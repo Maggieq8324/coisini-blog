@@ -26,7 +26,7 @@ public class ControllerLog {
     /**
      * 拦截控制层的所有public方法
      */
-    @Pointcut("execution(public * com.zzx.controller.*.*(..))")
+    @Pointcut("execution(public * com.coisini.controller.*.*(..))")
     public void log() {
     }
 

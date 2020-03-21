@@ -52,7 +52,7 @@ spring:
 
 mybatis:
   ###数据库模型对象
-  type-aliases-package: com.coisini.model.pojo
+  type-aliases-package: com.coisini.entity
   mapper-locations: mapper/*.xml
   ###打印sql
 #  configuration:
