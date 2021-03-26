@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '@/utils/request';
 import qs from 'qs';
 
 export default {
@@ -18,15 +18,16 @@ export default {
       data: qs.stringify({'mail': mail})
     });
   },
-  register(name, password, mail, mailCode, inviteCode) {
+  register(name, password, mail, mailCode) {
     return request({
       url: '/user/register',
       method: 'post',
       // header: 'Content-Type:application/x-www-form-urlencoded',
       data: qs.stringify({
-        'name': name, 'password': password,
-        'mail': mail, 'mailCode': mailCode,
-        'inviteCode': inviteCode
+        'name': name,
+        'password': password,
+        'mail': mail,
+        'mailCode': mailCode
       })
     });
   },
@@ -70,13 +71,13 @@ export default {
       data: qs.stringify({'newMail': newMail, 'oldMailCode': oldMailCode, 'newMailCode': newMailCode})
     });
   },
-  getUser(page, showCount) { //管理员分页查询用户数据
+  getUser(page, showCount) { // 管理员分页查询用户数据
     return request({
       url: '/user/' + page + '/' + showCount,
       method: 'get'
     });
   },
-  getUserByName(searchName, page, showCount) {   //管理层分页模糊查询用户名
+  getUserByName(searchName, page, showCount) {   // 管理层分页模糊查询用户名
     return request({
       url: '/user/search/' + page + '/' + showCount + '?userName=' + searchName,
       method: 'get'
@@ -88,7 +89,7 @@ export default {
       method: 'get'
     });
   },
-  logout(){
+  logout() {
     return request({
       url: '/user/logout',
       method: 'get'

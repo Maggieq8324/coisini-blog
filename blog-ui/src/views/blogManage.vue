@@ -1,10 +1,10 @@
 <template>
   <div>
     <div style="text-align: right;margin-bottom: 5px">
-      <el-button style="width: 7%;text-align: center" v-if="searchFlag == true" @click="returnNormal()">返回</el-button>
+      <!--<el-button style="width: 7%;text-align: center" v-if="searchFlag == true" @click="returnNormal()">返回</el-button>-->
 
       <el-input placeholder="模糊查询标题" v-model="searchName" suffix-icon="el-icon-search"
-                style="width: 30%;" @keyup.enter.native="searchSubmit"/>
+                style="width: 30%;" clearable @keyup.enter.native="searchSubmit" @clear="searchClear"/>
     </div>
     <div v-loading="loading">
       <el-table :data="blogData" style="width: 100%" :border="true">
@@ -71,80 +71,91 @@
   </div>
 </template>
 <script>
-  import blog from '@/api/blog'
-  import date from '@/utils/date'
+import blog from '@/api/blog';
+import date from '@/utils/date';
 
-  export default {
-    name: 'blogManage',
-    data() {
-      return {
-        blogData: [],
-        total: 0,        //数据总数
-        pageSize: 10,    //每页显示数量
-        currentPage: 1,   //当前页数
-        loading: true,
-        searchName: '',
-        searchFlag: false   //搜索状态 true 显示搜索数据 false显示正常数据
+export default {
+  name: 'blogManage',
+  data() {
+    return {
+      blogData: [],
+      total: 0,        // 数据总数
+      pageSize: 10,    // 每页显示数量
+      currentPage: 1,   // 当前页数
+      loading: true,
+      searchName: '',
+      searchFlag: false   // 搜索状态 true 显示搜索数据 false显示正常数据
+    };
+  },
+  created() {
+    this.load();
+  },
+  methods: {
+    load() {
+      if (this.searchFlag) {
+        blog.adminSearchBlog(this.searchName, this.currentPage, this.pageSize).then(resp => {
+          if (resp.sta === '00') {
+            this.blogData = resp.data.rows;
+            this.total = resp.data.total;
+          }
+
+          this.loading = false;
+        });
+      } else {
+        blog.adminGetBlog(this.currentPage, this.pageSize).then(resp => {
+          if (resp.sta === '00') {
+            this.blogData = resp.data.rows;
+            this.total = resp.data.total;
+          }
+
+          this.loading = false;
+        });
       }
     },
-    created() {
-      this.load()
+    currentChange(currentPage) { // 页码更改事件处理
+      this.currentPage = currentPage;
+      this.load();
+      scrollTo(0, 0);
     },
-    methods: {
-      load() {
-        if (this.searchFlag) {
-          blog.adminSearchBlog(this.searchName, this.currentPage, this.pageSize).then(res => {
-            this.blogData = res.data.rows;
-            this.total = res.data.total;
-            this.loading = false;
-          })
-        }
-        else {
-          blog.adminGetBlog(this.currentPage, this.pageSize).then(res => {
-            this.blogData = res.data.rows;
-            this.total = res.data.total;
-            this.loading = false;
-          })
-        }
-      },
-      currentChange(currentPage) { //页码更改事件处理
-        this.currentPage = currentPage;
-        this.load();
-        scrollTo(0, 0);
-      },
-      searchSubmit() {
-        this.currentPage = 1;
-        this.loading = true;
-        this.searchFlag = true;
-        this.load()
-      },
-      returnNormal() {
-        this.currentPage = 1;
-        this.searchName = ''
-        this.loading = true;
-        this.searchFlag = false;
-        this.load()
-      },
-      getTime(time) {
-        return date.timeago(time)
-      },
-      deleteBlog(id) {
-        this.$confirm('是否删除此博客?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          blog.adminDeleteBlog(id).then(res => {
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            });
+    searchSubmit() {
+      this.currentPage = 1;
+      this.loading = true;
+      this.searchFlag = true;
+      this.load();
+    },
+    searchClear() {
+      this.currentPage = 1;
+      this.loading = true;
+      this.searchFlag = false;
+      this.load();
+    },
+    // returnNormal() {
+    //   this.currentPage = 1;
+    //   this.searchName = '';
+    //   this.loading = true;
+    //   this.searchFlag = false;
+    //   this.load();
+    // },
+    getTime(time) {
+      return date.timeago(time);
+    },
+    deleteBlog(id) {
+      this.$confirm('是否删除此博客?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        blog.adminDeleteBlog(id).then(resp => {
+          if (resp.sta === '00') {
+            this.$message.success('删除成功');
             this.load();
-          });
-        }).catch(() => {
-        })
-
-      }
+          } else {
+            this.$message.error(resp.message || '删除失败');
+          }
+        });
+      }).catch(() => {
+      });
     }
   }
+};
 </script>

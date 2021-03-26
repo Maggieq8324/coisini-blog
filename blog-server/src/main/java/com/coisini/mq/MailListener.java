@@ -21,8 +21,6 @@ public class MailListener {
 
     private Logger logger = LoggerUtil.loggerFactory(this.getClass());
 
-
-
     @Autowired
     private JavaMailSender mailSender;
 
@@ -33,7 +31,6 @@ public class MailListener {
     public void executeSms(Map<String, String> map) {
         String mail = map.get("mail");
         String code = map.get("code");
-
 
         try {
             this.sendMail(mail, code);
@@ -47,7 +44,5 @@ public class MailListener {
         //发送邮件
         mailSender.send(mailMessage
                 .create(mail, "邮箱验证码", "邮箱验证码：" + code + "，" + MailConfig.EXPIRED_TIME + "分钟内有效"));
-
-
     }
 }

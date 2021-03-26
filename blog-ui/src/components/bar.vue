@@ -9,20 +9,20 @@
           <el-menu-item index="2" style="margin-left: 2%" route="/message">留言板</el-menu-item>
           <el-menu-item index="3" style="margin-left: 2%" route="/announcement">本站公告</el-menu-item>
 
-          <el-menu-item id="space" index="" @click="egg" class="hidden-xs-only"/>
-          <!--<el-menu-item/>-->
+          <el-menu-item id="space" index="" class="hidden-xs-only"/>
+          <el-menu-item/>
 
           <div style="width: 20%;float: left;margin: 10px 2% 0px -5%" class="hidden-xs-only">
             <el-input placeholder="搜索博客" v-model="searchTxt" suffix-icon="el-icon-search"
-                      @keyup.enter.native="searchSubmit"/>
+                      clearable @keyup.enter.native="searchSubmit" @clear="searchClear"/>
           </div>
 
-          <el-menu-item class="hidden-xs-only" v-if="this.$store.state.token==''" index=""
+          <el-menu-item class="hidden-xs-only" v-if="this.$store.state.token === ''" index=""
                         @click="loginFormVisible = true">
             <el-button type="text">登录</el-button>
           </el-menu-item>
 
-          <el-menu-item class="hidden-xs-only" v-if="this.$store.state.token==''" index=""
+          <el-menu-item class="hidden-xs-only" v-if="this.$store.state.token === ''" index=""
                         @click="registerFormVisible = true">
             <el-button type="text">注册</el-button>
           </el-menu-item>
@@ -45,7 +45,7 @@
 
           <el-dialog title="注册" :visible.sync="registerFormVisible" width="30%">
 
-            <el-form :model="form">
+            <el-form :model="form" style="width: 450px;margin: 0 auto;">
               <el-form-item :label-width="formLabelWidth">
                 <el-input v-model="form.registerName" placeholder="用户名" prefixIcon="el-icon-user-solid"/>
               </el-form-item>
@@ -59,9 +59,9 @@
                           prefixIcon="el-icon-bell"/>
               </el-form-item>
 
-              <el-form-item :label-width="formLabelWidth">
+              <!--<el-form-item :label-width="formLabelWidth">
                 <el-input v-model="form.registerInviteCode" placeholder="邀请码" prefixIcon="el-icon-s-promotion"/>
-              </el-form-item>
+              </el-form-item>-->
               <el-form-item :label-width="formLabelWidth">
                 <el-input v-model="form.registerMail" placeholder="邮箱" prefixIcon="el-icon-message"/>
               </el-form-item>
@@ -131,7 +131,7 @@ export default {
         registerConfirmPwd: '',
         registerMail: '',
         registerMailCode: '',
-        registerInviteCode: ''
+        // registerInviteCode: ''
       },
       formLabelWidth: '0px',
       sendMailFlag: false
@@ -160,23 +160,22 @@ export default {
       //        console.log(key, keyPath);
       if (key != null && key !== '') { this.activeIndex = key; }
     },
-    egg() {
-      this.$notify({
-        title: '彩蛋',
-        message: '耐心等待 十分钟后获得一枚邀请码',
-        type: 'success',
-        duration: 120
-      });
-    },
+    // egg() {
+    //   this.$notify({
+    //     title: '彩蛋',
+    //     message: '耐心等待 十分钟后获得一枚邀请码',
+    //     type: 'success',
+    //     duration: 120
+    //   });
+    // },
     userLogin() { // 登录方法
       if (this.form.loginName.length <= 0 || this.form.loginPwd.length <= 0) {
         this.$message.info('请输入登录名和账号');
         return;
       }
       user.login(this.form.loginName, this.form.loginPwd).then(resp => {
-        console.log('user.login');
-        console.log(resp);
         if (resp.sta === '00') {
+          this.form.loginName = '';
           this.form.loginPwd = '';
           this.$store.commit('login', resp.data);// 存储token
           this.$message.success(resp.message);
@@ -188,12 +187,9 @@ export default {
       });
     },
     logout() {  // 退出登录
-      user.logout().then(res => {
+      user.logout().then(resp => {
         this.$store.commit('logout');// 清除token等信息
-        this.$message({
-          message: '退出成功',
-          type: 'success'
-        });
+        this.$message.success(resp.message);
         this.$router.push({ // 路由跳转
           path: '/'
         });
@@ -202,18 +198,17 @@ export default {
     sendMail() { // 发送邮件
       var reg = new RegExp(/^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
       if (!reg.test(this.form.registerMail)) { // 检测字符串是否符合正则表达式
-        this.$message({
-          message: '邮箱格式不正确',
-          type: 'error'
-        });
+        this.$message.warning('邮箱格式不正确');
         return;
       }
       this.sendMailFlag = true;
-      user.sendMail(this.form.registerMail).then(res => {
-        this.$message({
-          message: '发送成功',
-          type: 'success'
-        });
+      user.sendMail(this.form.registerMail).then(resp => {
+        if (resp.sta === '00') {
+          this.$message.success('发送成功');
+        } else {
+          this.$message.success(resp.message || '发送失败');
+        }
+
         this.sendMailFlag = false;
       }).catch(() => {
         this.sendMailFlag = false;
@@ -222,43 +217,33 @@ export default {
     userRegister() { // 用户注册
       // 判断是否输入字段
       if (this.form.registerName.length <= 0 || this.form.registerPwd.length <= 0 || this.form.registerConfirmPwd.length <= 0 ||
-          this.form.registerMail.length <= 0 || this.form.registerMailCode.length <= 0 || this.form.registerInviteCode.length <= 0) {
-        this.$message({
-          message: '字段不符合规范',
-          type: 'error'
-        });
+          this.form.registerMail.length <= 0 || this.form.registerMailCode.length <= 0) {
+        this.$message.warning('字段不符合规范');
         return;
       }
       if (this.form.registerPwd !== this.form.registerConfirmPwd) {
-        this.$message({
-          message: '两次密码不一致',
-          type: 'error'
-        });
+        this.$message.warning('两次密码不一致');
         return;
       }
       if (this.form.registerPwd.length < 6) {
-        this.$message({
-          message: '密码长度需大于6位',
-          type: 'error'
-        });
+        this.$message.warning('密码长度需大于6位');
         return;
       }
       var reg = new RegExp(/^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
 
       if (!reg.test(this.form.registerMail)) { // 检测字符串是否符合正则表达式
-        this.$message({
-          message: '邮箱格式不正确',
-          type: 'error'
-        });
+        this.$message.warning('邮箱格式不正确');
         return;
       }
 
-      user.register(this.form.registerName, this.form.registerPwd, this.form.registerMail, this.form.registerMailCode, this.form.registerInviteCode).then(res => {
-        this.$message({
-          message: '注册成功',
-          type: 'success'
-        });
-        this.registerFormVisible = false;
+      user.register(this.form.registerName, this.form.registerPwd, this.form.registerMail, this.form.registerMailCode).then(resp => {
+        if (resp.sta === '00') {
+          this.$message.success('注册成功');
+          this.registerFormVisible = false;
+        } else {
+          this.$message.error(resp.message || '注册失败');
+        }
+
       });
     },
     searchSubmit() {
@@ -266,7 +251,12 @@ export default {
       this.$router.push({ // 路由跳转
         path: '/searchBlog/' + this.searchTxt
       });
-      this.searchTxt = '';// 清空搜索框
+      // this.searchTxt = '';// 清空搜索框
+    },
+    searchClear() {
+      this.$router.push({ // 路由跳转
+        path: '/'
+      });
     }
   }
 };

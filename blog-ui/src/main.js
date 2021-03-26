@@ -1,26 +1,26 @@
-import Vue from 'vue'
-import App from './App'
-import VueCookies from 'vue-cookies'
+import Vue from 'vue';
+import App from './App';
+import VueCookies from 'vue-cookies';
 
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import axios from 'axios';
+import store from './store/store';
 
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-import axios from 'axios'
-import store from './store/store'
+import mavonEditor from 'mavon-editor';
+import 'mavon-editor/dist/css/index.css';
 
-import mavonEditor from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
+import router from './router/router';
 
-import router from './router/router'
+import './assets/css/_main.css';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
-Vue.use(VueCookies)
-Vue.use(ElementUI)
-Vue.use(mavonEditor)
+Vue.use(VueCookies);
+Vue.use(ElementUI);
+Vue.use(mavonEditor);
 
-Vue.prototype.$http = axios
-
+Vue.prototype.$http = axios;
 
 /* eslint-disable no-new */
 new Vue({
@@ -29,4 +29,4 @@ new Vue({
   store,
   components: {App},
   template: '<App/>'
-})
+});

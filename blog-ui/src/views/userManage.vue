@@ -1,14 +1,14 @@
 <template>
   <div>
     <div style="text-align: right;margin-bottom: 5px">
-      <el-tooltip placement="top" effect="light" v-if="searchFlag == false">
+      <el-tooltip placement="top" effect="light" v-if="searchFlag === false">
         <div slot="content">如果不慎封禁了管理员<br/>请去数据库修改管理员状态</div>
         <el-link :underline="false" style="margin-right: 68%;color: #E6A23C"><i class="el-icon-question"></i></el-link>
       </el-tooltip>
-      <el-button style="width: 7%;text-align: center" v-if="searchFlag == true" @click="returnNormal()">返回</el-button>
+      <el-button style="width: 7%;text-align: center" v-if="searchFlag === true" @click="returnNormal()">返回</el-button>
 
       <el-input placeholder="使用用户名模糊查询用户" v-model="searchName" suffix-icon="el-icon-search"
-                style="width: 30%;" @keyup.enter.native="searchSubmit"/>
+                style="width: 30%;" clearable @keyup.enter.native="searchSubmit" @clear="searchClear"/>
     </div>
     <div v-loading="loading">
       <el-table :data="userData" style="width: 100%" :border="true">
@@ -122,15 +122,21 @@ export default {
   methods: {
     load() {
       if (this.searchFlag) {
-        user.getUserByName(this.searchName, this.currentPage, this.pageSize).then(res => {
-          this.userData = res.data.rows;
-          this.total = res.data.total;
+        user.getUserByName(this.searchName, this.currentPage, this.pageSize).then(resp => {
+          if (resp.sta === '00') {
+            this.userData = resp.data.rows;
+            this.total = resp.data.total;
+          }
+
           this.loading = false;
         });
       } else {
-        user.getUser(this.currentPage, this.pageSize).then(res => {
-          this.userData = res.data.rows;
-          this.total = res.data.total;
+        user.getUser(this.currentPage, this.pageSize).then(resp => {
+          if (resp.sta === '00') {
+            this.userData = resp.data.rows;
+            this.total = resp.data.total;
+          }
+
           this.loading = false;
         });
       }
@@ -146,6 +152,12 @@ export default {
       this.searchFlag = true;
       this.load();
     },
+    searchClear() {
+      this.currentPage = 1;
+      this.loading = true;
+      this.searchFlag = false;
+      this.load();
+    },
     returnNormal() {
       this.currentPage = 1;
       this.searchName = '';
@@ -158,7 +170,7 @@ export default {
     },
     banUser(id, state) {
       user.banUser(id, state).then(res => {
-        if (state == 1) {
+        if (state === 1) {
           this.$message({
             message: '解封成功',
             type: 'success'

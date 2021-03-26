@@ -10,7 +10,7 @@
         <el-link type="success" :underline="false">{{tag.name}}</el-link>
       </el-tag>
     </div>
-    <div style="margin-top: 15%">
+    <div style="margin-top: 8%">
       <el-button class="el-icon-plus" size="mini" @click="addTag">新增标签</el-button>
     </div>
 
@@ -18,88 +18,84 @@
 </template>
 
 <script>
-  import tag from '@/api/tag'
+import tag from '@/api/tag';
 
-  export default {
-    name: 'myTag',
-    data() {
-      return {
-        tags: []
-      }
+export default {
+  name: 'myTag',
+  data() {
+    return {
+      tags: []
+    };
+  },
+  created() {
+    this.load();
+  },
+  methods: {
+    load() {
+      tag.getTag().then(resp => {
+        if (resp.sta === '00') {
+          this.tags = resp.data;
+        }
+      });
     },
-    created() {
-      this.load()
+    deleteTag(tagId) {
+      this.$confirm('是否删除此标签?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        tag.deleteTag(tagId).then(resp => {
+          if (resp.sta === '00') {
+            this.load();
+            this.$message.success('删除成功');
+          } else {
+            this.$message.error(resp.message || '删除失败');
+          }
+        });
+      }).catch(() => {});
     },
-    methods: {
-      load() {
-        tag.getTag().then(res => {
-          this.tags = res.data;
-        })
-      },
-      deleteTag(tagId) {
-        this.$confirm('是否删除此标签?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          tag.deleteTag(tagId).then(res => {
+    editTag(tagId) {
+      this.$prompt('请输入修改后的标签名', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(({value}) => {
+        if (value == null || value.length <= 0) {
+          this.$message.warning('请输入修改后的标签名');
+          return;
+        }
+        tag.updateTag(tagId, value).then(resp => {
+          if (resp.sta === '00') {
             this.load();
-            this.$message({
-              type: 'success',
-              message: '删除成功'
-            });
-          })
-        }).catch(()=>{});
-      },
-      editTag(tagId) {
-
-        this.$prompt('请输入修改后的标签名', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消'
-        }).then(({value}) => {
-          if (value == null || value.length <= 0) {
-            this.$message({
-              type: 'error',
-              message: '字段不完整'
-            });
-            return;
+            this.$message.success('修改成功');
+          } else {
+            this.$message.error(resp.message || '修改失败');
           }
-          tag.updateTag(tagId, value).then(res => {
-            this.load();
-            this.$message({
-              type: 'success',
-              message: '修改成功'
-            });
-          })
-        }).catch(() => {
         });
-
-      },
-      addTag() {
-
-        this.$prompt('请输入新标签名', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消'
-        }).then(({value}) => {
-          if (value == null || value.length <= 0) {
-            this.$message({
-              type: 'error',
-              message: '字段不完整'
-            });
-            return;
+      }).catch(() => {
+      });
+    },
+    addTag() {
+      this.$prompt('请输入新标签名', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(({value}) => {
+        if (value == null || value.length <= 0) {
+          this.$message.warning('请输入新标签名');
+          return;
+        }
+        tag.addTag(value).then(resp => {
+          if (resp.sta === '00') {
+            this.load();
+            this.$message.success('新增成功');
+          } else {
+            this.$message.error(resp.message || '新增失败');
           }
-          tag.addTag(value).then(res => {
-            this.load();
-            this.$message({
-              type: 'success',
-              message: '新增成功'
-            });
-          })
-        }).catch(() => {
         });
-      }
+      }).catch(() => {
+      });
     }
   }
+};
 </script>
 <style scoped>
   #myTag {

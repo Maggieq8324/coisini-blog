@@ -1,7 +1,12 @@
 package com.coisini.exception;
 
+import com.coisini.model.ResponseModel;
 import com.coisini.model.Result;
 import com.coisini.model.StatusCode;
+import com.coisini.model.SysErrorCode;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.firewall.RequestRejectedException;
@@ -114,6 +119,23 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return Result.create(StatusCode.SERVICEERROR, "服务异常 请联系管理员");
     }
+    
+    /**
+	  *  主动throw的异常
+	 * @param e
+	 * @param response
+	 * @return
+	 */
+	@ExceptionHandler(BusinessException.class)
+	public ResponseModel handleUnProccessableServiceException(BusinessException e, HttpServletResponse response) {
+		//日志记录
+		e.printStackTrace();
+		//返回值
+		ResponseModel responseModel = new ResponseModel();
+		responseModel.setSta(SysErrorCode.CODE_99999);
+		responseModel.setMessage(e.getMessage());
+	    return responseModel;
+	}
 
 }
 

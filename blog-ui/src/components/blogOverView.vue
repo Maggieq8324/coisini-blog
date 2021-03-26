@@ -82,21 +82,23 @@ export default {
       }).then(() => {
         if (this.$store.state.roles.indexOf('ADMIN') > -1) {
           // 管理员
-          blog.adminDeleteBlog(id).then(res => {
-            this.$message({
-              type: 'success',
-              message: '删除成功'
-            });
-            window.location.reload();
+          blog.adminDeleteBlog(id).then(resp => {
+            if (resp.sta === '00') {
+              this.$message.success('删除成功');
+              window.location.reload();
+            } else {
+              this.$message.error(resp.message || '删除失败');
+            }
           });
         } else {
           // 普通用户
-          blog.userDeleteBlog(id).then(res => {
-            this.$message({
-              type: 'success',
-              message: '删除成功'
-            });
-            window.location.reload();
+          blog.userDeleteBlog(id).then(resp => {
+            if (resp.sta === '00') {
+              this.$message.success('删除成功');
+              window.location.reload();
+            } else {
+              this.$message.error(resp.message || '删除失败');
+            }
           });
         }
       }).catch(() => {

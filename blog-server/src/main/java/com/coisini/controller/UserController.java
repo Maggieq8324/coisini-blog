@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
+import java.util.Objects;
 
 /**
 *  用户API
@@ -38,7 +39,7 @@ public class UserController {
     private FormatUtil formatUtil;
 
     /**
-         * 登录返回token
+          * 登录返回token
      * @param user
      * @return
      */
@@ -68,25 +69,23 @@ public class UserController {
             responseModel.setMessage(re.getMessage());
             return responseModel;
         }
-
     }
 
-
     /**
-     * 用户退出登录
-     * 删除redis中的token
-     *
+          * 用户退出登录
+          * 删除redis中的token
      * @param
      * @return
      */
     @ApiOperation(value = "用户退出登录")
     @GetMapping("/logout")
-    public Result logout() {
-
-        userService.logout();
-        return Result.create(StatusCode.OK, "退出成功");
+    public ResponseModel logout() {
+    	userService.logout();
+    	ResponseModel responseModel = new ResponseModel();
+    	responseModel.setSta(SysErrorCode.CODE_00);
+    	responseModel.setMessage("退出成功");
+        return responseModel;
     }
-
 
 //    /**
 //     * 创建管理员
@@ -118,36 +117,40 @@ public class UserController {
 //    }
 
     /**
-     * 用户注册
-     *
+          *  用户注册
      * @param user
      * @param mailCode   邮箱验证码
      * @param inviteCode 邀请码
      * @return
      */
-    @ApiOperation(value = "用户注册", notes = "用户名+密码+邮箱+邮箱验证码+邀请码 name+password+mail+mailCode+inviteCode")
+    @ApiOperation(value = "用户注册", notes = "用户名+密码+邮箱+邮箱验证码+邀请码 name+password+mail+mailCode")
     @PostMapping("/register")
-    public Result register(User user, String mailCode, String inviteCode) {
+    public ResponseModel register(User user, String mailCode) {
+    	ResponseModel responseModel = new ResponseModel();
         if (!formatUtil.checkStringNull(
                 user.getName(),
                 mailCode,
                 user.getPassword(),
-                user.getMail(),
-                inviteCode)) {
-            return Result.create(StatusCode.ERROR, "注册失败，字段不完整");
+                user.getMail())) {
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("注册失败，字段不完整");
+        	return responseModel;
         }
+        
         try {
-            userService.register(user, mailCode, inviteCode);
-            return Result.create(StatusCode.OK, "注册成功");
+            userService.register(user, mailCode);
+            responseModel.setSta(SysErrorCode.CODE_00);
+        	responseModel.setMessage("注册成功");
+        	return responseModel;
         } catch (RuntimeException e) {
-            return Result.create(StatusCode.ERROR, "注册失败，" + e.getMessage());
+        	responseModel.setSta(SysErrorCode.CODE_00);
+        	responseModel.setMessage("注册失败，" + e.getMessage());
+        	return responseModel;
         }
     }
 
-
     /**
-     * 用户封禁或解禁
-     *
+          * 用户封禁或解禁
      * @param id
      * @param state
      * @return
@@ -161,7 +164,6 @@ public class UserController {
             return Result.create(StatusCode.ERROR, "参数错误");
         }
 
-
         if (state == 0) {
             userService.updateUserState(id, state);
             return Result.create(StatusCode.OK, "封禁成功");
@@ -173,79 +175,103 @@ public class UserController {
         }
     }
 
-
     /**
-     * 发送验证邮件
-     * 异步发送
-     *
+          *  发送验证邮件
+          *  异步发送
      * @param mail
      * @return
      */
     @ApiOperation(value = "发送验证邮件", notes = "mail 冷却五分钟")
     @PostMapping("/sendMail")
-    public Result sendMail(String mail) {
+    public ResponseModel sendMail(String mail) {
+    	ResponseModel responseModel = new ResponseModel();
 
         //邮箱格式校验
         if (!(formatUtil.checkStringNull(mail)) || (!formatUtil.checkMail(mail))) {
-            return Result.create(StatusCode.ERROR, "邮箱格式错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("邮箱格式错误");
+        	return responseModel;
         }
+        
         String redisMailCode = userService.getMailCodeFromRedis(mail);
 
         //此邮箱发送过验证码
         if (redisMailCode != null) {
-
-            return Result.create(StatusCode.ERROR, MailConfig.EXPIRED_TIME + "分钟内不可重发验证码");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage(MailConfig.EXPIRED_TIME + "分钟内不可重发验证码");
+        	return responseModel;
         } else {
             userService.sendMail(mail);
-
-            return Result.create(StatusCode.OK, "发送成功");
+            
+            responseModel.setSta(SysErrorCode.CODE_00);
+        	responseModel.setMessage("发送成功");
+        	return responseModel;
         }
     }
 
     /**
-     * 更新用户打赏码
-     *
+          * 更新用户打赏码
      * @return
      */
     @ApiOperation(value = "更新用户打赏码", notes = "更新用户打赏码")
     @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/updateReward")
-    public Result updateReward(String imgPath) {
+    public ResponseModel updateReward(String imgPath) {
+    	ResponseModel responseModel = new ResponseModel();
+    	
         if (!formatUtil.checkStringNull(imgPath)) {
-            return Result.create(StatusCode.ERROR, "格式错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("格式错误");
+        	return responseModel;
         }
+        
         userService.updateUserReward(imgPath);
-        return Result.create(StatusCode.OK, "更新成功");
+        responseModel.setSta(SysErrorCode.CODE_00);
+    	responseModel.setMessage("更新成功");
+    	return responseModel;
     }
 
-
     /**
-     * 获取用户绑定的邮箱
-     *
+          * 获取用户绑定的邮箱
      * @return
      */
     @ApiOperation(value = "获取用户绑定的邮箱", notes = "获取用户绑定的邮箱")
-    @PreAuthorize("hasAuthority('USER')")
+//    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/mail")
-    public Result getUserMail() {
-        return Result.create(StatusCode.OK, "查询成功", userService.findUserMail());
+    public ResponseModel getUserMail() {
+    	ResponseModel responseModel = new ResponseModel();
+    	responseModel.setSta(SysErrorCode.CODE_00);
+    	responseModel.setMessage( "查询成功");
+    	responseModel.setData(userService.findUserMail());
+    	return responseModel;
     }
 
     /**
-     * 获取用户的打赏码
-     *
+          * 获取用户的打赏码
      * @return
      */
     @ApiOperation(value = "获取用户的打赏码", notes = "获取用户的打赏码")
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/getReward")
-    public Result getUserReward() {
-        return Result.create(StatusCode.OK, "查询成功", userService.findUserReward());
+    public ResponseModel getUserReward() {
+    	ResponseModel responseModel = new ResponseModel();
+    	
+    	String userReward = userService.findUserReward();
+    	
+    	if(Objects.isNull(userReward)) {
+    		responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("查询失败");
+    	}else {
+    		responseModel.setSta(SysErrorCode.CODE_00);
+        	responseModel.setMessage("查询成功");
+        	responseModel.setData(userReward);
+    	}
+
+    	return responseModel;
     }
 
     /**
-     * 修改密码
-     *
+          * 修改密码
      * @param oldPassword 旧密码
      * @param newPassword 新密码
      * @param code        邮箱验证码
@@ -254,22 +280,29 @@ public class UserController {
     @ApiOperation(value = "用户修改密码", notes = "旧密码+新密码+验证码")
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/updatePassword")
-    public Result updatePassword(String oldPassword, String newPassword, String code) {
+    public ResponseModel updatePassword(String oldPassword, String newPassword, String code) {
+    	ResponseModel responseModel = new ResponseModel();
+    	
         if (!formatUtil.checkStringNull(oldPassword, newPassword, code)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
+        
         try {
             userService.updateUserPassword(oldPassword, newPassword, code);
-            return Result.create(StatusCode.OK, "修改密码成功");
+            responseModel.setSta(SysErrorCode.CODE_00);
+        	responseModel.setMessage("修改密码成功");
+        	return responseModel;
         } catch (RuntimeException e) {
-            return Result.create(StatusCode.ERROR, e.getMessage());
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("修改密码失败，" + e.getMessage());
+        	return responseModel;
         }
     }
 
-
     /**
-     * 改绑邮箱
-     *
+          *  改绑邮箱
      * @param newMail     新邮箱
      * @param oldMailCode 旧邮箱验证码
      * @param newMailCode 新邮箱验证码
@@ -278,25 +311,35 @@ public class UserController {
     @ApiOperation(value = "改绑邮箱", notes = "新邮箱+旧邮箱验证码+新邮箱验证码")
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/updateMail")
-    public Result updateMail(String newMail, String oldMailCode, String newMailCode) {
+    public ResponseModel updateMail(String newMail, String oldMailCode, String newMailCode) {
+    	ResponseModel responseModel = new ResponseModel();
+    	
         if (!formatUtil.checkStringNull(newMail, oldMailCode, newMailCode)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
         //检查邮箱格式
         if (!formatUtil.checkMail(newMail)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
+        
         try {
             userService.updateUserMail(newMail, oldMailCode, newMailCode);
-            return Result.create(StatusCode.OK, "改绑成功");
+            responseModel.setSta(SysErrorCode.CODE_00);
+        	responseModel.setMessage("改绑成功");
+        	return responseModel;
         } catch (RuntimeException e) {
-            return Result.create(StatusCode.ERROR, e.getMessage());
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("改绑失败，" + e.getMessage());
+        	return responseModel;
         }
     }
 
     /**
-     * 重置密码
-     *
+          *  重置密码
      * @param mailCode
      * @param newPassword
      * @return
@@ -304,20 +347,26 @@ public class UserController {
     @ApiOperation(value = "重置密码", notes = "用户名+验证码+新密码")
 //    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/forgetPassword")
-    public Result forgetPassword(String userName, String mailCode, String newPassword) {
+    public ResponseModel forgetPassword(String userName, String mailCode, String newPassword) {
+    	ResponseModel responseModel = new ResponseModel();
 
         if (!formatUtil.checkStringNull(userName, mailCode, newPassword)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
 
         try {
             userService.forgetPassword(userName, mailCode, newPassword);
-            return Result.create(StatusCode.OK, "重置成功");
+            responseModel.setSta(SysErrorCode.CODE_00);
+        	responseModel.setMessage("重置成功");
+        	return responseModel;
         } catch (RuntimeException e) {
-            return Result.create(StatusCode.ERROR, e.getMessage());
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("重置失败," + e.getMessage());
+        	return responseModel;
         }
     }
-
 
 //    /**
 //     * 只能由com.zzx.filter.JwtTokenFilter 转发token过期的请求进行访问
@@ -339,30 +388,48 @@ public class UserController {
     @ApiOperation(value = "分页查询用户", notes = "页码+显示数量")
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{page}/{showCount}")
-    public Result findUser(@PathVariable Integer page, @PathVariable Integer showCount) {
+    public ResponseModel findUser(@PathVariable Integer page, @PathVariable Integer showCount) {
+    	ResponseModel responseModel = new ResponseModel();
+    	
         if (!formatUtil.checkPositive(page, showCount)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
+        
         PageResult<User> pageResult =
                 new PageResult<>(userService.getUserCount(), userService.findUser(page, showCount));
-        return Result.create(StatusCode.OK, "查询成功", pageResult);
+  
+        responseModel.setSta(SysErrorCode.CODE_00);
+        responseModel.setMessage("查询成功");
+        responseModel.setData(pageResult);
+        return responseModel;
     }
-
 
     @ApiOperation(value = "根据用户名分页搜索用户", notes = "页码+显示数量+搜索内容")
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/search/{page}/{showCount}")
-    public Result searchUser(String userName, @PathVariable Integer page, @PathVariable Integer showCount) {
+    public ResponseModel searchUser(String userName, @PathVariable Integer page, @PathVariable Integer showCount) {
+    	ResponseModel responseModel = new ResponseModel();
+    	
         if (!formatUtil.checkStringNull(userName)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
         if (!formatUtil.checkPositive(page, showCount)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
+        
         PageResult<User> pageResult =
                 new PageResult<>(userService.getUserCountByName(userName), userService.searchUserByName(userName, page, showCount));
 
-        return Result.create(StatusCode.OK, "查询成功", pageResult);
+        responseModel.setSta(SysErrorCode.CODE_00);
+        responseModel.setMessage("查询成功");
+        responseModel.setData(pageResult);
+        return responseModel;
     }
 
 

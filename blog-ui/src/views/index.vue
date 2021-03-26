@@ -16,18 +16,18 @@
   </div>
 </template>
 <script>
-  import introduction from '@/components/introduction'
-  import newDiscuss from '@/components/newDiscuss'
-  import hotBlog from '@/components/hotBlog'
-  import statisticalBlog from '@/components/statisticalBlog'
-  import indexBlogList from '@/components/indexBlogList'
+import introduction from '@/components/introduction';
+import newDiscuss from '@/components/newDiscuss';
+import hotBlog from '@/components/hotBlog';
+import statisticalBlog from '@/components/statisticalBlog';
+import indexBlogList from '@/components/indexBlogList';
 
-  import 'element-ui/lib/theme-chalk/display.css';
+import 'element-ui/lib/theme-chalk/display.css';
 
-  export default {
-    name: 'index',
-    components: {introduction, newDiscuss, hotBlog, statisticalBlog, indexBlogList}
-  }
+export default {
+  name: 'index',
+  components: {introduction, newDiscuss, hotBlog, statisticalBlog, indexBlogList}
+};
 </script>
 <style scoped>
 

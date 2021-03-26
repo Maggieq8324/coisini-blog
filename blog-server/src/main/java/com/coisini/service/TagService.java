@@ -33,16 +33,13 @@ public class TagService {
 
     /**
      * 新增标签
-     *
      * @param tagName
      */
     public void saveTag(String tagName) {
         String username = jwtTokenUtil.getUsernameFromRequest(request);
         User user = userDao.findUserByName(username);
 
-
-        if (tagDao.findTagByTagName(tagName) != null) //mysql where tag_name 忽略大小写
-        {
+        if (tagDao.findTagByTagName(tagName) != null) { //mysql where tag_name 忽略大小写
             throw new RuntimeException("标签重复");
         }
 
@@ -54,7 +51,6 @@ public class TagService {
 
     /**
      * 删除标签
-     *
      * @param tagId
      */
     @Transactional(rollbackFor = Exception.class)
@@ -76,7 +72,6 @@ public class TagService {
 
     /**
      * 更改标签
-     *
      * @param tagId
      * @param tagName
      */

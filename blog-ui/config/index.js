@@ -19,7 +19,7 @@ module.exports = {
         }
       },
       '/api': {
-        target: 'http://127.0.0.1:8324/', //
+        target: 'http://127.0.0.1:31091/', //
         changeOrigin: true, //
         pathRewrite: {
           // 路径重写，
@@ -27,7 +27,7 @@ module.exports = {
         }
       },
       '/img': {     //图片资源默认以8324端口发起请求
-        target: 'http://127.0.0.1:8324/', //
+        target: 'http://127.0.0.1:31091/', //
         changeOrigin: true, //
         pathRewrite: {
           // 路径重写，
@@ -75,6 +75,7 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
+    // assetsPublicPath: '/blog/',
 
     /**
      * Source Maps

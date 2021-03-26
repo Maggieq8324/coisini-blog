@@ -18,14 +18,14 @@
   </div>
 </template>
 <script>
-  import myBlogList from '@/components/myBlogList'
-  import userNewDiscuss from '@/components/userNewDiscuss'
-  import myTag from '@/components/myTag'
+import myBlogList from '@/components/myBlogList';
+import userNewDiscuss from '@/components/userNewDiscuss';
+import myTag from '@/components/myTag';
 
-  export default {
-    name: 'myBlog',
-    components: {myBlogList,userNewDiscuss,myTag}
-  }
+export default {
+  name: 'myBlog',
+  components: {myBlogList, userNewDiscuss, myTag}
+};
 </script>
 <style scoped>
   #myBlog{

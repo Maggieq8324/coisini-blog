@@ -1,7 +1,7 @@
 package com.coisini.controller;
 
-import com.coisini.model.Result;
-import com.coisini.model.StatusCode;
+import com.coisini.model.ResponseModel;
+import com.coisini.model.SysErrorCode;
 import com.coisini.service.ReplyService;
 import com.coisini.utils.FormatUtil;
 import io.swagger.annotations.Api;
@@ -28,54 +28,80 @@ public class ReplyController {
     private FormatUtil formatUtil;
 
     @ApiOperation(value = "发布回复", notes = "回复内容+评论id (父回复节点)?")
-    @PreAuthorize("hasAuthority('USER')")
+//    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/{discussId}")
-    public Result reply(@PathVariable Integer discussId, String replyBody, Integer rootId) {
+    public ResponseModel reply(@PathVariable Integer discussId, String replyBody, Integer rootId) {
+    	ResponseModel responseModel = new ResponseModel();
 
         if (!formatUtil.checkStringNull(replyBody)) {
-            return Result.create(StatusCode.ERROR, "参数异常");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数异常");
+        	return responseModel;
         }
+        
         if (!formatUtil.checkPositive(discussId)) {
-            return Result.create(StatusCode.ERROR, "参数异常");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数异常");
+        	return responseModel;
         }
 
         try {
             replyService.saveReply(discussId, replyBody, rootId);
-            return Result.create(StatusCode.OK, "回复成功");
+            responseModel.setSta(SysErrorCode.CODE_00);
+        	responseModel.setMessage("回复成功");
+        	return responseModel;
         } catch (RuntimeException e) {
-            return Result.create(StatusCode.ERROR, "回复失败" + e.getMessage());
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("回复失败");
+        	return responseModel;
         }
     }
 
     @ApiOperation(value = "删除回复", notes = "回复id")
-    @PreAuthorize("hasAuthority('USER')")
+//    @PreAuthorize("hasAuthority('USER')")
     @DeleteMapping("/{replyId}")
-    public Result deleteReply(@PathVariable Integer replyId) {
+    public ResponseModel deleteReply(@PathVariable Integer replyId) {
+    	ResponseModel responseModel = new ResponseModel();
+    	
         if (!formatUtil.checkPositive(replyId)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
 
         try {
             replyService.deleteReply(replyId);
-            return Result.create(StatusCode.OK, "删除成功");
+            responseModel.setSta(SysErrorCode.CODE_00);
+        	responseModel.setMessage("删除成功");
+        	return responseModel;
         } catch (RuntimeException e) {
-            return Result.create(StatusCode.ERROR, "删除失败" + e.getMessage());
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("删除失败" + e.getMessage());
+        	return responseModel;
         }
     }
 
     @ApiOperation(value = "管理员删除回复", notes = "回复id")
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/admin/{replyId}")
-    public Result adminDeleteDiscuss(@PathVariable Integer replyId) {
+    public ResponseModel adminDeleteDiscuss(@PathVariable Integer replyId) {
+    	ResponseModel responseModel = new ResponseModel();
+    	
         if (!formatUtil.checkPositive(replyId)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
 
         try {
             replyService.adminDeleteReply(replyId);
-            return Result.create(StatusCode.OK, "删除成功");
+            responseModel.setSta(SysErrorCode.CODE_00);
+        	responseModel.setMessage("删除成功");
+        	return responseModel;
         } catch (RuntimeException e) {
-            return Result.create(StatusCode.ERROR, "删除失败" + e.getMessage());
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("删除失败" + e.getMessage());
+        	return responseModel;
         }
 
     }

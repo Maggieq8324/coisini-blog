@@ -15,30 +15,32 @@
 </template>
 
 <script>
-  import blog from '@/api/blog'
+import blog from '@/api/blog';
 
-  export default {
-    name: 'hotBlog',
-    data() {
-      return {
-        hotBlog: []
+export default {
+  name: 'hotBlog',
+  data() {
+    return {
+      hotBlog: []
+    };
+  },
+  created() {
+    blog.getHotBlog().then(resp => {
+      if (resp.sta === '00') {
+        this.hotBlog = resp.data;
       }
-    },
-    created() {
-      blog.getHotBlog().then(responese => {
-        this.hotBlog = responese.data;
+    });
+  },
+  methods: {
+    router(id) {
+      scrollTo(0, 0);
+      this.$router.push({ // 路由跳转
+        path: '/blog/' + id
       });
-    },
-    methods: {
-      router(id) {
-        scrollTo(0, 0);
-        this.$router.push({ //路由跳转
-          path: '/blog/'+id
-        })
-      }
     }
-
   }
+
+};
 </script>
 <style scoped>
   #hotBlog {

@@ -2,8 +2,6 @@ package com.coisini.config;
 
 public class MailConfig {
 
-
-
     /**
      * redis 中 mail key 的前缀
      */

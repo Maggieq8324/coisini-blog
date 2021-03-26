@@ -9,7 +9,12 @@
         maxlength="100"
         show-word-limit/>
       <br/><br/>
-      <mavon-editor ref=md              @save="save()" v-model="body" id="editor" @imgAdd="$uploadImg" @imgDel="$imgDel"
+      <mavon-editor ref=md
+                    @save="save()"
+                    v-model="body"
+                    id="editor"
+                    @imgAdd="$uploadImg"
+                    @imgDel="$imgDel"
                     placeholder="## Start"/>
       <!-- 以下是预览模式配置 -->
       <!--:toolbarsFlag="false"  :subfield="false" defaultOpen="preview"-->
@@ -41,78 +46,78 @@
 </template>
 
 <script>
-  import tag from '@/api/tag'
-  import blog from '@/api/blog'
-  import file from '@/utils/file'
+import tag from '@/api/tag';
+import blog from '@/api/blog';
+import file from '@/utils/file';
 
-  export default {
+export default {
 
-    name: 'newBlog',
-    data() {
-      return {
-        title: '',
-        body: '',
-        tags: [],
-        checkboxGroup: [],
-        img_file: {}
+  name: 'newBlog',
+  data() {
+    return {
+      title: '',
+      body: '',
+      tags: [],
+      checkboxGroup: [],
+      img_file: {}
+    };
+  },
+  methods: {
+    sendBlog() { // 发布博客
+      if (this.checkboxGroup.length <= 0 || this.title.length <= 0 || this.body.length <= 0) {
+        this.$message.warning('内容不允许为空');
+        return;
       }
-    },
-    methods: {
-      sendBlog() { //发布博客
-        if (this.checkboxGroup.length <= 0 || this.title.length <= 0 || this.body.length <= 0) {
-          this.$message({
-            type: 'error',
-            message: '字段不完整'
-          });
-          return;
-        }
-        var tags = this.checkboxGroup;
-        var tagStr = '';
-        for (var i = 0; i < tags.length; i++) {
-          if (i != tags.length - 1)
-            tagStr = tagStr + tags[i] + ',';
-          else
-            tagStr = tagStr + tags[i];
-        }
+      var tags = this.checkboxGroup;
+      var tagStr = '';
+      for (var i = 0; i < tags.length; i++) {
+        if (i !== tags.length - 1) { tagStr = tagStr + tags[i] + ','; } else { tagStr = tagStr + tags[i]; }
+      }
 
-        blog.sendBlog(this.title, this.body, tagStr).then(res => {
-          this.$alert('发布成功', '提示', {
+      blog.sendBlog(this.title, this.body, tagStr).then(resp => {
+        if (resp.sta === '00') {
+          this.$alert(resp.message, '提示', {
             confirmButtonText: '确定',
             callback: action => {
-              if (action == 'confirm') {
+              if (action === 'confirm') {
                 scrollTo(0, 0);
-                history.back()
+                // history.back();
+                window.location.href = '/blog';
               }
             }
           });
-        })
-      },
-      $uploadImg(pos, $file) { //图片上传
-
-        // 第一步.将图片上传到服务器.
-        var formdata = new FormData();
-        formdata.append('file', $file);
-        blog.uploadImg(formdata).then(res => {
-          // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-          this.$refs.md.$img2Url(pos, res.data);
-        })
-      },
-      $imgDel(pos) {
-        delete this.img_file[pos];
-      },
-      save() {
-        if (this.title.length > 0 && this.body.length > 0) {
-          file.generateTxt(this.title, this.body + '\n' + new Date().toLocaleString());
+        } else {
+          this.$message.error(resp.message || '发布失败');
         }
-      }
-    },
-    created() {
-      tag.getTag().then(res => {
-        this.tags = res.data;
-      })
 
+      });
+    },
+    $uploadImg(pos, $file) { // 图片上传
+      // 第一步.将图片上传到服务器.
+      var formdata = new FormData();
+      formdata.append('file', $file);
+      blog.uploadImg(formdata).then(res => {
+        // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+        this.$refs.md.$img2Url(pos, res.data);
+      });
+    },
+    $imgDel(pos) {
+      delete this.img_file[pos];
+    },
+    save() {
+      if (this.title.length > 0 && this.body.length > 0) {
+        file.generateTxt(this.title, this.body + '\n' + new Date().toLocaleString());
+      }
     }
+  },
+  created() {
+    tag.getTag().then(res => {
+      if (res.sta === '00') {
+        this.tags = res.data;
+      }
+    });
   }
+};
 </script>
 <style>
   #newBlog {

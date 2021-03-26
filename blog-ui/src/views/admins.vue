@@ -35,37 +35,37 @@
   </div>
 </template>
 <script>
-  //vue不支持文件名为admin的文件
-  export default {
-    name: 'admins',
-    data() {
-      return {
-        activeIndex: '1'
-      }
-    },
-    watch: {
-      // 监控当前页面path，防止刷新页面显示错误
-      '$route.path': {
-        deep: true,
-        immediate: true,
-        handler(to, from) {
-          if (to === '/admins/codeManage') {
-            this.activeIndex = '2'
-          } else if (to === '/admins/announcementManage') {
-            this.activeIndex = '3'
-          } else if (to === '/admins/blogManage') {
-            this.activeIndex = '4'
-          }
+// vue不支持文件名为admin的文件
+export default {
+  name: 'admins',
+  data() {
+    return {
+      activeIndex: '1'
+    };
+  },
+  watch: {
+    // 监控当前页面path，防止刷新页面显示错误
+    '$route.path': {
+      deep: true,
+      immediate: true,
+      handler(to, from) {
+        if (to === '/admins/codeManage') {
+          this.activeIndex = '2';
+        } else if (to === '/admins/announcementManage') {
+          this.activeIndex = '3';
+        } else if (to === '/admins/blogManage') {
+          this.activeIndex = '4';
         }
       }
-    },
-    methods: {
-      handleSelect(key, keyPath) {
-//        console.log(key, keyPath);
-        this.activeIndex = key
-      }
+    }
+  },
+  methods: {
+    handleSelect(key, keyPath) {
+      //        console.log(key, keyPath);
+      this.activeIndex = key;
     }
   }
+};
 </script>
 <style scoped>
   .menuItem {

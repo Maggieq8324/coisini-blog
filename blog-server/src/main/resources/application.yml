@@ -21,8 +21,8 @@ spring:
   mail:
     host: smtp.qq.com
     port: 25
-    username: 1936524252@qq.com
-    password: LT528324
+    username: maggieq8324@foxmail.com
+    password: gblwaiageaoscgje
     default-encoding: UTF-8
     properties:
       mail:
@@ -31,6 +31,10 @@ spring:
           starttls:
             enable: true
             required: true
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
 
   ###Redis
   redis:
@@ -60,18 +64,14 @@ mybatis:
 
 ###是否启用swagger
 swagger:
-  enable: false
+  enable: true
 
 logging:
   level:
     org.springframework.security: info
     root: info
-  path: e:/springboot-blog
-
-
-
-
-
+  # path: e:/springboot-blog
+  path: c:/blog/log
 
 ### jwt
 jwt:
@@ -89,7 +89,8 @@ upload:
   #静态资源对外暴露的访问路径 一个* 代表只匹配该路径下的一级子路径
   staticAccessPath: /img/*
   #文件上传目录
-  uploadFolder: E:/blog
+  # uploadFolder: E:/blog
+  uploadFolder: C:/blog/data
   #文件夹层数
   layerCount: 2
   #文件夹内单位数
@@ -97,7 +98,7 @@ upload:
 
 ###站点介绍
 site:
-  introduction: "分享知识"
+  introduction: "万事从未风过耳，一生只是梦游身"
 
 server:
-  port: 8324
+  port: 31091

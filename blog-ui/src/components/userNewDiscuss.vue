@@ -14,30 +14,32 @@
 </template>
 
 <script>
-  import discuss from '@/api/discuss'
+import discuss from '@/api/discuss';
 
-  export default {
-    name: 'introduction',
-    data() {
-      return {
-        discussList: ''
+export default {
+  name: 'introduction',
+  data() {
+    return {
+      discussList: ''
+    };
+  },
+  created() {
+    discuss.getUserNewDiscuss().then(resp => {
+      if (resp.sta === '00') {
+        this.discussList = resp.data;
       }
-    },
-    created() {
-      discuss.getUserNewDiscuss().then(responese => {
-        this.discussList = responese.data;
+    });
+  },
+  methods: {
+    router(id) {
+      scrollTo(0, 0);
+      this.$router.push({ // 路由跳转
+        path: '/blog/' + id
       });
-    },
-    methods: {
-      router(id) {
-        scrollTo(0, 0);
-        this.$router.push({ //路由跳转
-          path: '/blog/'+id
-        })
-      }
     }
-
   }
+
+};
 </script>
 <style scoped>
   #userNewDiscuss {

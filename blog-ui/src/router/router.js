@@ -1,27 +1,29 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 
-import index from '@/views/index'
-import message from '@/views/message'
-import announcement from '@/views/announcement'
-import newBlog from '@/views/newBlog'
-import account from '@/views/account'
-import admins from '@/views/admins'
-import forgetPwd from '@/views/forgetPwd'
-import searchBlog from '@/views/searchBlog'
-import blog from '@/views/blog'
-import myBlog from '@/views/myBlog'
-import editBlog from '@/views/editBlog'
-import notfound from '@/views/notfound'
+import index from '@/views/index';
+import message from '@/views/message';
+import announcement from '@/views/announcement';
+import newBlog from '@/views/newBlog';
+import account from '@/views/account';
+import admins from '@/views/admins';
+import forgetPwd from '@/views/forgetPwd';
+import searchBlog from '@/views/searchBlog';
+import blog from '@/views/blog';
+import myBlog from '@/views/myBlog';
+import editBlog from '@/views/editBlog';
+import notfound from '@/views/notfound';
 
-import userManage from '@/views/userManage'
-import codeManage from '@/views/codeManage'
-import announcementManage from '@/views/announcementManage'
-import blogManage from '@/views/blogManage'
+import userManage from '@/views/userManage';
+import codeManage from '@/views/codeManage';
+import announcementManage from '@/views/announcementManage';
+import blogManage from '@/views/blogManage';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
+  mode: 'history',
+  base: 'blog',
   routes: [
     {
       path: '/',
@@ -52,7 +54,7 @@ export default new Router({
       path: '/admins',
       name: 'admins',
       component: admins,
-      children: [  //这里就是二级路由的配置
+      children: [  // 这里就是二级路由的配置
         {
           path: 'userManage',
           name: 'userManage',
@@ -106,4 +108,4 @@ export default new Router({
       component: notfound
     }
   ]
-})
+});

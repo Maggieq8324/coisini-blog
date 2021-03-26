@@ -77,14 +77,13 @@ public class BlogService {
     private RabbitTemplate rabbitTemplate;
 
     /**
-     * 返回的首页博客列表内容的最大字符数
+          * 返回的首页博客列表内容的最大字符数
      */
     private static final int MAX_BODY_CHAR_COUNT = 150;
 
 
     /**
-     * 保存图片,返回url
-     *
+          * 保存图片,返回url
      * @param file
      * @return
      * @throws IOException
@@ -108,8 +107,7 @@ public class BlogService {
     }
 
     /**
-     * 保存博文
-     *
+          * 保存博文
      * @param blogTitle
      * @param blogBody
      * @param tagIds
@@ -124,7 +122,6 @@ public class BlogService {
                 throw new RuntimeException();
             }
         }
-
 
         Blog blog = new Blog();
         //博文用户
@@ -164,14 +161,12 @@ public class BlogService {
     }
 
     /**
-     * 根据id查询博文以及博文标签
-     * 正常状态
-     *
+          * 根据id查询博文以及博文标签
+          * 正常状态
      * @param blogId
      * @return
      */
     public Blog findBlogById(Integer blogId, boolean isHistory) throws IOException {
-
         // 查询缓存
         String blogJson = redisTemplate.opsForValue().get(RedisConfig.REDIS_BLOG_PREFIX + blogId);
         Blog blog = null;
@@ -207,17 +202,14 @@ public class BlogService {
         return blog;
     }
 
-
     /**
-     * 根据用户查询博文以及标签
-     * 正常状态
-     *
+          * 根据用户查询博文以及标签
+          * 正常状态
      * @param page      页数
      * @param showCount 显示数量
      * @return
      */
     public List<Blog> findBlogByUser(Integer page, Integer showCount) {
-
 
         User user = userDao.findUserByName(jwtTokenUtil.getUsernameFromRequest(request));
         List<Blog> blogs = blogDao.findBlogByUserId(user.getId(), (page - 1) * showCount, showCount);
@@ -229,9 +221,8 @@ public class BlogService {
     }
 
     /**
-     * 查询该用户的博客数量
-     * 正常状态
-     *
+          * 查询该用户的博客数量
+          * 正常状态
      * @return
      */
     public Long getBlogCountByUser() {
@@ -240,9 +231,8 @@ public class BlogService {
     }
 
     /**
-     * 查询主页所有博客数量
-     * 正常状态
-     *
+          * 查询主页所有博客数量
+          * 正常状态
      * @return
      */
     public Long getHomeBlogCount() {
@@ -250,15 +240,13 @@ public class BlogService {
     }
 
     /**
-     * 查询主页博客
-     * 正常状态
-     *
+          * 查询主页博客
+          * 正常状态
      * @param page      页码
      * @param showCount 显示条数
      * @return
      */
     public List<Blog> findHomeBlog(Integer page, Integer showCount) throws IOException {
-
         // mysql 分页中的开始位置
         int start = (page - 1) * showCount;
 
@@ -325,14 +313,11 @@ public class BlogService {
         }
 
         return blogs;
-
-
     }
 
     /**
-     * 查询热门博文
-     * 正常状态
-     *
+          * 查询热门博文
+          * 正常状态
      * @return
      */
     public List<Blog> findHotBlog() throws IOException {
@@ -360,14 +345,11 @@ public class BlogService {
             // 通过定时任务进行热门博客列表更新
             return blogDao.findHotBlog(6);
         }
-
-
     }
 
     /**
-     * 搜索博文
-     * 正常状态
-     *
+          * 搜索博文
+          * 正常状态
      * @param searchText
      * @return
      */
@@ -380,9 +362,8 @@ public class BlogService {
     }
 
     /**
-     * 符合关键词的博文数量
-     * 正常状态
-     *
+          * 符合关键词的博文数量
+          * 正常状态
      * @param searchText
      * @return
      */
@@ -391,9 +372,8 @@ public class BlogService {
     }
 
     /**
-     * 查询所有博文
-     * 正常状态
-     *
+          * 查询所有博文
+          * 正常状态
      * @return
      */
     public List<Blog> findAllBlog(Integer page, Integer showCount) {
@@ -401,8 +381,7 @@ public class BlogService {
     }
 
     /**
-     * 修改博文
-     *
+          * 修改博文
      * @param blogId
      * @param blogTitle
      * @param blogBody
@@ -415,7 +394,6 @@ public class BlogService {
         if (!user.getId().equals(blog.getUser().getId())) {
             throw new RuntimeException("无权限修改");
         }
-
 
         blog.setTitle(blogTitle);
         blog.setBody(blogBody);
@@ -435,8 +413,7 @@ public class BlogService {
     }
 
     /**
-     * 用户删除博文
-     *
+          * 用户删除博文
      * @param blogId
      */
     @Transactional(rollbackFor = Exception.class)
@@ -447,7 +424,6 @@ public class BlogService {
         if (!user.getId().equals(blog.getUser().getId())) {
             throw new RuntimeException("无权限删除");
         }
-
 
         //更改博客状态
         blog.setState(0);
@@ -466,8 +442,7 @@ public class BlogService {
     }
 
     /**
-     * 管理员删除博文
-     *
+          * 管理员删除博文
      * @param blogId
      */
     @Transactional(rollbackFor = Exception.class)
@@ -486,7 +461,6 @@ public class BlogService {
             List<String> newBlogIds = redisTemplate.opsForList().range(RedisConfig.REDIS_NEW_BLOG, 0, RedisConfig.REDIS_NEW_BLOG_COUNT - 1);
             List<String> hotBlogIds = redisTemplate.opsForList().range(RedisConfig.REDIS_HOT_BLOG, 0, RedisConfig.REDIS_HOT_BLOG_COUNT - 1);
 
-
             if (newBlogIds.contains(blogId + "")) {
                 // 更新最新博客列表
                 blogTask.updateRedisNewBlogList();
@@ -499,7 +473,6 @@ public class BlogService {
         }
         // 删除博客归档信息
         redisTemplate.delete(RedisConfig.REDIS_STATISTICAL);
-
     }
 
     //存在业务冲突，弃用此方法
@@ -512,11 +485,9 @@ public class BlogService {
 //        blogDao.updateBlogState(blogId, 1);
 //    }
 
-
     /**
-     * 符合关键字的博文数量
-     * 所有状态
-     *
+          * 符合关键字的博文数量
+          * 所有状态
      * @param searchText
      * @return
      */
@@ -525,9 +496,8 @@ public class BlogService {
     }
 
     /**
-     * 搜索博文
-     * 所有状态
-     *
+          * 搜索博文
+          * 所有状态
      * @param searchText 搜索内容
      * @param page
      * @param showCount
@@ -538,11 +508,9 @@ public class BlogService {
         return blogs;
     }
 
-
     /**
-     * 按月份归档博客
-     * 正常状态
-     *
+          * 按月份归档博客
+          * 正常状态
      * @return
      */
     public List<Map<String, Object>> statisticalBlogByMonth() throws IOException {
@@ -558,13 +526,11 @@ public class BlogService {
             redisTemplate.opsForValue().set(RedisConfig.REDIS_STATISTICAL, objectMapper.writeValueAsString(maps));
             return maps;
         }
-
     }
 
     /**
-     * 查询博客记录数
-     * 所有状态
-     *
+          * 查询博客记录数
+          * 所有状态
      * @return
      */
     public Long getAllBlogCount() {

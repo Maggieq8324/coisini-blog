@@ -17,14 +17,14 @@
 
 </template>
 <script>
-  export default {
-    name: 'notfound',
-    methods: {
-      back() {
-        history.back()
-      }
+export default {
+  name: 'notfound',
+  methods: {
+    back() {
+      history.back();
     }
   }
+};
 </script>
 <style scoped>
 
@@ -34,7 +34,7 @@
 
   .notfoud-container .img-404 {
     height: 155px;
-    background: url(../assets/404page.png) center center no-repeat;
+    background: url(../assets/images/404page.png) center center no-repeat;
     -webkit-background-size: 150px auto;
     margin-top: 40px;
     margin-bottom: 20px

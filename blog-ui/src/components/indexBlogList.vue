@@ -65,7 +65,6 @@ export default {
     },
     loadBlog() { // 加载数据
       blog.getBlogHome(this.currentPage, this.pageSize).then(resp => {
-        console.log(resp);
         if (resp.sta === '00') {
           this.total = resp.data.total;
           this.blogList = resp.data.rows;

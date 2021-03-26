@@ -44,11 +44,11 @@
 
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="success" plain v-if="scope.row.top==1"
+            <el-button size="mini" type="success" plain v-if="scope.row.top===1"
                        @click="top(scope.row.id,(scope.row.top+1)%2)">置顶公告
             </el-button>
 
-            <el-button size="mini" type="warning" plain v-if="scope.row.top==0"
+            <el-button size="mini" type="warning" plain v-if="scope.row.top===0"
                        @click="top(scope.row.id,(scope.row.top+1)%2)">取消置顶
             </el-button>
 
@@ -77,103 +77,104 @@
   </div>
 </template>
 <script>
-  import announcement from '@/api/announcement'
+import announcement from '@/api/announcement';
 
-  export default {
-    name: 'announcement',
-    data() {
-      return {
-        announcementTitle: '',
-        announcementBody: '',
-        announcementData: [],
-        total: 0,        //数据总数
-        pageSize: 10,    //每页显示数量
-        currentPage: 1,   //当前页数
-        loading: true,
-        sendFlag: false
-      }
-    },
-    created() {
-      this.load()
-    },
-    methods: {
-      load() {
-        announcement.getAnnouncement(this.currentPage, this.pageSize).then(res => {
-          this.announcementData = res.data.rows;
-          this.total = res.data.total;
-          this.loading = false;
-        });
-      },
-      currentChange(currentPage) { //页码更改事件处理
-        this.currentPage = currentPage;
-        this.load();
-        scrollTo(0, 0);
-      },
-      sendAnnouncement() {
-        if (this.announcementTitle.length <= 0 || this.announcementBody.length <= 0) {
-          this.$message({
-            message: '字段不完整',
-            type: 'error'
-          });
-          return;
+export default {
+  name: 'announcement',
+  data() {
+    return {
+      announcementTitle: '',
+      announcementBody: '',
+      announcementData: [],
+      total: 0,        // 数据总数
+      pageSize: 10,    // 每页显示数量
+      currentPage: 1,   // 当前页数
+      loading: true,
+      sendFlag: false
+    };
+  },
+  created() {
+    this.load();
+  },
+  methods: {
+    load () {
+      announcement.getAnnouncement(this.currentPage, this.pageSize).then(resp => {
+        if (resp.sta === '00') {
+          this.announcementData = resp.data.rows;
+          this.total = resp.data.total;
         }
 
-        announcement.sendAnnouncement(this.announcementTitle, this.announcementBody).then(res => {
-          this.$message({
-            message: '发布成功',
-            type: 'success'
-          });
+        this.loading = false;
+      });
+    },
+    currentChange (currentPage) { // 页码更改事件处理
+      this.currentPage = currentPage;
+      this.load();
+      scrollTo(0, 0);
+    },
+    sendAnnouncement () {
+      if (this.announcementTitle.length <= 0 || this.announcementBody.length <= 0) {
+        this.$message.warning('请输入内容');
+        return;
+      }
+
+      announcement.sendAnnouncement(this.announcementTitle, this.announcementBody).then(resp => {
+        if (resp.sta === '00') {
+          this.$message.success('发布成功');
           this.announcementTitle = '';
           this.announcementBody = '';
           this.load();
-          this.sendFlag = false
-        })
-      },
-      top(id, state) {
-        announcement.top(id, state).then(res => {
-          if (state == 1) {
-            this.$message({
-              message: '取消成功',
-              type: 'success'
-            });
+          this.sendFlag = false;
+        } else {
+          this.$message.error(resp.message || '发布失败');
+        }
+      });
+    },
+    top (id, state) {
+      announcement.top(id, state).then(resp => {
+        if (resp.sta === '00') {
+          if (state === 1) {
+            this.$message.success('取消成功');
           } else {
-            this.$message({
-              message: '置顶成功',
-              type: 'success'
-            });
+            this.$message.success('置顶成功');
           }
           this.load();
-        })
-      },
-      deleteAnnouncement(id) {
-        this.$confirm('是否删除此公告?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          announcement.deleteAnnouncement(id).then(res => {
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            });
+        } else {
+          this.$message.error(resp.message || '操作失败');
+        }
+      });
+    },
+    deleteAnnouncement (id) {
+      this.$confirm('是否删除此公告?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        announcement.deleteAnnouncement(id).then(resp => {
+          if (resp.sta === '00') {
+            this.$message.success('删除成功');
             this.load();
-          })
-        }).catch(() => {
-        })
-      },
-      substring(txt) {
-        txt = txt.replace(new RegExp('<.*>', 'g'), '<标签>');
-
-        if (txt.length > 50)
-          return txt.substring(0, 50) + '...';
-        else
-          return txt;
-      },
-      look(title, body) {
-        this.$alert('<div>' + body + '</div>', title, {
-          dangerouslyUseHTMLString: true
+          } else {
+            this.$message.error(resp.message || '删除失败');
+          }
         });
+      }).catch(() => {
+      });
+    },
+    substring (txt) {
+      txt = txt.replace(new RegExp('<.*>', 'g'), '<标签>');
+
+      if (txt.length > 50) {
+        return txt.substring(0, 50) + '...';
+      } else {
+        return txt;
       }
+    },
+    look (title, body) {
+      this.$alert('<div>' + body + '</div>', title, {
+        dangerouslyUseHTMLString: true
+      });
     }
   }
+};
 </script>

@@ -17,7 +17,6 @@
       </el-divider>
     </div>
 
-
     <div style="padding-bottom: 4%">
       <el-pagination
         :pager-count="5"
@@ -44,79 +43,82 @@
   </el-card>
 </template>
 <script>
-  import message from '@/api/message'
-  import date from '@/utils/date'
-  import 'element-ui/lib/theme-chalk/display.css';
+import message from '@/api/message';
+import date from '@/utils/date';
+import 'element-ui/lib/theme-chalk/display.css';
 
-  export default {
-    name: 'message',
-    data() {
-      return {
-        total: 0,        //数据总数
-        messageList: [],   //当前页数据
-        pageSize: 5,    //每页显示数量
-        currentPage: 1,   //当前页数
-        messageBody: '',
-        loading: true //是否加载中
-      }
-    },
-    created() {
-      this.loadMessage();
-
-    },
-    methods: {
-      loadMessage() {
-        message.getMessage(this.currentPage, this.pageSize).then(res => {
+export default {
+  name: 'message',
+  data() {
+    return {
+      total: 0,        // 数据总数
+      messageList: [],   // 当前页数据
+      pageSize: 5,    // 每页显示数量
+      currentPage: 1,   // 当前页数
+      messageBody: '',
+      loading: true // 是否加载中
+    };
+  },
+  created() {
+    this.loadMessage();
+  },
+  methods: {
+    loadMessage() {
+      message.getMessage(this.currentPage, this.pageSize).then(res => {
+        if (JSON.stringify(res) !== '{}') {
           this.total = res.data.total;
           this.messageList = res.data.rows;
-          this.loading = false
-        })
-      },
-      currentChange(currentPage) { //页码更改事件处理
-        this.currentPage = currentPage;
-        this.loadMessage();
-      },
-      sendMessage() {
-        if (this.messageBody.length <= 0) {
-          this.$message({
-            type: 'error',
-            message: '字段不完整'
-          });
-          return;
         }
-        message.sendMessage(this.messageBody).then(res => {
-          this.$message({
-            type: 'success',
-            message: '留言成功'
-          });
+
+        this.loading = false;
+      });
+    },
+    currentChange(currentPage) { // 页码更改事件处理
+      this.currentPage = currentPage;
+      this.loadMessage();
+    },
+    sendMessage() {
+      if (this.messageBody.length <= 0) {
+        this.$message({
+          type: 'error',
+          message: '字段不完整'
+        });
+        return;
+      }
+      message.sendMessage(this.messageBody).then(res => {
+        if (res.sta === '00') {
+          this.$message.success('留言成功');
           this.messageBody = '';
           this.loadMessage();
-        })
-      },
-      deleteMessage(id) {
-        this.$confirm('是否删除此留言?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          message.deleteMessage(id).then(res => {
-            this.$message({
-              type: 'success',
-              message: '删除成功'
-            });
-            this.loadMessage();
-          })
-        }).catch(() => {
-        });
-      },
-      getStoreRoles() { //获取store中存储的roles
-        return this.$store.state.roles;
-      },
-      getTime(time) {//将时间戳转化为几分钟前，几小时前
-        return date.timeago(time);
-      },
+        } else {
+          this.$message.warning(res.message);
+        }
+      });
     },
+    deleteMessage(id) {
+      this.$confirm('是否删除此留言?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        message.deleteMessage(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功'
+          });
+          this.loadMessage();
+        });
+      }).catch(() => {
+      });
+    },
+    getStoreRoles() { // 获取store中存储的roles
+      return this.$store.state.roles;
+    },
+    getTime(time) { // 将时间戳转化为几分钟前，几小时前
+      return date.timeago(time);
+    }
   }
+};
 </script>
 <style scoped>
   #message {

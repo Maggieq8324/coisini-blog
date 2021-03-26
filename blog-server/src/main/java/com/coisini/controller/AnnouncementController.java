@@ -1,8 +1,8 @@
 package com.coisini.controller;
 
 import com.coisini.model.PageResult;
-import com.coisini.model.Result;
-import com.coisini.model.StatusCode;
+import com.coisini.model.ResponseModel;
+import com.coisini.model.SysErrorCode;
 import com.coisini.entity.Announcement;
 import com.coisini.service.AnnouncementService;
 import com.coisini.utils.FormatUtil;
@@ -32,61 +32,100 @@ public class AnnouncementController {
     @ApiOperation(value = "发布公告", notes = "公告标题+公告内容")
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public Result newAnnouncement(String title, String body) {
+    public ResponseModel newAnnouncement(String title, String body) {
+    	ResponseModel responseModel = new ResponseModel();
+    	
         if (!formatUtil.checkStringNull(title, body)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
 
         if (title.length() > 255) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("标题过长");
+        	return responseModel;
         }
 
         announcementService.saveAnnouncement(title, body);
-        return Result.create(StatusCode.OK, "发布成功");
+        responseModel.setSta(SysErrorCode.CODE_00);
+    	responseModel.setMessage("发布成功");
+    	return responseModel;
     }
 
     @ApiOperation(value = "删除公告", notes = "公告id")
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{announcementId}")
-    public Result deleteAnnouncement(@PathVariable Integer announcementId) {
+    public ResponseModel deleteAnnouncement(@PathVariable Integer announcementId) {
+    	ResponseModel responseModel = new ResponseModel();
+    	
         if (!formatUtil.checkPositive(announcementId)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+            responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
 
         announcementService.deleteAnnouncementById(announcementId);
-        return Result.create(StatusCode.OK, "删除成功");
+        responseModel.setSta(SysErrorCode.CODE_00);
+    	responseModel.setMessage("删除成功");
+    	return responseModel;
     }
 
-    //置顶
+    /**
+          *  置顶
+     * @param announcementId
+     * @param top
+     * @return
+     */
     @ApiOperation(value = "置顶/取消置顶公告", notes = "公告id+置顶状态 0置顶 1正常")
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/top/{announcementId}/{top}")
-    public Result top(@PathVariable Integer announcementId, @PathVariable Integer top) {
+    public ResponseModel top(@PathVariable Integer announcementId, @PathVariable Integer top) {
+    	ResponseModel responseModel = new ResponseModel();
+    	
         if (!formatUtil.checkPositive(announcementId)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
+        
         if (!formatUtil.checkObjectNull(top)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
 
         announcementService.updateAnnouncementTop(announcementId, top);
-        return Result.create(StatusCode.OK, "操作成功");
+        responseModel.setSta(SysErrorCode.CODE_00);
+    	responseModel.setMessage("操作成功");
+    	return responseModel;
     }
 
 
-    //分页获取公告
-
+    /**
+          *  分页获取公告
+     * @param page
+     * @param showCount
+     * @return
+     */
     @ApiOperation(value = "分页查询公告", notes = "页码+显示条数")
     @GetMapping("/{page}/{showCount}")
-    public Result getAnnouncement(@PathVariable Integer page, @PathVariable Integer showCount) {
+    public ResponseModel getAnnouncement(@PathVariable Integer page, @PathVariable Integer showCount) {
+    	ResponseModel responseModel = new ResponseModel();
+    	
         if (!formatUtil.checkPositive(page, showCount)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
 
         PageResult<Announcement> pageResult =
                 new PageResult<>(announcementService.getAnnouncementCount(), announcementService.findAnnouncement(page, showCount));
-
-        return Result.create(StatusCode.OK, "查询成功", pageResult);
+        
+        responseModel.setSta(SysErrorCode.CODE_00);
+    	responseModel.setMessage("查询成功");
+    	responseModel.setData(pageResult);
+    	return responseModel;
     }
 
 

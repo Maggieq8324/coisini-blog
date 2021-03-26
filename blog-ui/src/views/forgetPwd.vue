@@ -32,99 +32,80 @@
   </el-card>
 </template>
 <script>
-  import user from '@/api/user'
+import user from '@/api/user';
 
-  export default {
-    name: 'forgetPwd',
-    data() {
-      return {
-        userName: '',
-        mail: '',
-        mailCode: '',
-        newPassword: '',
-        confirmPassword: '',
-        sendMailFlag: false
+export default {
+  name: 'forgetPwd',
+  data() {
+    return {
+      userName: '',
+      mail: '',
+      mailCode: '',
+      newPassword: '',
+      confirmPassword: '',
+      sendMailFlag: false
+    };
+  },
+  methods: {
+    sendMail() { // 发送邮件
+      var reg = new RegExp(/^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
+      if (this.userName.length <= 0) {
+        this.$message.warning('请填写用户名');
+        return;
       }
+      if (!reg.test(this.mail)) { // 检测字符串是否符合正则表达式
+        this.$message.warning('邮箱格式不正确');
+        return;
+      }
+      this.sendMailFlag = true;
+      user.sendMail(this.mail).then(resp => {
+        if (resp.sta === '00') {
+          this.$message.success('发送成功');
+        } else {
+          this.$message.error(resp.message || '发送失败');
+        }
+        this.sendMailFlag = false;
+      }).catch(() => {
+        this.sendMailFlag = false;
+      });
     },
-    methods: {
-      sendMail() {//发送邮件
-        var reg = new RegExp(/^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
-        if (this.userName.length <= 0) {
-          this.$message({
-            message: '请填写用户名',
-            type: 'error'
-          });
-          return;
-        }
-        if (!reg.test(this.mail)) {//检测字符串是否符合正则表达式
-          this.$message({
-            message: '邮箱格式不正确',
-            type: 'error'
-          });
-          return;
-        }
-        this.sendMailFlag = true;
-        user.sendMail(this.mail).then(res => {
-          this.$message({
-            message: '发送成功',
-            type: 'success'
-          });
-          this.sendMailFlag = false;
-        }).catch(()=>{
-          this.sendMailFlag = false;
-        })
-      },
-      forgetPwd() {
-        if (this.userName.length <= 0) {
-          this.$message({
-            message: '请填写用户名',
-            type: 'error'
-          });
-          return;
-        }
-        var reg = new RegExp(/^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
-        if (!reg.test(this.mail)) {//检测字符串是否符合正则表达式
-          this.$message({
-            message: '邮箱格式不正确',
-            type: 'error'
-          });
-          return;
-        }
-        if (this.newPassword.length < 6) {
-          this.$message({
-            message: '密码不能小于6位',
-            type: 'error'
-          });
-          return;
-        }
-        if (this.newPassword != this.confirmPassword) {
-          this.$message({
-            message: '两次输入的密码不一致',
-            type: 'error'
-          });
-          return;
-        }
-        if (this.mailCode.length <= 0) {
-          this.$message({
-            message: '请输入验证码',
-            type: 'error'
-          });
-          return;
-        }
-        user.forgetPassword(this.userName, this.mailCode, this.newPassword).then(res => {
-
-          this.$message({
-            message: '更改成功',
-            type: 'success'
-          });
-          scrollTo(0, 0);
-          this.$router.push({ //路由跳转
-            path: '/'
-          })
-        })
+    forgetPwd() {
+      if (this.userName.length <= 0) {
+        this.$message.warning('请填写用户名');
+        return;
       }
+      var reg = new RegExp(/^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
+      if (!reg.test(this.mail)) { // 检测字符串是否符合正则表达式
+        this.$message.warning('邮箱格式不正确');
+        return;
+      }
+      if (this.newPassword.length < 6) {
+        this.$message.warning('密码不能小于6位');
+        return;
+      }
+      if (this.newPassword !== this.confirmPassword) {
+        this.$message.warning('两次输入的密码不一致');
+        return;
+      }
+      if (this.mailCode.length <= 0) {
+        this.$message.warning('请输入验证码');
+        return;
+      }
+      user.forgetPassword(this.userName, this.mailCode, this.newPassword).then(resp => {
+        if (resp.sta === '00') {
+          this.$message.success('更改成功');
+        } else {
+          this.$message.success(resp.message || '更改失败');
+        }
+
+        scrollTo(0, 0);
+        this.$router.push({ // 路由跳转
+          path: '/'
+        });
+      });
     }
   }
+};
 </script>
 <style scoped>
   #forgetPwd {

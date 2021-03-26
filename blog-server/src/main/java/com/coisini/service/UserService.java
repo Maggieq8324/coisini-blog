@@ -4,10 +4,10 @@ package com.coisini.service;
 import com.coisini.config.JwtConfig;
 import com.coisini.config.MailConfig;
 import com.coisini.config.RabbitMqConfig;
-import com.coisini.mapper.CodeMapper;
+//import com.coisini.mapper.CodeMapper;
 import com.coisini.mapper.RoleMapper;
 import com.coisini.mapper.UserMapper;
-import com.coisini.entity.Code;
+//import com.coisini.entity.Code;
 import com.coisini.entity.Role;
 import com.coisini.entity.User;
 import com.coisini.utils.JwtTokenUtil;
@@ -35,8 +35,8 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserMapper userDao;
 
-    @Autowired
-    private CodeMapper codeDao;
+//    @Autowired
+//    private CodeMapper codeDao;
 
     @Autowired
     private RoleMapper roleDao;
@@ -68,15 +68,15 @@ public class UserService implements UserDetailsService {
 
 
     /**
-     * 登录
-     * 返回token，用户名，用户角色
-     *
+          * 登录
+          * 返回token，用户名，用户角色
      * @param user
      * @return
      */
     public Map<String, Object> login(User user) throws UsernameNotFoundException, RuntimeException {
 
         User dbUser = this.findUserByName(user.getName());
+        
         //此用户不存在 或 密码错误
         if (null == dbUser || !encoder.matches(user.getPassword(), dbUser.getPassword())) {
             throw new UsernameNotFoundException("用户名或密码错误");
@@ -107,33 +107,28 @@ public class UserService implements UserDetailsService {
                 set(JwtConfig.REDIS_TOKEN_KEY_PREFIX + user.getName(), jwtConfig.getPrefix() + token, jwtConfig.getTime(), TimeUnit.SECONDS);
 
         return map;
-
-
     }
 
     /**
-     * 注册
-     *
+          * 注册
      * @param userToAdd
      */
     @Transactional(rollbackFor = Exception.class)
-    public void register(User userToAdd, String mailCode, String inviteCode) throws RuntimeException {
-
+    public void register(User userToAdd, String mailCode) throws RuntimeException {
 
         //验证码无效 throw 异常
         if (!checkMailCode(userToAdd.getMail(), mailCode)) {
             throw new RuntimeException("验证码错误");
         }
 
-
         //有效
         //查询邀请码是否有效
-        Code code = codeDao.findCodeById(inviteCode);
-
-        if (code == null || code.getState() != 0) {
-            //无效 throw 异常
-            throw new RuntimeException("邀请码无效");
-        }
+//        Code code = codeDao.findCodeById(inviteCode);
+//
+//        if (code == null || code.getState() != 0) {
+//            //无效 throw 异常
+//            throw new RuntimeException("邀请码无效");
+//        }
         //有效 保存用户
         final String username = userToAdd.getName();
         if (userDao.findUserByName(username) != null) {
@@ -157,15 +152,14 @@ public class UserService implements UserDetailsService {
             roleDao.saveUserRoles(userToAdd.getId(), role.getId());
         }
         // 更新邀请码状态
-        code.setUser(userToAdd);
-        code.setState(1);
-        codeDao.updateCode(code);
+//        code.setUser(userToAdd);
+//        code.setState(1);
+//        codeDao.updateCode(code);
     }
 
 
     /**
-     * 根据用户名查询用户
-     *
+          * 根据用户名查询用户
      * @param name
      * @return
      * @throws UsernameNotFoundException
@@ -183,8 +177,7 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 从token中提取信息
-     *
+          * 从token中提取信息
      * @param authHeader
      * @return
      */
@@ -216,8 +209,7 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 封禁或解禁用户
-     *
+          * 封禁或解禁用户
      * @param id
      * @param state
      */
@@ -238,8 +230,7 @@ public class UserService implements UserDetailsService {
 
 
     /**
-     * 创建管理员
-     *
+          * 创建管理员
      * @param user
      */
     public void createAdmin(User user) {
@@ -263,8 +254,7 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 修改用户密码
-     *
+          * 修改用户密码
      * @param oldPassword 旧密码
      * @param newPassword 新密码
      * @param code        邮箱验证码
@@ -288,12 +278,10 @@ public class UserService implements UserDetailsService {
         //更新密码
         user.setPassword(encoder.encode(newPassword));
         userDao.updateUser(user);
-
     }
 
     /**
-     * 更新用户邮箱
-     *
+          * 更新用户邮箱
      * @param newMail     新邮箱
      * @param oldMailCode 旧邮箱验证码
      * @param newMailCode 新邮箱验证码
@@ -315,12 +303,10 @@ public class UserService implements UserDetailsService {
             throw new RuntimeException("此邮箱已使用");
         }
 
-
         //校验新邮箱验证码
         if (!checkMailCode(newMail, newMailCode)) {
             throw new RuntimeException("新邮箱无效验证码");
         }
-
 
         user.setMail(newMail);
         //更新用户邮箱信息
@@ -329,8 +315,7 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 重置密码
-     *
+          * 重置密码
      * @param userName
      * @param mailCode
      * @param newPassword
@@ -354,8 +339,7 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 根据用户名分页搜索用户
-     *
+          * 根据用户名分页搜索用户
      * @param userName
      * @return
      */
@@ -364,8 +348,7 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 分页查询用户
-     *
+           * 分页查询用户
      * @param page
      * @param showCount
      * @return
@@ -375,8 +358,7 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 查询用户数
-     *
+          * 查询用户数
      * @return
      */
     public Long getUserCount() {
@@ -385,8 +367,7 @@ public class UserService implements UserDetailsService {
 
 
     /**
-     * 查询用户邮箱
-     *
+          * 查询用户邮箱
      * @return
      */
     public String findUserMail() {
@@ -395,8 +376,7 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 模糊查询用户名 返回记录数
-     *
+          * 模糊查询用户名 返回记录数
      * @param userName
      * @return
      */
@@ -404,10 +384,8 @@ public class UserService implements UserDetailsService {
         return userDao.getUserCountByName(userName);
     }
 
-
     /**
-     * 将 邮件 和 验证码发送到消息队列
-     *
+          * 将 邮件 和 验证码发送到消息队列
      * @param mail
      */
     public void sendMail(String mail) {
@@ -427,8 +405,7 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 从redis中提取 验证码
-     *
+          * 从redis中提取 验证码
      * @param mail 邮箱
      * @return 验证码
      */
@@ -437,8 +414,7 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 校验验证码是否正确
-     *
+          * 校验验证码是否正确
      * @param mail
      * @param code
      * @return
@@ -455,8 +431,7 @@ public class UserService implements UserDetailsService {
 
 
     /**
-     * 根据用户名查询用户
-     *
+          * 根据用户名查询用户
      * @param name
      * @return
      */
@@ -470,8 +445,7 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 更改用户打赏码
-     *
+          * 更改用户打赏码
      * @param imgPath
      */
     public void updateUserReward(String imgPath) {
@@ -481,8 +455,8 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 退出登录
-     * 删除redis中的key
+          * 退出登录
+          * 删除redis中的key
      */
     public void logout() {
         String username = jwtTokenUtil.getUsernameFromRequest(request);

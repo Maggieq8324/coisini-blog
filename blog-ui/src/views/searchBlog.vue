@@ -68,9 +68,12 @@ export default {
       scrollTo(0, 0);
     },
     loadBlog() { // 加载数据
-      blog.userSearchBlog(this.searchTxt, this.currentPage, this.pageSize).then(responese => {
-        this.total = responese.data.total;
-        this.blogList = responese.data.rows;
+      blog.userSearchBlog(this.searchTxt, this.currentPage, this.pageSize).then(resp => {
+        if (resp.sta === '00') {
+          this.total = resp.data.total;
+          this.blogList = resp.data.rows;
+        }
+
         this.loading = false;
       });
     }

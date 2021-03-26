@@ -92,7 +92,6 @@
             </el-upload>
           </el-form-item>
 
-
         </el-form>
       </div>
       <div style="margin-left: 45%">
@@ -100,204 +99,181 @@
       </div>
     </div>
 
-
   </el-card>
 </template>
 
 <script>
-  import user from '@/api/user'
+import user from '@/api/user';
 
-  export default {
-    name: 'account',
-    data() {
-      return {
-        oldPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-        updatePwdMailCode: '', // 修改密码验证码
-        mail: '', //用户原邮箱
-        oldMailCode: '', //原邮箱验证码
-        newMail: '',    //新邮箱
-        newMailCode: '',  //新邮箱验证码
-        updatePwdSendFlag: false,
-        updateMailToOldSendFlag: false,
-        updateMailToNewSendFlag: false,
-        imageUrl: '',
-        userReward: '',
-        upload: '/api/blog/uploadImg'
-      }
+export default {
+  name: 'account',
+  data() {
+    return {
+      oldPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+      updatePwdMailCode: '', // 修改密码验证码
+      mail: '', // 用户原邮箱
+      oldMailCode: '', // 原邮箱验证码
+      newMail: '',    // 新邮箱
+      newMailCode: '',  // 新邮箱验证码
+      updatePwdSendFlag: false,
+      updateMailToOldSendFlag: false,
+      updateMailToNewSendFlag: false,
+      imageUrl: '',
+      userReward: '',
+      upload: '/api/blog/uploadImg'
+    };
+  },
+  created() {
+    this.load();
+  },
+  methods: {
+    load() {
+      user.getUserMail().then(resp => {
+        if (resp.sta === '00') {
+          this.mail = resp.data;
+        }
+      });
+      user.getUserReward().then(resp => {
+        if (resp.sta === '00') {
+          this.userReward = resp.data;
+        } else {
+          this.userReward = '';
+        }
+      });
     },
-    created() {
-      this.load();
+    getToken() {
+      return {'Authorization': this.$store.state.token};
     },
-    methods: {
-      load() {
-        user.getUserMail().then(res => {
-          this.mail = res.data;
-        })
-        user.getUserReward().then(res => {
+    updateReward() {
+      if (this.imageUrl === '') { return; }
 
-          if (res.data === undefined) {
-            this.userReward = '';
-          } else {
-            this.userReward = res.data;
-          }
-        })
-      },
-      getToken() {
-        return {'Authorization': this.$store.state.token}
-      },
-      updateReward() {
-        if (this.imageUrl === '')
-          return;
-
-        user.updateReward(this.imageUrl).then(res => {
-          this.$message({
-            message: res.message,
-            type: 'success'
-          });
+      user.updateReward(this.imageUrl).then(resp => {
+        if (resp.sta === '00') {
+          this.$message.success(resp.message);
           this.load();
-        })
-
-
-      },
-      handleAvatarSuccess(res, file) {
-        this.imageUrl = res.data;
-      },
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isPNG = file.type === 'image/png';
-        const isLt2M = file.size / 1024 / 1024 < 1;
-        if (!isJPG && !isPNG) {
-          this.$message.error('图片不支持除 jpg/png 以外的格式');
+        } else {
+          this.$message.error(resp.message || '更新失败');
         }
-        if (!isLt2M) {
-          this.$message.error('打赏码图片大小不能超过 1MB!');
-        }
-        return true;
-      },
-
-      updatePwdSendMail() {  //更改密码发送验证码
-        this.updatePwdSendFlag = true;
-        this.sendMail(this.mail);
-      },
-      updateMailSendMailToOld() {  //更改密码发送验证码到旧邮箱
-        this.updateMailToOldSendFlag = true;
-        this.sendMail(this.mail);
-      },
-      updateMailSendMailToNew() {  //更改密码发送验证码到新邮箱
-        this.updateMailToNewSendFlag = true;
-        this.sendMail(this.newMail);
-      },
-      sendMail(mail) {
-        var reg = new RegExp(/^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
-        if (!reg.test(mail)) {//检测字符串是否符合正则表达式
-          this.$message({
-            message: '邮箱格式不正确',
-            type: 'error'
-          });
+      });
+    },
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = res.data;
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg';
+      const isPNG = file.type === 'image/png';
+      const isLt2M = file.size / 1024 / 1024 < 1;
+      if (!isJPG && !isPNG) {
+        this.$message.error('图片不支持除 jpg/png 以外的格式');
+      }
+      if (!isLt2M) {
+        this.$message.error('打赏码图片大小不能超过 1MB!');
+      }
+      return true;
+    },
+    updatePwdSendMail() {  // 更改密码发送验证码
+      this.updatePwdSendFlag = true;
+      this.sendMail(this.mail);
+    },
+    updateMailSendMailToOld() {  // 更改密码发送验证码到旧邮箱
+      this.updateMailToOldSendFlag = true;
+      this.sendMail(this.mail);
+    },
+    updateMailSendMailToNew() {  // 更改密码发送验证码到新邮箱
+      this.updateMailToNewSendFlag = true;
+      this.sendMail(this.newMail);
+    },
+    sendMail(mail) {
+      var reg = new RegExp(/^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
+      if (!reg.test(mail)) { // 检测字符串是否符合正则表达式
+        this.$message.warning('邮箱格式不正确');
+        this.updatePwdSendFlag = false;
+        this.updateMailToOldSendFlag = false;
+        this.updateMailToNewSendFlag = false;
+        return;
+      }
+      user.sendMail(mail).then(resp => {
+        if (resp.sta === '00') {
+          this.$message.success('发送成功');
           this.updatePwdSendFlag = false;
           this.updateMailToOldSendFlag = false;
           this.updateMailToNewSendFlag = false;
-          return;
-        }
-        user.sendMail(mail).then(res => {
-          this.$message({
-            message: '发送成功',
-            type: 'success'
-          });
+        } else {
           this.updatePwdSendFlag = false;
-          this.updateMailToOldSendFlag = false;
-          this.updateMailToNewSendFlag = false;
-        }).catch(() => {
-          this.updatePwdSendFlag = false;
-          this.updateMailToOldSendFlag = false;
-          this.updateMailToNewSendFlag = false;
-        })
-      },
-      updatePwd() {
+          this.$message.error(resp.message || '发送失败');
+        }
+      }).catch(() => {
+        this.updatePwdSendFlag = false;
+        this.updateMailToOldSendFlag = false;
+        this.updateMailToNewSendFlag = false;
+      });
+    },
+    updatePwd() {
+      if (this.oldPassword.length <= 0) {
+        this.$message.warning('原密码不能为空');
+        return;
+      }
 
-        if (this.oldPassword.length <= 0) {
-          this.$message({
-            message: '原密码不能为空',
-            type: 'error'
-          });
-          return;
-        }
+      if (this.newPassword.length < 6) {
+        this.$message.warning('密码不能小于6位');
+        return;
+      }
 
-        if (this.newPassword.length < 6) {
-          this.$message({
-            message: '密码不能小于6位',
-            type: 'error'
-          });
-          return;
-        }
-        if (this.newPassword != this.confirmPassword) {
-          this.$message({
-            message: '两次输入的密码不一致',
-            type: 'error'
-          });
-          return;
-        }
-        if (this.updatePwdMailCode.length <= 0) {
-          this.$message({
-            message: '请输入验证码',
-            type: 'error'
-          });
-          return;
-        }
-        user.updatePassword(this.oldPassword, this.newPassword, this.updatePwdMailCode).then(res => {
-          this.$message({
-            message: '修改成功',
-            type: 'success'
-          });
-          this.$store.commit('logout')//清除token等信息
-          this.$router.push({ //路由跳转
+      if (this.newPassword !== this.confirmPassword) {
+        this.$message.warning('两次输入的密码不一致');
+        return;
+      }
+
+      if (this.updatePwdMailCode.length <= 0) {
+        this.$message.warning('请输入验证码');
+        return;
+      }
+
+      user.updatePassword(this.oldPassword, this.newPassword, this.updatePwdMailCode).then(resp => {
+        if (resp.sta === '00') {
+          this.$message.success('修改成功');
+          this.$store.commit('logout');// 清除token等信息
+          this.$router.push({ // 路由跳转
             path: '/'
-          })
-        })
-      },
-      updateMail() {
-        var reg = new RegExp(/^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
-        if (!reg.test(this.newMail)) {//检测字符串是否符合正则表达式
-          this.$message({
-            message: '邮箱格式不正确',
-            type: 'error'
           });
-          return;
+        } else {
+          this.$message.error(resp.message || '修改失败');
         }
+      });
+    },
+    updateMail() {
+      var reg = new RegExp(/^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
+      if (!reg.test(this.newMail)) { // 检测字符串是否符合正则表达式
+        this.$message.warning('邮箱格式不正确');
+        return;
+      }
 
-        if (this.oldMailCode.length <= 0) {//
-          this.$message({
-            message: '请填写验证码',
-            type: 'error'
-          });
-          return;
-        }
+      if (this.oldMailCode.length <= 0) { //
+        this.$message.warning('请填写验证码');
+        return;
+      }
 
-        if (this.newMailCode.length <= 0) {//
-          this.$message({
-            message: '请填写验证码',
-            type: 'error'
-          });
-          return;
-        }
+      if (this.newMailCode.length <= 0) { //
+        this.$message.warning('请填写验证码');
+        return;
+      }
 
-        user.updateMail(this.newMail, this.oldMailCode, this.newMailCode).then(res => {
-          this.$message({
-            message: '改绑成功',
-            type: 'success'
-          });
+      user.updateMail(this.newMail, this.oldMailCode, this.newMailCode).then(resp => {
+        if (resp.sta === '00') {
+          this.$message.success('改绑成功');
           this.newMail = '';
           this.oldMailCode = '';
           this.newMailCode = '';
           this.load();
-        })
-
-
-      }
-    },
+        } else {
+          this.$message.error(resp.message || '改绑失败');
+        }
+      });
+    }
   }
+};
 </script>
 <style scoped>
   #account {

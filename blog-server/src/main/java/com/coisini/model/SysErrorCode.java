@@ -8,6 +8,7 @@ package com.coisini.model;
 public class SysErrorCode {
     public static final String CODE_00 = "00";
     public static final String CODE_401 = "401";
+    public static final String CODE_404 = "404";
     public static final String CODE_99001 = "99001";
     public static final String CODE_99002 = "99002";
     public static final String CODE_99003 = "99003";

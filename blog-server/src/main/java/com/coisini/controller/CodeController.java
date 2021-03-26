@@ -1,8 +1,10 @@
 package com.coisini.controller;
 
 import com.coisini.model.PageResult;
+import com.coisini.model.ResponseModel;
 import com.coisini.model.Result;
 import com.coisini.model.StatusCode;
+import com.coisini.model.SysErrorCode;
 import com.coisini.entity.Code;
 import com.coisini.service.CodeService;
 import com.coisini.utils.FormatUtil;
@@ -32,21 +34,33 @@ public class CodeController {
     //生成激活码 将生成的激活码返回
     @ApiOperation(value = "生成激活码", notes = "生成激活码")
     @PostMapping
-    public Result generateCode() {
-        return Result.create(StatusCode.OK, "生成成功", codeService.generateCode());
+    public ResponseModel generateCode() {
+    	ResponseModel responseModel = new ResponseModel();
+    	responseModel.setSta(SysErrorCode.CODE_00);
+    	responseModel.setMessage("生成成功");
+    	responseModel.setData(codeService.generateCode());
+    	return responseModel;
     }
 
     //分页查询激活码
     @ApiOperation(value = "分页查询激活码", notes = "页码+显示条数")
     @GetMapping("/{page}/{showCount}")
-    public Result findCode(@PathVariable Integer page, @PathVariable Integer showCount) {
+    public ResponseModel findCode(@PathVariable Integer page, @PathVariable Integer showCount) {
+    	ResponseModel responseModel = new ResponseModel();
+    	
         if (!formatUtil.checkPositive(page, showCount)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
+        	responseModel.setSta(SysErrorCode.CODE_99999);
+        	responseModel.setMessage("参数错误");
+        	return responseModel;
         }
 
         PageResult<Code> pageResult =
                 new PageResult<>(codeService.getCodeCount(), codeService.findCode(page, showCount));
-        return Result.create(StatusCode.OK, "查询成功", pageResult);
+        
+        responseModel.setSta(SysErrorCode.CODE_00);
+        responseModel.setMessage("查询成功");
+        responseModel.setData(pageResult);
+        return responseModel;
     }
 
 }

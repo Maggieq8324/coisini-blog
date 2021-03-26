@@ -7,20 +7,20 @@
 </template>
 
 <script>
-  import site from '@/api/site'
+import site from '@/api/site';
 
-  export default {
-    name: 'HelloWorld',
-    data() {
-      return {
-        msg: ''
-      }
-    },
-    created() {
-      site.getSite().then(responese => {
-        this.msg = responese.code;
-      });
-    }
-
+export default {
+  name: 'HelloWorld',
+  data() {
+    return {
+      msg: ''
+    };
+  },
+  created() {
+    site.getSite().then(responese => {
+      this.msg = responese.code;
+    });
   }
+
+};
 </script>

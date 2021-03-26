@@ -5,28 +5,36 @@
       <span style="color:#67C23A" class="el-icon-location-information">本站介绍</span>
     </p>
     <hr />
+    <div>
+      <img alt="958小站" class="avatar" src="../assets/images/icon.jpg" draggable="false">
+    </div>
+    <span style="font-size: 20px;font-weight: bold">958小站</span>
+    <br/>
+    <br/>
     {{ introduction }}
-    <br/><br/><br/>
+    <br/>
   </el-card>
 </template>
 
 <script>
-  import site from '@/api/site'
+import site from '@/api/site';
 
-  export default {
-    name: 'introduction',
-    data() {
-      return {
-        introduction: ''
+export default {
+  name: 'introduction',
+  data() {
+    return {
+      introduction: ''
+    };
+  },
+  created() {
+    site.getSite().then(resp => {
+      if (resp.sta === '00') {
+        this.introduction = resp.data;
       }
-    },
-    created() {
-      site.getSite().then(responese => {
-        this.introduction = responese.data;
-      });
-    }
-
+    });
   }
+
+};
 </script>
 <style scoped>
   #introduction {
@@ -36,5 +44,10 @@
     text-align: center;
 
     margin: 20px 0;
+  }
+
+  .avatar {
+    width: 90%;
+    height: 90%;
   }
 </style>

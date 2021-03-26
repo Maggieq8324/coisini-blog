@@ -1,88 +1,88 @@
-import request from '@/utils/request'
+import request from '@/utils/request';
 import qs from 'qs';
 
 export default {
   getHotBlog() {
     return request({
-      url: '/blog/hotBlog',
+      url: '/blogs/hotBlog',
       method: 'get'
-    })
+    });
   },
   getStatisticalBlogByMonth() {
     return request({
-      url: '/blog/statisticalBlogByMonth',
+      url: '/blogs/statisticalBlogByMonth',
       method: 'get'
-    })
+    });
   },
   getBlogHome(page, showCount) {
     return request({
-      url: '/blog/home/' + page + '/' + showCount,
+      url: '/blogs/home/' + page + '/' + showCount,
       method: 'get'
-    })
+    });
   },
   getBlogById(id, isClick) {
     return request({
-      url: '/blog/' + id + '/' + isClick,
+      url: '/blogs/' + id + '/' + isClick,
       method: 'get'
-    })
+    });
   },
   getMyBlog(page, showCount) {
     return request({
-      url: '/blog/myblog/' + page + '/' + showCount,
+      url: '/blogs/myblog/' + page + '/' + showCount,
       method: 'get'
-    })
+    });
   },
-  sendBlog(blogTitle, blogBody, tagId) {  //发布博客
+  sendBlog(blogTitle, blogBody, tagId) {  // 发布博客
     // alert(qs.stringify({'blogTitle': blogTitle, 'blogBody': blogBody,'tagId':tagId}))
     return request({
-      url: '/blog',
+      url: '/blogs',
       method: 'post',
       data: qs.stringify({'blogTitle': blogTitle, 'blogBody': blogBody, 'tagId': tagId})
-    })
+    });
   },
   uploadImg(formdata) {
     return request({
-      url: '/blog/uploadImg',
+      url: '/blogs/uploadImg',
       method: 'post',
       data: formdata,
-      headers: {'Content-Type': 'multipart/form-data'},
-    })
+      headers: {'Content-Type': 'multipart/form-data'}
+    });
   },
-  editBlog(blogId, blogTitle, blogBody, tagId) {  //发布博客
+  editBlog(blogId, blogTitle, blogBody, tagId) {  // 发布博客
     return request({
-      url: '/blog/' + blogId,
+      url: '/blogs/' + blogId,
       method: 'put',
       data: qs.stringify({'blogTitle': blogTitle, 'blogBody': blogBody, 'tagId': tagId})
-    })
+    });
   },
-  adminDeleteBlog(blogId) { //管理员删除博客
+  adminDeleteBlog(blogId) { // 管理员删除博客
     return request({
-      url: '/blog/admin/' + blogId,
+      url: '/blogs/admin/' + blogId,
       method: 'delete'
-    })
+    });
   },
-  userDeleteBlog(blogId) { //普通用户删除博客
+  userDeleteBlog(blogId) { // 普通用户删除博客
     return request({
-      url: '/blog/' + blogId,
+      url: '/blogs/' + blogId,
       method: 'delete'
-    })
+    });
   },
   adminGetBlog(page, showCount) {
     return request({
-      url: '/blog/AllBlog/' + page + '/' + showCount,
+      url: '/blogs/AllBlog/' + page + '/' + showCount,
       method: 'get'
-    })
+    });
   },
   adminSearchBlog(searchTxt, page, showCount) {
     return request({
-      url: '/blog/searchAllBlog/' + page + '/' + showCount + '?search=' + searchTxt,
+      url: '/blogs/searchAllBlog/' + page + '/' + showCount + '?search=' + searchTxt,
       method: 'get'
-    })
+    });
   },
   userSearchBlog(searchTxt, page, showCount) {
     return request({
-      url: '/blog/searchBlog/' + page + '/' + showCount + '?search=' + searchTxt,
+      url: '/blogs/searchBlog/' + page + '/' + showCount + '?search=' + searchTxt,
       method: 'get'
-    })
+    });
   }
-}
+};
