@@ -2,8 +2,6 @@ package com.coisini.controller;
 
 import com.coisini.model.PageResult;
 import com.coisini.model.ResponseModel;
-import com.coisini.model.Result;
-import com.coisini.model.StatusCode;
 import com.coisini.model.SysErrorCode;
 import com.coisini.entity.Code;
 import com.coisini.service.CodeService;

@@ -16,11 +16,6 @@ import org.springframework.web.filter.CorsFilter;
 public class CorsConfig {
 	
 	private final static String ALLOWORIGIN_CORS = "*";
-	private final static String ALLOWORIGIN_DEVELOPER_CORS_1 = "http://localhost:8080";
-	private final static String ALLOWORIGIN_DEVELOPER_CORS_2 = "http://127.0.0.1:8080";
-	private final static String ALLOWORIGIN_PRIVATE_CORS_1 = "https://localhost";
-	private final static String ALLOWORIGIN_PRIVATE_CORS_2 = "https://127.0.0.1";
-	private final static String ALLOWORIGIN_PRODUCTION_CORS = "https://39.100.65.160";
 	
 	@Bean
     public CorsFilter corsFilter() {

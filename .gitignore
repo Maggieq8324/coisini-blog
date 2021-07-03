@@ -1,2 +1,5 @@
 /blog-server/README.md
 /blog-server/target
+/deploy
+/blog-server/.idea
+/blog-server/blog-server.iml
