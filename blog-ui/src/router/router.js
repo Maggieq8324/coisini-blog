@@ -17,7 +17,7 @@ import userManage from '@/pages/views/userManage';
 import codeManage from '@/pages/views/codeManage';
 import announcementManage from '@/pages/views/announcementManage';
 import blogManage from '@/pages/views/blogManage';
-import resume from '@/pages/resume/resume';
+import rsa from '@/pages/rsa/rsa';
 import home from '@/pages/home';
 
 Vue.use(Router);
@@ -27,7 +27,7 @@ export default new Router({
   base: 'blog',
   routes: [
     {
-      path: '/resume', component: () => import('../pages/resume/resume')
+      path: '/resume', component: () => import('../pages/rsa/rsa')
     },
     {
       path: '/',

@@ -13,5 +13,4 @@ function generateTxt(filename, text) {
 
 export default {
   generateTxt
-}
-
+};
