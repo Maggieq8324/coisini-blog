@@ -3,8 +3,8 @@ import {Message, MessageBox} from 'element-ui';
 import store from '@/store/store';
 import router from '@/router/router';
 
-let devServerHost = '/api';
-// let devServerHost = 'https://www.coisini.club/blog-server/';
+// let devServerHost = '/api';
+let devServerHost = 'https://www.coisini.club/blog-server/';
 
 // 创建axios实例
 var prod;

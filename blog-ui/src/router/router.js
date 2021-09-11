@@ -17,25 +17,20 @@ import userManage from '@/pages/views/userManage';
 import codeManage from '@/pages/views/codeManage';
 import announcementManage from '@/pages/views/announcementManage';
 import blogManage from '@/pages/views/blogManage';
-import rsa from '@/pages/rsa/rsa';
-import home from '@/pages/home';
+import home from '@/pages/home'; // 博客主页
 
 Vue.use(Router);
 
 export default new Router({
   mode: 'history',
-  base: 'blog',
+  // base: 'blog',
   routes: [
     {
-      path: '/resume', component: () => import('../pages/rsa/rsa')
-    },
-    {
-      path: '/',
+      path: '/blog', // 博客首页
       component: home,
       children: [
         {
           path: '/',
-          name: '主页',
           component: index
         },
         {
@@ -117,11 +112,13 @@ export default new Router({
         }
       ]
     },
+
+
     // {
     //   path: '/resume',
     //   name: 'resume',
     //   component: resume
-    // }
+    // },
     // {
     //   path: '/',
     //   name: 'index',
