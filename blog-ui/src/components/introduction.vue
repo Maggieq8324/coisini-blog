@@ -2,13 +2,13 @@
   <el-card id="introduction">
     <!--<hr />-->
     <p>
-      <span style="color:#67C23A" class="el-icon-location-information">本站介绍</span>
+      <span style="color:#67C23A" class="el-icon-location-information">公众号</span>
     </p>
     <hr />
     <div>
-      <img alt="958小站" class="avatar" src="../assets/images/icon.jpg" draggable="false">
+      <img alt="咸鱼很咸" class="avatar" src="../assets/images/icon.jpg" draggable="false">
     </div>
-    <span style="font-size: 20px;font-weight: bold">958小站</span>
+    <span style="font-size: 20px;font-weight: bold">咸鱼很咸</span>
     <br/>
     <br/>
     {{ introduction }}
