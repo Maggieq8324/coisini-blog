@@ -49,12 +49,14 @@ public class MessageService {
             User user = userDao.findUserByName(jwtTokenUtil.getUsernameFromRequest(request));//已登录
             name = user.getName();
         } catch (NullPointerException e) { //token 校验失败 游客身份
-            name = requestUtil.getIpAddress(request);
+            name = requestUtil.getIpAddr(request);
         }
+
+        /* 20211231 去除已留言限制 */
         //查询此ip/name 是否留言过
-        if (messageDao.findMessageByName(name) != null) {
-            throw new RuntimeException("你已留过言");
-        }
+//        if (messageDao.findMessageByName(name) != null) {
+//            throw new RuntimeException("你已留过言");
+//        }
 
         Message message = new Message();
         message.setName(name);

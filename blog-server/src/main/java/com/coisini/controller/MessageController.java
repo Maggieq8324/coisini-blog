@@ -49,7 +49,7 @@ public class MessageController {
         	return responseModel;
         } catch (RuntimeException e) {
             responseModel.setSta(SysErrorCode.CODE_99999);
-        	responseModel.setMessage("留言失败" + (e.getMessage() == null ? "" : e.getMessage()));
+        	responseModel.setMessage("留言失败 " + (e.getMessage() == null ? "" : e.getMessage()));
         	return responseModel;
 //            return Result.create(StatusCode.ERROR, "留言失败" + (e.getMessage() == null ? "" : e.getMessage()));
         }
