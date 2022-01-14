@@ -72,7 +72,7 @@ logging:
     org.springframework.security: info
     root: info
   # path: e:/springboot-blog
-  path: /data/blog/logs
+  path: /usr/local/blog/logs
 
 ### jwt
 jwt:
@@ -91,7 +91,7 @@ upload:
   staticAccessPath: /img/*
   #文件上传目录
   # uploadFolder
-  uploadFolder: /data/blog/data
+  uploadFolder: /usr/local/blog/img
   #文件夹层数
   layerCount: 2
   #文件夹内单位数

@@ -41,8 +41,7 @@ public class BlogTask {
      * 10 min 执行一次
      * 博客任务
      */
-	/* @Scheduled(fixedRate = 1000 * 60 * 10) */
-    @Scheduled(fixedRate = 1000 * 60)
+    @Scheduled(fixedRate = 1000 * 60 * 30)
     private void blogTask() {
 
         try {

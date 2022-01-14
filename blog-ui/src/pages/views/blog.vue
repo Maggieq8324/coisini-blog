@@ -26,7 +26,12 @@
         </p>
       </div>
 
-      <mavon-editor v-model="body" id="editor" :toolbarsFlag="false" :subfield="false" defaultOpen="preview"/>
+      <mavon-editor v-model="body"
+                    id="editor"
+                    :toolbarsFlag="false"
+                    :subfield="false"
+                    defaultOpen="preview"
+                    :codeStyle="codeStyle"/>
       <!-- 以下是预览模式配置 -->
       <!--:toolbarsFlag="false"  :subfield="false" defaultOpen="preview"-->
 
@@ -111,6 +116,7 @@ import blog from '@/api/blog';
 import discuss from '@/api/discuss';
 import reply from '@/api/reply';
 import date from '@/utils/date';
+import {global} from "@/config/global"
 
 import 'element-ui/lib/theme-chalk/display.css';
 
@@ -118,6 +124,7 @@ export default {
   name: 'blog',
   data() {
     return {
+      codeStyle: global.codeStyle,
       blogId: -1, // 博文id
       title: '', // 博文标题
       body: '', // 博文内容
@@ -190,7 +197,7 @@ export default {
           this.userName = resp.data.user.name;
           this.tags = resp.data.tags;
           if (resp.data.user.reward && resp.data.user.reward !== 'null') {
-            this.userReward = resp.data.user.reward;
+            this.userReward = global.apiBaseUrl + resp.data.user.reward;
           }
 
           // 设置cookies

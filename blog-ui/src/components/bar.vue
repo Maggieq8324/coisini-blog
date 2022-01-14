@@ -5,7 +5,7 @@
         <el-menu :default-active="activeIndex" class="el-menu-demo" :router="true" mode="horizontal"
                  @select="handleSelect">
 
-          <el-menu-item index="1" route="/">首页</el-menu-item>
+          <el-menu-item index="1" route="/blog">首页</el-menu-item>
           <el-menu-item index="2" style="margin-left: 2%" route="/message">留言板</el-menu-item>
           <el-menu-item index="3" style="margin-left: 2%" route="/announcement">本站公告</el-menu-item>
 

@@ -71,15 +71,7 @@
       <div>
         <h3>更新打赏码</h3>
         <el-form ref="form" label-width="100px">
-          <el-form-item label="当前打赏码">
-            <el-image v-if="userReward!==''"
-                      style="width: 200px; height: 200px"
-                      :src="userReward"
-                      :fit="'fit'"/>
-            <span v-if="userReward===''">暂无</span>
-          </el-form-item>
-
-          <el-form-item label="更新打赏码">
+          <el-form-item label="">
             <el-upload
               class="avatar-uploader"
               :action="upload"
@@ -87,7 +79,7 @@
               :on-success="handleAvatarSuccess"
               :show-file-list="false"
               :before-upload="beforeAvatarUpload">
-              <img v-if="imageUrl" :src="imageUrl" class="avatar">
+              <img v-if="userReward" :src="userReward" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
@@ -104,6 +96,7 @@
 
 <script>
 import user from '@/api/user';
+import {global} from "@/config/global"
 
 export default {
   name: 'account',
@@ -120,9 +113,8 @@ export default {
       updatePwdSendFlag: false,
       updateMailToOldSendFlag: false,
       updateMailToNewSendFlag: false,
-      imageUrl: '',
       userReward: '',
-      upload: '/api/blog/uploadImg'
+      upload: global.apiBaseUrl + '/blogs/uploadImg'
     };
   },
   created() {
@@ -137,7 +129,7 @@ export default {
       });
       user.getUserReward().then(resp => {
         if (resp.sta === '00') {
-          this.userReward = resp.data;
+          this.userReward = global.apiBaseUrl + resp.data;
         } else {
           this.userReward = '';
         }
@@ -147,9 +139,9 @@ export default {
       return {'Authorization': this.$store.state.token};
     },
     updateReward() {
-      if (this.imageUrl === '') { return; }
+      if (this.userReward === '') { return; }
 
-      user.updateReward(this.imageUrl).then(resp => {
+      user.updateReward(this.userReward.replace(global.apiBaseUrl, '')).then(resp => {
         if (resp.sta === '00') {
           this.$message.success(resp.message);
           this.load();
@@ -159,7 +151,7 @@ export default {
       });
     },
     handleAvatarSuccess(res, file) {
-      this.imageUrl = res.data;
+      this.userReward = global.apiBaseUrl + res.data;
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg';

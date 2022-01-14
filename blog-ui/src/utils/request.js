@@ -2,14 +2,12 @@ import axios from 'axios';
 import {Message, MessageBox} from 'element-ui';
 import store from '@/store/store';
 import router from '@/router/router';
-
-// let devServerHost = '/api';
-let devServerHost = 'https://www.coisini.club/blog-server/';
+import {global} from "../config/global";
 
 // 创建axios实例
 var prod;
 const service = axios.create({
-  baseURL: devServerHost, // api的base_url
+  baseURL: global.apiBaseUrl, // api的base_url
   timeout: 15000, // 请求超时时间,
   header: 'Content-Type:application/x-www-form-urlencoded'
 });
@@ -75,12 +73,12 @@ service.interceptors.response.use(
         }).then(() => {
           // window.location.href = '#/'
           router.push({ // 路由跳转
-            path: '/'
+            path: '/blog'
           });
           location.reload();
         }).catch(() => {
           router.push({ // 路由跳转
-            path: '/'
+            path: '/blog'
           });
           location.reload();
         });

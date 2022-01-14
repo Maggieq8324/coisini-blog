@@ -12,7 +12,7 @@
         show-word-limit/>
       <br/><br/>
       <mavon-editor ref=md    @save="save()" v-model="body" id="editor" @imgAdd="$uploadImg" @imgDel="$imgDel"
-                    placeholder="## Start"/>
+                    placeholder="## Start" :codeStyle="codeStyle"/>
       <!-- 以下是预览模式配置 -->
       <!--:toolbarsFlag="false"  :subfield="false" defaultOpen="preview"-->
 
@@ -46,12 +46,14 @@
 import tag from '@/api/tag';
 import blog from '@/api/blog';
 import file from '@/utils/file';
+import { global } from "@/config/global"
 
 export default {
 
   name: 'editBlog',
   data() {
     return {
+      codeStyle: global.codeStyle,
       title: '',
       body: '',
       tags: [],

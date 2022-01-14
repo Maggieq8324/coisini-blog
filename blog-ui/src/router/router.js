@@ -93,7 +93,7 @@ export default new Router({
         {
           path: '/blog/:blogId',
           name: 'blog',
-          component: blog
+          component: blog,
         },
         {
           path: '/myBlog',
