@@ -15,8 +15,8 @@ import java.util.Map;
 /**
  * 发送邮件的队列消费者
  */
-//@Component
-//@RabbitListener(queues = RabbitMqConfig.MAIL_QUEUE)
+@Component
+@RabbitListener(queues = RabbitMqConfig.MAIL_QUEUE)
 public class MailListener {
 
     private Logger logger = LoggerUtil.loggerFactory(this.getClass());

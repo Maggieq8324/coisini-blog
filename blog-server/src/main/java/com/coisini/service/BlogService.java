@@ -101,7 +101,6 @@ public class BlogService {
         //保存图片
         String fileName = uuidUtil.generateUUID() + format;
         File diskFile = new File(savePath + "/" + fileName);
-        System.out.println("saveImg: " + savePath + "/" + fileName);
         file.transferTo(diskFile);
         //将硬盘路径转换为url，返回
         return imgUploadConfig.getStaticAccessPath().replaceAll("\\*", "") + fileName;
