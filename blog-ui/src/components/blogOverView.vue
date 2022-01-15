@@ -115,7 +115,7 @@ export default {
     },
     editBlog(id) {
       this.$router.push({ // 路由跳转
-        path: '/editBlog/' + id
+        path: '/blog/editBlog/' + id
       });
     }
 
