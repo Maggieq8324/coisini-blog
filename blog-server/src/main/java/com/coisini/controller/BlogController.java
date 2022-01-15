@@ -39,7 +39,7 @@ public class BlogController {
     private FormatUtil formatUtil;
 
     @ApiOperation(value = "上传图片", notes = "图片")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PostMapping("/uploadImg")
     public ResponseModel uploadImg(MultipartFile file) {
     	ResponseModel responseModel = new ResponseModel();
@@ -78,13 +78,13 @@ public class BlogController {
     }
 
     /**
-          * 保存博文，博文内容由前端md编辑器生成
+     * 保存博文，博文内容由前端md编辑器生成
      * @param blogBody
      * @param blogTitle
      * @return
      */
     @ApiOperation(value = "发布博文", notes = "博文标题+博文内容+博文标签")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PostMapping
     public ResponseModel newBlog(String blogTitle, String blogBody, Integer[] tagId) {
     	ResponseModel responseModel = new ResponseModel();
@@ -129,13 +129,13 @@ public class BlogController {
     }
 
     /**
-          * 根据用户分页查询博文
+     * 根据用户分页查询博文
      * @param page      页数
      * @param showCount 显示条数
      * @return
      */
     @ApiOperation(value = "根据用户分页查询博文", notes = "页数+显示数量")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/myblog/{page}/{showCount}")
     public ResponseModel findBlogByUser(@PathVariable Integer page, @PathVariable Integer showCount) {
     	ResponseModel responseModel = new ResponseModel();

@@ -39,7 +39,7 @@ public class UserController {
     private FormatUtil formatUtil;
 
     /**
-          * 登录返回token
+     * 登录返回token
      * @param user
      * @return
      */
@@ -72,8 +72,8 @@ public class UserController {
     }
 
     /**
-          * 用户退出登录
-          * 删除redis中的token
+     * 用户退出登录
+     * 删除redis中的token
      * @param
      * @return
      */
@@ -117,7 +117,7 @@ public class UserController {
 //    }
 
     /**
-          *  用户注册
+     *  用户注册
      * @param user
      * @param mailCode   邮箱验证码
      * @param inviteCode 邀请码
@@ -210,7 +210,7 @@ public class UserController {
     }
 
     /**
-          * 更新用户打赏码
+     * 更新用户打赏码
      * @return
      */
     @ApiOperation(value = "更新用户打赏码", notes = "更新用户打赏码")
@@ -232,11 +232,11 @@ public class UserController {
     }
 
     /**
-          * 获取用户绑定的邮箱
+     * 获取用户绑定的邮箱
      * @return
      */
     @ApiOperation(value = "获取用户绑定的邮箱", notes = "获取用户绑定的邮箱")
-//    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/mail")
     public ResponseModel getUserMail() {
     	ResponseModel responseModel = new ResponseModel();
@@ -247,11 +247,11 @@ public class UserController {
     }
 
     /**
-          * 获取用户的打赏码
+     * 获取用户的打赏码
      * @return
      */
     @ApiOperation(value = "获取用户的打赏码", notes = "获取用户的打赏码")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/getReward")
     public ResponseModel getUserReward() {
     	ResponseModel responseModel = new ResponseModel();
@@ -271,7 +271,7 @@ public class UserController {
     }
 
     /**
-          * 修改密码
+     * 修改密码
      * @param oldPassword 旧密码
      * @param newPassword 新密码
      * @param code        邮箱验证码
@@ -302,7 +302,7 @@ public class UserController {
     }
 
     /**
-          *  改绑邮箱
+     *  改绑邮箱
      * @param newMail     新邮箱
      * @param oldMailCode 旧邮箱验证码
      * @param newMailCode 新邮箱验证码
@@ -339,13 +339,13 @@ public class UserController {
     }
 
     /**
-          *  重置密码
+     *  重置密码
      * @param mailCode
      * @param newPassword
      * @return
      */
     @ApiOperation(value = "重置密码", notes = "用户名+验证码+新密码")
-//    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PostMapping("/forgetPassword")
     public ResponseModel forgetPassword(String userName, String mailCode, String newPassword) {
     	ResponseModel responseModel = new ResponseModel();

@@ -33,7 +33,7 @@ public class TagController {
      * @return
      */
     @ApiOperation(value = "新增标签", notes = "标签名")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PostMapping
     public ResponseModel newTag(String tagName) {
     	ResponseModel responseModel = new ResponseModel();
@@ -62,7 +62,7 @@ public class TagController {
      * @return
      */
     @ApiOperation(value = "删除标签", notes = "标签id")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @DeleteMapping("/{tagId}")
     public ResponseModel deleteTag(@PathVariable Integer tagId) {
     	ResponseModel responseModel = new ResponseModel();
@@ -91,7 +91,7 @@ public class TagController {
      * @return
      */
     @ApiOperation(value = "修改标签", notes = "标签id+新标签名")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PutMapping
     public ResponseModel updateTag(Integer tagId, String tagName) {
     	ResponseModel responseModel = new ResponseModel();
@@ -125,7 +125,7 @@ public class TagController {
      * @return
      */
     @ApiOperation(value = "获取用户标签", notes = "用户id")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping
     public ResponseModel findTagByUserId() {
     	ResponseModel responseModel = new ResponseModel();

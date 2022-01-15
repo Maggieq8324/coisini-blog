@@ -28,7 +28,7 @@ public class ReplyController {
     private FormatUtil formatUtil;
 
     @ApiOperation(value = "发布回复", notes = "回复内容+评论id (父回复节点)?")
-//    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PostMapping("/{discussId}")
     public ResponseModel reply(@PathVariable Integer discussId, String replyBody, Integer rootId) {
     	ResponseModel responseModel = new ResponseModel();
@@ -58,7 +58,7 @@ public class ReplyController {
     }
 
     @ApiOperation(value = "删除回复", notes = "回复id")
-//    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @DeleteMapping("/{replyId}")
     public ResponseModel deleteReply(@PathVariable Integer replyId) {
     	ResponseModel responseModel = new ResponseModel();

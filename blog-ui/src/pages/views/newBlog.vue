@@ -49,6 +49,7 @@
 import tag from '@/api/tag';
 import blog from '@/api/blog';
 import file from '@/utils/file';
+import { global } from '@/config/global';
 
 export default {
 
@@ -98,7 +99,7 @@ export default {
       formdata.append('file', $file);
       blog.uploadImg(formdata).then(res => {
         // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-        this.$refs.md.$img2Url(pos, res.data);
+        this.$refs.md.$img2Url(pos, global.apiBaseUrl + res.data);
       });
     },
     $imgDel(pos) {

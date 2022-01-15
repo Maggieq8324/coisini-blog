@@ -46,7 +46,7 @@
 import tag from '@/api/tag';
 import blog from '@/api/blog';
 import file from '@/utils/file';
-import { global } from "@/config/global"
+import { global } from '@/config/global';
 
 export default {
 
@@ -106,11 +106,11 @@ export default {
     },
     $uploadImg(pos, $file) { // 图片上传
       // 第一步.将图片上传到服务器.
-      var formdata = new FormData();
-      formdata.append('file', $file);
-      blog.uploadImg(formdata).then(res => {
+      let formData = new FormData();
+      formData.append('file', $file);
+      blog.uploadImg(formData).then(res => {
         // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-        this.$refs.md.$img2Url(pos, res.data);
+        this.$refs.md.$img2Url(pos, global.apiBaseUrl + res.data);
       });
     },
     $imgDel(pos) {

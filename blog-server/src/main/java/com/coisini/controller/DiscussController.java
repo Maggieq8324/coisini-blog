@@ -132,7 +132,7 @@ public class DiscussController {
     }
 
     @ApiOperation(value = "获取用户发布的所有博文下的评论", notes = "获取用户发布的所有博文下的评论")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/userNewDiscuss")
     public ResponseModel userNewDiscuss() {
     	ResponseModel responseModel = new ResponseModel();

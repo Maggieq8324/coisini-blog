@@ -28,12 +28,12 @@
 
         <el-table-column label="赞赏码" width="150">
           <template slot-scope="scope">
-            <i class="el-icon-trophy" v-if="scope.row.reward!=null">&nbsp;&nbsp;&nbsp;&nbsp;</i>
+            <i class="el-icon-trophy" v-if="scope.row.reward != null">&nbsp;&nbsp;&nbsp;&nbsp;</i>
             <a href="javascript:">
-              <img v-if="scope.row.reward!=null" width="30px" height="30px" @click="showImg(scope.row.reward)"
+              <img v-if="scope.row.reward != null" width="30px" height="30px" @click="showImg(scope.row.reward)"
                    :src="scope.row.reward" alt="赞赏码"/>
             </a>
-            <p class="el-icon-trophy" v-if="scope.row.reward==null">&nbsp;&nbsp;&nbsp;&nbsp;暂无记录</p>
+            <p class="el-icon-trophy" v-if="scope.row.reward == null">&nbsp;&nbsp;&nbsp;&nbsp;暂无记录</p>
           </template>
         </el-table-column>
 
@@ -102,6 +102,7 @@
 import user from '@/api/user';
 import other from '@/api/other';
 import date from '@/utils/date';
+import { global } from '@/config/global';
 
 export default {
   name: 'userManage',
@@ -133,6 +134,13 @@ export default {
       } else {
         user.getUser(this.currentPage, this.pageSize).then(resp => {
           if (resp.sta === '00') {
+            resp.data.rows.map(function(item) {
+              if (item.reward) {
+                item.reward = global.apiBaseUrl + item.reward;
+              }
+              return item;
+            });
+
             this.userData = resp.data.rows;
             this.total = resp.data.total;
           }
