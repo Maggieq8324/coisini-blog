@@ -1,9 +1,10 @@
 package com.coisini.config;
 
 /**
- * 配置redis的存取
- *
- * @blame mqpearth
+ * @Description 配置redis的存取
+ * @author coisini
+ * @date Jan 16, 2022
+ * @version 2.0
  */
 public class RedisConfig {
 
@@ -21,7 +22,6 @@ public class RedisConfig {
      * redis中存放 热门博客 的 key
      */
     public static final String REDIS_HOT_BLOG = "HOTBLOG";
-
 
     /**
      * redis中存放 最新博客 的 key

@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
-const path = require('path')
+const path = require('path');
 
 module.exports = {
   dev: {
@@ -17,7 +17,7 @@ module.exports = {
           '^/api': '/blog-server'
         }
       },
-      '/img': {     //图片资源默认以8324端口发起请求
+      '/img': {
         target: 'http://127.0.0.1:31091/', //
         changeOrigin: true, //
         pathRewrite: {

@@ -1,11 +1,18 @@
 package com.coisini.config;
 
+/**
+ * @Description MAIL
+ * @author coisini
+ * @date Jan 16, 2022
+ * @version 2.0
+ */
 public class MailConfig {
 
     /**
      * redis 中 mail key 的前缀
      */
     public static final String REDIS_MAIL_KEY_PREFIX = "MAIL_";
+
     /**
      * redis中 mail code 的过期时间
      */

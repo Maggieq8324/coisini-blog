@@ -19,6 +19,4 @@ public class ErrorConfig implements ErrorPageRegistrar {
         registry.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/notfound"));
     }
 
-
-
 }

@@ -1,56 +1,47 @@
 package com.coisini.controller;
 
-import com.coisini.model.PageResult;
-import com.coisini.model.ResponseModel;
-import com.coisini.model.SysErrorCode;
+import com.coisini.model.*;
 import com.coisini.entity.Announcement;
 import com.coisini.service.AnnouncementService;
 import com.coisini.utils.FormatUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
- *  公告API
-* @author Coisini
-* @date Mar 21, 2020
-*/
-
+ * @Description 公告API
+ * @author coisini
+ * @date Jan 16, 2022
+ * @version 2.0
+ */
 @Api(tags = "公告api")
 @RestController
 @RequestMapping("/announcement")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AnnouncementController {
-    @Autowired
-    private AnnouncementService announcementService;
 
-    @Autowired
-    private FormatUtil formatUtil;
+    private final AnnouncementService announcementService;
 
+    private final FormatUtil formatUtil;
 
     @ApiOperation(value = "发布公告", notes = "公告标题+公告内容")
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public ResponseModel newAnnouncement(String title, String body) {
-    	ResponseModel responseModel = new ResponseModel();
-    	
+    public UnifyResponse newAnnouncement(String title, String body) {
+
         if (!formatUtil.checkStringNull(title, body)) {
-        	responseModel.setSta(SysErrorCode.CODE_99999);
-        	responseModel.setMessage("参数错误");
-        	return responseModel;
+        	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
         }
 
         if (title.length() > 255) {
-        	responseModel.setSta(SysErrorCode.CODE_99999);
-        	responseModel.setMessage("标题过长");
-        	return responseModel;
+            return UnifyResponse.fail(UnifyCode.ERROR, "标题过长", null);
         }
 
         announcementService.saveAnnouncement(title, body);
-        responseModel.setSta(SysErrorCode.CODE_00);
-    	responseModel.setMessage("发布成功");
-    	return responseModel;
+        return UnifyResponse.success(UnifyCode.SUCCESS, "发布成功", null);
     }
 
     @ApiOperation(value = "删除公告", notes = "公告id")

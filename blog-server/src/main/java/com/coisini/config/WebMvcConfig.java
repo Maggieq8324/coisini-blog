@@ -2,6 +2,7 @@ package com.coisini.config;
 
 import com.coisini.utils.FileUtil;
 import com.coisini.utils.LoggerUtil;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -11,16 +12,14 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Configuration
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private SwaggerConfig swaggerConfig;
+    private final SwaggerConfig swaggerConfig;
 
-    @Autowired
-    private ImgUploadConfig imgUploadConfig;
+    private final ImgUploadConfig imgUploadConfig;
 
-    @Autowired
-    private FileUtil fileUtil;
+    private final FileUtil fileUtil;
 
     private Logger logger = LoggerUtil.loggerFactory(this.getClass());
 

@@ -4,7 +4,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * 站点介绍
+ * @Description 站点介绍
+ * @author coisini
+ * @date Jan 16, 2022
+ * @version 2.0
  */
 @ConfigurationProperties(prefix = "site")
 @Component

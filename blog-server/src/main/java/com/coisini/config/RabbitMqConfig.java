@@ -1,7 +1,10 @@
 package com.coisini.config;
 
 /**
- * @blame MQPearth
+ * @Description MQ
+ * @author coisini
+ * @date Jan 16, 2022
+ * @version 2.0
  */
 public class RabbitMqConfig {
     /**

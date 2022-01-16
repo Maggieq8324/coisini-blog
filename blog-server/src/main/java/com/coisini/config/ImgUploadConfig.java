@@ -6,8 +6,11 @@ import java.io.File;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * 文件上传相关属性
- **/
+ * @Description 文件上传相关属性
+ * @author coisini
+ * @date Jan 16, 2022
+ * @version 2.0
+ */
 @Component
 @ConfigurationProperties(prefix = "upload")
 public class ImgUploadConfig {
