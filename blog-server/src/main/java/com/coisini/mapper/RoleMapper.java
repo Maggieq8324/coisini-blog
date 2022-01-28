@@ -3,14 +3,19 @@ package com.coisini.mapper;
 import com.coisini.entity.Role;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
+/**
+ * @Description 角色Mapper
+ * @author coisini
+ * @date Jan 19, 2022
+ * @version 1.0
+ */
 @Repository
 @Mapper
 public interface RoleMapper {
+
     /**
      * 根据用户id查询角色
      * @param id
@@ -32,7 +37,6 @@ public interface RoleMapper {
      */
     Role findRoleByName(String name);
 
-
     /**
      * 查询角色数量
      * 返回值建议使用Integer包装类型，Integer 默认值为null
@@ -45,4 +49,5 @@ public interface RoleMapper {
      * @return
      */
     List<Role> findAllRole();
+
 }

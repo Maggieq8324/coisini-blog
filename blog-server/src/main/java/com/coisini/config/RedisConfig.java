@@ -33,7 +33,6 @@ public class RedisConfig {
      */
     public static final String REDIS_BLOG_PREFIX = "BLOG_";
 
-
     /**
      * 博客归档缓存key
      */
@@ -43,7 +42,6 @@ public class RedisConfig {
      * IP_127.0.0.1
      */
     public static final String REDIS_IP_PREFIX = "IP_";
-
 
     /**
      * 请求频率限制 缓存时间

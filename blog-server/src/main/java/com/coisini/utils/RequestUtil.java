@@ -2,9 +2,14 @@ package com.coisini.utils;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * @Description Request工具类
+ * @author coisini
+ * @date Jan 21, 2022
+ * @version 1.0
+ */
 @Component
 public class RequestUtil {
 
@@ -48,7 +53,7 @@ public class RequestUtil {
         String ip = request.getHeader("X-Forwarded-For");
 
         if(!StringUtils.isEmpty(ip) && !"unKnown".equalsIgnoreCase(ip)){
-            //多次反向代理后会有多个ip值，第一个ip才是真实ip
+            // 多次反向代理后会有多个ip值，第一个ip才是真实ip
             int index = ip.indexOf(",");
             if(index != -1){
                 return ip.substring(0,index);
@@ -60,6 +65,8 @@ public class RequestUtil {
         if(!StringUtils.isEmpty(ip) && !"unKnown".equalsIgnoreCase(ip)){
             return ip;
         }
+
         return request.getRemoteAddr();
     }
+
 }

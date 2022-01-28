@@ -4,6 +4,7 @@ package com.coisini.model;
  * 状态码
  */
 public class StatusCode {
+
     /**
      * 操作成功
      */

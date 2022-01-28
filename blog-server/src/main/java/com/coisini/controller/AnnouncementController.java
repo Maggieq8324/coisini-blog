@@ -27,6 +27,12 @@ public class AnnouncementController {
 
     private final FormatUtil formatUtil;
 
+    /**
+     * 发布公告
+     * @param title
+     * @param body
+     * @return
+     */
     @ApiOperation(value = "发布公告", notes = "公告标题+公告内容")
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
@@ -44,6 +50,11 @@ public class AnnouncementController {
         return UnifyResponse.success(UnifyCode.SUCCESS, "发布成功", null);
     }
 
+    /**
+     * 删除公告
+     * @param announcementId
+     * @return
+     */
     @ApiOperation(value = "删除公告", notes = "公告id")
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{announcementId}")
@@ -63,7 +74,7 @@ public class AnnouncementController {
     }
 
     /**
-          *  置顶
+     * 置顶
      * @param announcementId
      * @param top
      * @return
@@ -92,9 +103,8 @@ public class AnnouncementController {
     	return responseModel;
     }
 
-
     /**
-          *  分页获取公告
+     * 分页获取公告
      * @param page
      * @param showCount
      * @return
@@ -118,6 +128,5 @@ public class AnnouncementController {
     	responseModel.setData(pageResult);
     	return responseModel;
     }
-
 
 }

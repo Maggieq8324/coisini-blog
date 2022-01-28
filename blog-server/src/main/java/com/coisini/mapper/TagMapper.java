@@ -1,12 +1,16 @@
 package com.coisini.mapper;
 
-
 import com.coisini.entity.Tag;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
+/**
+ * @Description 标签Mapper
+ * @author coisini
+ * @date Jan 19, 2022
+ * @version 2.0
+ */
 @Repository
 @Mapper
 public interface TagMapper {
@@ -36,7 +40,6 @@ public interface TagMapper {
      */
     Tag findTagById(Integer tagId);
 
-
     /**
      * 查询该user id下的所有标签
      * @param userId
@@ -44,14 +47,14 @@ public interface TagMapper {
     List<Tag> findTagByUserId(Integer userId);
 
     /**
-     * 查询博文的所有标签
+     * 查询博客的所有标签
      * @param blogId
      * @return
      */
     List<Tag> findTagByBlogId(Integer blogId);
 
     /**
-     * 根据博文id删除标签
+     * 根据博客id删除标签
      * @param blogId
      */
     void deleteTagByBlogId(Integer blogId);

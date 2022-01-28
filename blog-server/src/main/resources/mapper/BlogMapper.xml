@@ -84,7 +84,7 @@
         WHERE ( blog_title LIKE '%${value}%' OR blog_body LIKE '%${value}%') AND blog_state = 1
     </select>
 
-    <select id="findAllblog" resultMap="Blog">
+    <select id="findAllBlog" resultMap="Blog">
         SELECT blog_id,blog_title,LEFT (blog_body,150) AS blog_body,blog_discussCount,blog_blogViews,blog_time,blog_state,b.user_id,u.user_name
         FROM blog b LEFT JOIN user u on b.user_id = u.user_id
         ORDER BY blog_state DESC,blog_time DESC

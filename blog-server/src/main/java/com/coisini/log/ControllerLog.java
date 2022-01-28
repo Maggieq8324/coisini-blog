@@ -1,25 +1,27 @@
 package com.coisini.log;
 
 import com.coisini.utils.LoggerUtil;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
 /**
- * 控制层 日志 切面
+ * @Description 控制层日志切面
+ * @author coisini
+ * @date Jan 19, 2022
+ * @version 2.0
  */
 @Aspect
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ControllerLog {
 
-
-    @Autowired
-    private HttpServletRequest request;
+    private final HttpServletRequest request;
 
     private Logger logger = LoggerUtil.loggerFactory(this.getClass());
 
@@ -27,13 +29,10 @@ public class ControllerLog {
      * 拦截控制层的所有public方法
      */
     @Pointcut("execution(public * com.coisini.controller.*.*(..))")
-    public void log() {
-    }
-
+    public void log() {}
 
     /**
      * 方法执行前后 拦截
-     *
      * @param pjp
      * @return
      * @throws Throwable
@@ -41,11 +40,10 @@ public class ControllerLog {
     @Around("log()")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
 
-        //方法消耗时间
+        // TODO 方法消耗时间
         long start = System.currentTimeMillis();
         Object obj = pjp.proceed();
         long end = System.currentTimeMillis();
-
 
         StringBuilder builder = new StringBuilder();
         builder.append("{URL:[").append(request.getRequestURI()).append("],")
@@ -57,9 +55,7 @@ public class ControllerLog {
 
         logger.info(builder.toString());
         return obj;
-
     }
-
 
 }
 

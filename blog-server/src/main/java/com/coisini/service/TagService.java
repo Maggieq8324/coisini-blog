@@ -62,7 +62,7 @@ public class TagService {
             throw new RuntimeException("无权删除此标签");
         }
 
-        //查询此标签下是否有博文
+        //查询此标签下是否有博客
         if (blogDao.findBlogCountByTagId(tagId) > 0) {
             throw new RuntimeException("此标签关联了博客");
         }

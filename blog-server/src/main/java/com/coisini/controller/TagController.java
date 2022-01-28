@@ -1,91 +1,82 @@
 package com.coisini.controller;
 
-import com.coisini.model.ResponseModel;
-import com.coisini.model.SysErrorCode;
+import com.coisini.model.UnifyCode;
+import com.coisini.model.UnifyResponse;
 import com.coisini.service.TagService;
 import com.coisini.utils.FormatUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
-* 标签API
-* @author Coisini
-* @date Mar 21, 2020
-*/
+ * @Description
+ * @author coisini
+ * @date Jan 18, 2021
+ * @version 1.0
+ */
 @Api(tags = "标签api")
 @RestController
 @RequestMapping("/tag")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Slf4j
 public class TagController {
 
+    private final TagService tagService;
 
-    @Autowired
-    private TagService tagService;
-
-    @Autowired
-    private FormatUtil formatUtil;
+    private final FormatUtil formatUtil;
 
     /**
-     * 新增一个标签
+     * 新增标签
      * @param tagName 标签名
      * @return
      */
     @ApiOperation(value = "新增标签", notes = "标签名")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PostMapping
-    public ResponseModel newTag(String tagName) {
-    	ResponseModel responseModel = new ResponseModel();
+    public UnifyResponse newTag(String tagName) {
+
         if (!formatUtil.checkStringNull(tagName)) {
-        	responseModel.setSta(SysErrorCode.CODE_99999);
-        	responseModel.setMessage("参数异常");
-        	return responseModel;
+        	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
         }
 
         try {
             tagService.saveTag(tagName);
-            responseModel.setSta(SysErrorCode.CODE_00);
-        	responseModel.setMessage("新增成功");
-        	return responseModel;
+        	return UnifyResponse.success(UnifyCode.ADD_SUCCESS);
         } catch (RuntimeException e) {
-        	responseModel.setSta(SysErrorCode.CODE_99999);
-        	responseModel.setMessage("新增失败," + e.getMessage());
-        	return responseModel;
+            log.error("新增失败：", e);
+        	return UnifyResponse.fail(UnifyCode.SERVER_ERROR, "新增失败：" + e.getMessage(), null);
         }
     }
     
-
     /**
-     * 删除一个标签
+     * 删除标签
      * @param tagId 标签id
      * @return
      */
     @ApiOperation(value = "删除标签", notes = "标签id")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @DeleteMapping("/{tagId}")
-    public ResponseModel deleteTag(@PathVariable Integer tagId) {
-    	ResponseModel responseModel = new ResponseModel();
+    public UnifyResponse deleteTag(@PathVariable Integer tagId) {
+
         if (!formatUtil.checkObjectNull(tagId)) {
-        	responseModel.setSta(SysErrorCode.CODE_99999);
-        	responseModel.setMessage("参数异常");
-        	return responseModel;
+        	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
         }
+
         try {
             tagService.deleteTagById(tagId);
-            responseModel.setSta(SysErrorCode.CODE_00);
-        	responseModel.setMessage("删除成功");
-        	return responseModel;
+        	return UnifyResponse.success(UnifyCode.DELETE_SUCCESS);
         } catch (RuntimeException e) {
-        	responseModel.setSta(SysErrorCode.CODE_99999);
-        	responseModel.setMessage("删除失败," + e.getMessage());
-        	return responseModel;
+            log.error("删除失败：", e);
+            return UnifyResponse.fail(UnifyCode.SERVER_ERROR, "删除失败：" + e.getMessage(), null);
         }
     }
 
-
     /**
-     * 修改一个标签
+     * 修改标签
      * @param tagId   标签id
      * @param tagName 新标签名
      * @return
@@ -93,32 +84,24 @@ public class TagController {
     @ApiOperation(value = "修改标签", notes = "标签id+新标签名")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PutMapping
-    public ResponseModel updateTag(Integer tagId, String tagName) {
-    	ResponseModel responseModel = new ResponseModel();
-    	
+    public UnifyResponse updateTag(Integer tagId, String tagName) {
+
         if (!formatUtil.checkObjectNull(tagId)) {
-        	responseModel.setSta(SysErrorCode.CODE_99999);
-        	responseModel.setMessage("参数异常");
-        	return responseModel;
+        	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
         }
+
         if (!formatUtil.checkStringNull(tagName)) {
-        	responseModel.setSta(SysErrorCode.CODE_99999);
-        	responseModel.setMessage("参数异常");
-        	return responseModel;
+            return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
         }
 
         try {
             tagService.updateTag(tagId, tagName);
-            responseModel.setSta(SysErrorCode.CODE_00);
-        	responseModel.setMessage("修改成功");
-        	return responseModel;
+        	return UnifyResponse.success(UnifyCode.UPDATE_SUCCESS);
         } catch (RuntimeException e) {
-        	responseModel.setSta(SysErrorCode.CODE_99999);
-        	responseModel.setMessage("修改失败," + e.getMessage());
-        	return responseModel;
+            log.error("修改失败：", e);
+            return UnifyResponse.fail(UnifyCode.SERVER_ERROR, "修改失败：" + e.getMessage(), null);
         }
     }
-
 
     /**
      * 获取某用户下的所有标签
@@ -127,12 +110,8 @@ public class TagController {
     @ApiOperation(value = "获取用户标签", notes = "用户id")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping
-    public ResponseModel findTagByUserId() {
-    	ResponseModel responseModel = new ResponseModel();
-    	responseModel.setSta(SysErrorCode.CODE_00);
-    	responseModel.setMessage("查询成功");
-    	responseModel.setData(tagService.findTagByUserId());
-    	return responseModel;
+    public UnifyResponse findTagByUserId() {
+    	return UnifyResponse.success(UnifyCode.QUERY_SUCCESS, tagService.findTagByUserId());
     }
 
 }

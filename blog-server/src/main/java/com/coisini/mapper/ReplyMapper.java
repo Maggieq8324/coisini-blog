@@ -3,9 +3,14 @@ package com.coisini.mapper;
 import com.coisini.entity.Reply;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
+/**
+ * @Description 回复Mapper
+ * @author coisini
+ * @date Jan 19, 2022
+ * @version 2.0
+ */
 @Repository
 @Mapper
 public interface ReplyMapper {
@@ -41,4 +46,5 @@ public interface ReplyMapper {
      * @return 受影响行数
      */
     Integer deleteReplyByDiscussId(Integer discussId);
+
 }

@@ -4,9 +4,14 @@ import com.coisini.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
+/**
+ * @Description 用户Mapper
+ * @author coisini
+ * @date Jan 19, 2022
+ * @version 2.0
+ */
 @Repository
 @Mapper
 public interface UserMapper {
@@ -26,25 +31,15 @@ public interface UserMapper {
      */
     void saveUser(User user);
 
-
-
-
-
     /**
      * 根据邮箱查询用户
-     *
      * @param mail
      * @return
      */
     User findUserByMail(String mail);
 
-
-
-
-
     /**
      * 根据id查询用户
-     *
      * @param id
      * @return
      */
@@ -52,7 +47,6 @@ public interface UserMapper {
 
     /**
      * 根据用户名搜索用户
-     *
      * @param userName
      * @return
      */
@@ -60,24 +54,20 @@ public interface UserMapper {
 
     /**
      * 查询用户数
-     *
      * @return
      */
     Long getUserCount();
 
     /**
      * 分页查询用户
-     *
      * @param start
      * @param showCount
      * @return
      */
     List<User> findUser(@Param("start") Integer start, @Param("showCount") Integer showCount);
 
-
     /**
      * 模糊查询用户名 返回记录数
-     *
      * @param userName
      * @return
      */
@@ -88,4 +78,5 @@ public interface UserMapper {
      * @param user
      */
     void updateUser(User user);
+
 }

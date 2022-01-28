@@ -11,7 +11,6 @@ public class ErrorConfig implements ErrorPageRegistrar {
 
     /**
      * 有匹配的路径，但是该路径下的资源不存在
-     *
      * @param registry
      */
     @Override

@@ -1,29 +1,31 @@
 package com.coisini.utils;
 
 import com.coisini.config.ImgUploadConfig;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * 文件操作工具
+ * @Description 文件操作工具
+ * @author coisini
+ * @date Jan 21, 2022
+ * @version 1.0
  */
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class FileUtil {
-    @Autowired
-    private ImgUploadConfig imgUploadConfig;
+
+    private final ImgUploadConfig imgUploadConfig;
 
     /**
      * 获取可用的文件保存路径
      * 当所有路径文件夹单位数都超过FolderSize时，返回null
-     *
      * @return
      */
     public String getSavePath() {
-
         ConcurrentLinkedQueue<File> availablePath = ImgUploadConfig.getAvailablePath();
         Iterator<File> iterator = availablePath.iterator();
        
@@ -41,7 +43,6 @@ public class FileUtil {
     /**
      * 初始化上传文件夹
      * ！操作非常耗时
-     *
      * @return
      */
     public List<File> initUploadFolder() {
@@ -63,7 +64,6 @@ public class FileUtil {
 
     /**
      * 创建文件夹
-     *
      * @param path
      * @param folderSize 文件夹个数
      */
@@ -77,10 +77,8 @@ public class FileUtil {
         return files; //返回创建的文件夹
     }
 
-
     /**
      * 获取上传文件夹的最下层路径
-     *
      * @return
      */
     public List<File> getAllFolder() {
@@ -97,4 +95,5 @@ public class FileUtil {
         }
         return files;
     }
+
 }

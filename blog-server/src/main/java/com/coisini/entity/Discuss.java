@@ -2,59 +2,41 @@ package com.coisini.entity;
 
 import lombok.Data;
 import lombok.ToString;
-
 import java.util.Date;
 import java.util.List;
 
 /**
- * 评论
+ * @Description 评论
+ * @author coisini
+ * @date Jan 19, 2022
+ * @version 2.0
  */
 @Data
 @ToString
 public class Discuss {
-    private Integer id;//id
-    private String body;//评论内容
-    private Date time;//评论时间
-    private User user;//评论用户
-    private Blog blog;//评论博文
+
+    private Integer id;
+
+	/**
+	 * 评论内容
+	 */
+	private String body;
+
+	/**
+	 * 评论时间
+	 */
+    private Date time;
+
+	/**
+	 * 评论用户
+	 */
+    private User user;
+
+	/**
+	 * 评论博客
+	 */
+    private Blog blog;
+
     private List<Reply> replyList;
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public String getBody() {
-		return body;
-	}
-	public void setBody(String body) {
-		this.body = body;
-	}
-	public Date getTime() {
-		return time;
-	}
-	public void setTime(Date time) {
-		this.time = time;
-	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
-	public Blog getBlog() {
-		return blog;
-	}
-	public void setBlog(Blog blog) {
-		this.blog = blog;
-	}
-	public List<Reply> getReplyList() {
-		return replyList;
-	}
-	public void setReplyList(List<Reply> replyList) {
-		this.replyList = replyList;
-	}
-
-
 
 }

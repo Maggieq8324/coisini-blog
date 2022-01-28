@@ -2,60 +2,43 @@ package com.coisini.entity;
 
 import lombok.Data;
 import lombok.ToString;
-
 import java.util.Date;
 
 /**
- * 回复
+ * @Description 回复
+ * @author coisini
+ * @date Jan 19, 2022
+ * @version 2.0
  */
 @Data
 @ToString
-
 public class Reply {
-    private Integer id;//id
-    private String body;//回复内容
-    private Date time;//回复时间
-    private User user;//用户
-    private Discuss discuss;//评论
-    private Reply reply;//父节点回复
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public String getBody() {
-		return body;
-	}
-	public void setBody(String body) {
-		this.body = body;
-	}
-	public Date getTime() {
-		return time;
-	}
-	public void setTime(Date time) {
-		this.time = time;
-	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
-	public Discuss getDiscuss() {
-		return discuss;
-	}
-	public void setDiscuss(Discuss discuss) {
-		this.discuss = discuss;
-	}
-	public Reply getReply() {
-		return reply;
-	}
-	public void setReply(Reply reply) {
-		this.reply = reply;
-	}
 
+    private Integer id;
 
+	/**
+	 * 回复内容
+	 */
+	private String body;
 
+	/**
+	 * 回复时间
+	 */
+    private Date time;
+
+	/**
+	 * 用户
+	 */
+    private User user;
+
+	/**
+	 * 评论
+	 */
+    private Discuss discuss;
+
+	/**
+	 * 父节点回复
+	 */
+    private Reply reply;
 
 }

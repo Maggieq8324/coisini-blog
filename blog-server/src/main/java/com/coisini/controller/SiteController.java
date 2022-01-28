@@ -1,39 +1,38 @@
 package com.coisini.controller;
 
 import com.coisini.config.SiteIntroductionConfig;
-import com.coisini.model.ResponseModel;
-import com.coisini.model.SysErrorCode;
+import com.coisini.model.UnifyCode;
+import com.coisini.model.UnifyResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
-* 站点API
-* @author Coisini
-* @date Mar 21, 2020
-*/
-
+ * @Description 站点API
+ * @author coisini
+ * @date Jan 18, 2021
+ * @version 1.0
+ */
 @Api(tags = "站点api")
 @RestController
 @RequestMapping("/site")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SiteController {
 
-    @Autowired
-    private SiteIntroductionConfig siteIntroductionConfig;
+    private final SiteIntroductionConfig siteIntroductionConfig;
 
-
+    /**
+     * 站点介绍
+     * @return
+     */
     @ApiOperation(value = "站点介绍", notes = "站点介绍")
     @GetMapping
-    public ResponseModel getIntroduction() {
-    	ResponseModel response = new ResponseModel();
-    	response.setSta(SysErrorCode.CODE_00);
-    	response.setMessage("获取成功");
-    	response.setData(siteIntroductionConfig.getIntroduction());
-    	return response;
+    public UnifyResponse getIntroduction() {
+    	return UnifyResponse.success(UnifyCode.QUERY_SUCCESS, siteIntroductionConfig.getIntroduction());
     }
-
 
 }

@@ -2,37 +2,31 @@ package com.coisini.entity;
 
 import lombok.Data;
 import lombok.ToString;
-
 import java.util.Date;
 
 /**
- * 登录表
+ * @Description 登录
+ * @author coisini
+ * @date Jan 19, 2022
+ * @version 2.0
  */
 @Data
 @ToString
 public class Login {
 
-    private Date time;//最后登录时间
-    private String ip;//最后登录ip
-    private User user;//用户
-	public Date getTime() {
-		return time;
-	}
-	public void setTime(Date time) {
-		this.time = time;
-	}
-	public String getIp() {
-		return ip;
-	}
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
+	/**
+	 * 最后登录时间
+	 */
+    private Date time;
 
+	/**
+	 * 登录ip
+	 */
+    private String ip;
+
+	/**
+	 * 用户
+	 */
+    private User user;
 
 }

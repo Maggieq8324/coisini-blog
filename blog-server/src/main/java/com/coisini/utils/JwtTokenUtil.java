@@ -1,23 +1,27 @@
 package com.coisini.utils;
 
-
 import com.coisini.config.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * @Description JWT 工具类
+ * @author coisini
+ * @date Jan 21, 2022
+ * @version 1.0
+ */
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class JwtTokenUtil implements Serializable {
-
 
     private static final long serialVersionUID = -5625635588908941275L;
 
@@ -25,13 +29,10 @@ public class JwtTokenUtil implements Serializable {
     private static final String CLAIM_KEY_CREATED = "created";
     private static final String CLAIM_KEY_ROLES = "roles";
 
-    @Autowired
-    private JwtConfig jwtConfig;
-
+    private final JwtConfig jwtConfig;
 
     /**
      * 从request中获取用户名
-     *
      * @param request
      * @return
      */
@@ -44,7 +45,6 @@ public class JwtTokenUtil implements Serializable {
 
     /**
      * 从token中获取用户名
-     *
      * @param token
      * @return
      */
@@ -56,10 +56,15 @@ public class JwtTokenUtil implements Serializable {
         } catch (Exception e) {
             username = null;
         }
+
         return username;
     }
 
-
+    /**
+     * 获取token创建时间
+     * @param token
+     * @return
+     */
     public Date getCreatedDateFromToken(String token) {
         Date created;
         try {
@@ -73,7 +78,6 @@ public class JwtTokenUtil implements Serializable {
 
     /**
      * 从token中获取过期时间
-     *
      * @param token
      * @return
      */
@@ -88,6 +92,11 @@ public class JwtTokenUtil implements Serializable {
         return expiration;
     }
 
+    /**
+     * 获取盐
+     * @param token
+     * @return
+     */
     private Claims getClaimsFromToken(String token) {
         Claims claims;
         try {

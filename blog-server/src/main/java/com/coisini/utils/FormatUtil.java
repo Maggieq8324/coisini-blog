@@ -1,21 +1,30 @@
 package com.coisini.utils;
 
 import org.springframework.stereotype.Component;
-import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @Description 校验类
+ * @author coisini
+ * @date Jan 21, 2022
+ * @version 1.0
+ */
 @Component
 public class FormatUtil {
 
+    /**
+     * 邮箱格式
+     */
+    private static final Pattern MAIL_PATTERN = Pattern.compile("\\w+@\\w+(\\.\\w{2,3})*\\.\\w{2,3}");
 
-    private static final Pattern MAIL_PATTERN = Pattern.compile("\\w+@\\w+(\\.\\w{2,3})*\\.\\w{2,3}");//邮箱格式
-
-    private static final Pattern IP_PATTERN = Pattern.compile("([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}");//ip格式
+    /**
+     * IP格式
+     */
+    private static final Pattern IP_PATTERN = Pattern.compile("([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}");
 
     /**
      * 邮箱格式校验
-     *
      * @param mail
      * @return
      */
@@ -28,7 +37,6 @@ public class FormatUtil {
      * 一般只适用于controller的参数校验
      * 检查字符串是否 为 null 为 ""
      * 为null 或 ""都返回 false
-     *
      * @param strs 动态参数
      */
     public boolean checkStringNull(String... strs) {
@@ -43,7 +51,6 @@ public class FormatUtil {
     /**
      * 用于controller的参数校验
      * 检查对象是否 为 null
-     *
      * @param objs 动态参数
      */
     public boolean checkObjectNull(Object... objs) {
@@ -55,10 +62,8 @@ public class FormatUtil {
         return true;
     }
 
-
     /**
      * 获取文件格式
-     *
      * @param fileName 完整文件名
      * @return
      */
@@ -77,7 +82,6 @@ public class FormatUtil {
 
     /**
      * 检查数字是否为非负数 >= 0
-     *
      * @param numbers
      * @return true -> 全部数字为非负数
      */
@@ -87,12 +91,12 @@ public class FormatUtil {
                 return false;
             }
         }
+
         return true;
     }
 
     /**
      * 检查数字是否为正数 >0
-     *
      * @param numbers
      * @return true -> 全部数字为正数
      */
@@ -102,20 +106,18 @@ public class FormatUtil {
                 return false;
             }
         }
+
         return true;
     }
 
-    public boolean hasObject(Collection<? extends Object> collections, Object obj) {
-
-        for (@SuppressWarnings("unused") Object o : collections) {
-
-        }
-
-        return false;
-    }
-
+    /**
+     * IP校验
+     * @param name
+     * @return
+     */
     public boolean checkIP(String name) {
         Matcher m = IP_PATTERN.matcher(name);
         return m.matches();
     }
+
 }

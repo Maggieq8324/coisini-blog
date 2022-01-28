@@ -1,32 +1,31 @@
 package com.coisini.utils;
 
 import org.springframework.stereotype.Component;
-
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
 /**
- * date工具
+ * @Description Date工具
+ * @author coisini
+ * @date Jan 21, 22022
+ * @version 1.0
  */
 @Component
 public class DateUtil {
 
-
     /**
      * 获取当前date格式时间
-     *
      * @return
      */
     public Date getCurrentDate() {
-
         return new Date();
     }
 
-
-    //打印当前日期
+    /**
+     * 打印当前日期
+     */
     public String printDate() {
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -55,7 +54,6 @@ public class DateUtil {
 
     /**
      * 设置时间
-     *
      * @param year
      * @param month
      * @param date
@@ -69,7 +67,6 @@ public class DateUtil {
 
     /**
      * 获取当前时间的前一天时间
-     *
      * @param cl
      * @return
      */
@@ -84,7 +81,6 @@ public class DateUtil {
 
     /**
      * 获取当前时间的后一天时间
-     *
      * @param cl
      * @return
      */
@@ -99,7 +95,6 @@ public class DateUtil {
 
     /**
      * 打印时间
-     *
      * @param cl
      */
     public void printCalendar(Calendar cl) {
@@ -201,7 +196,6 @@ public class DateUtil {
 
     /**
      * 字符串转换为对应日期
-     *
      * @param source
      * @param pattern "yyyy-MM-dd"
      * @return
@@ -218,7 +212,6 @@ public class DateUtil {
 
     /**
      * Date类型转为指定格式的String类型
-     *
      * @param source
      * @param pattern
      * @return
@@ -230,7 +223,6 @@ public class DateUtil {
 
     /**
      * 获取前一天的时间的 年-月-日
-     *
      * @return
      */
     public String getYestoryDate() {
@@ -243,7 +235,6 @@ public class DateUtil {
 
     /**
      * 获取当前时间的 年-月-日
-     *
      * @return
      */
     public String getTodayDate() {
@@ -254,7 +245,6 @@ public class DateUtil {
 
     /**
      * 将当前时间秒的形式（1538129545）转换为年月日-时分秒（2018-09-28 18:12:25）
-     *
      * @param timeStamp
      * @return
      */
@@ -266,7 +256,6 @@ public class DateUtil {
 
     /**
      * 将当前时间秒的形式（1538129545）转换为年月日（2018-09-28）
-     *
      * @param timeStamp 时间戳
      * @return
      */
@@ -278,7 +267,6 @@ public class DateUtil {
 
     /**
      * 当前时间秒的形式转化为 HH:mm:ss
-     *
      * @param timeStamp 时间戳
      * @return
      */
@@ -295,7 +283,6 @@ public class DateUtil {
 
     /**
      * 判断目标日期距离当前日期多长时间
-     *
      * @param timeStamp
      * @return
      */
@@ -322,7 +309,6 @@ public class DateUtil {
 
     /**
      * 计算传入时间和系统时间相差几分钟
-     *
      * @param date
      * @return
      */
@@ -359,7 +345,6 @@ public class DateUtil {
 
     /**
      * 把毫秒转化成日期
-     *
      * @param dateFormat (日期格式，例如：MM/ dd/yyyy HH:mm:ss)
      * @param millSec    (毫秒数)
      * @return
@@ -371,7 +356,9 @@ public class DateUtil {
         return sdf.format(date);
     }
 
-    // 获取当天的开始时间
+    /**
+     * 获取当天的开始时间
+     */
     public Date getDayBegin() {
         Calendar cal = new GregorianCalendar();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -381,7 +368,9 @@ public class DateUtil {
         return cal.getTime();
     }
 
-    // 获取当天的结束时间
+    /**
+     * 获取当天的结束时间
+     */
     public static Date getDayEnd() {
         Calendar cal = new GregorianCalendar();
         cal.set(Calendar.HOUR_OF_DAY, 23);
@@ -390,7 +379,9 @@ public class DateUtil {
         return cal.getTime();
     }
 
-    // 获取昨天的开始时间
+    /**
+     * 获取昨天的开始时间
+     */
     public Date getBeginDayOfYesterday() {
         Calendar cal = new GregorianCalendar();
         cal.setTime(this.getDayBegin());
@@ -398,7 +389,9 @@ public class DateUtil {
         return cal.getTime();
     }
 
-    // 获取昨天的结束时间
+    /**
+     * 获取昨天的结束时间
+     */
     public Date getEndDayOfYesterDay() {
         Calendar cal = new GregorianCalendar();
         cal.setTime(getDayEnd());
@@ -406,7 +399,10 @@ public class DateUtil {
         return cal.getTime();
     }
 
-    // 获取明天的开始时间
+    /**
+     * 获取明天的开始时间
+     * @return
+     */
     public Date getBeginDayOfTomorrow() {
         Calendar cal = new GregorianCalendar();
         cal.setTime(this.getDayBegin());
@@ -415,7 +411,10 @@ public class DateUtil {
         return cal.getTime();
     }
 
-    // 获取明天的结束时间
+    /**
+     * 获取明天的结束时间
+     * @return
+     */
     public Date getEndDayOfTomorrow() {
         Calendar cal = new GregorianCalendar();
         cal.setTime(getDayEnd());
@@ -423,7 +422,10 @@ public class DateUtil {
         return cal.getTime();
     }
 
-    // 获取本周的开始时间
+    /**
+     * 获取本周的开始时间
+     * @return
+     */
     @SuppressWarnings("unused")
 	public Date getBeginDayOfWeek() {
         Date date = new Date();
@@ -440,7 +442,10 @@ public class DateUtil {
         return getDayStartTime(cal.getTime());
     }
 
-    // 获取本周的结束时间
+    /**
+     * 获取本周的结束时间
+     * @return
+     */
     public Date getEndDayOfWeek() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(this.getBeginDayOfWeek());
@@ -449,14 +454,20 @@ public class DateUtil {
         return getDayEndTime(weekEndSta);
     }
 
-    // 获取本月的开始时间
+    /**
+     * 获取本月的开始时间
+     * @return
+     */
     public Date getBeginDayOfMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(getNowYear(), getNowMonth() - 1, 1);
         return getDayStartTime(calendar.getTime());
     }
 
-    // 获取本月的结束时间
+    /**
+     * 获取本月的结束时间
+     * @return
+     */
     public Date getEndDayOfMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(getNowYear(), getNowMonth() - 1, 1);
@@ -465,7 +476,10 @@ public class DateUtil {
         return getDayEndTime(calendar.getTime());
     }
 
-    // 获取本年的开始时间
+    /**
+     * 获取本年的开始时间
+     * @return
+     */
     public Date getBeginDayOfYear() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, getNowYear());
@@ -476,7 +490,10 @@ public class DateUtil {
         return getDayStartTime(cal.getTime());
     }
 
-    // 获取本年的结束时间
+    /**
+     * 获取本年的结束时间
+     * @return
+     */
     public Date getEndDayOfYear() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, getNowYear());
@@ -485,7 +502,11 @@ public class DateUtil {
         return getDayEndTime(cal.getTime());
     }
 
-    // 获取某个日期的开始时间
+    /**
+     * 获取某个日期的开始时间
+     * @param d
+     * @return
+     */
     public Timestamp getDayStartTime(Date d) {
         Calendar calendar = Calendar.getInstance();
         if (null != d) {
@@ -497,7 +518,11 @@ public class DateUtil {
         return new Timestamp(calendar.getTimeInMillis());
     }
 
-    // 获取某个日期的结束时间
+    /**
+     * 获取某个日期的结束时间
+     * @param d
+     * @return
+     */
     public Timestamp getDayEndTime(Date d) {
         Calendar calendar = Calendar.getInstance();
         if (null != d) {
@@ -509,7 +534,10 @@ public class DateUtil {
         return new Timestamp(calendar.getTimeInMillis());
     }
 
-    // 获取今年是哪一年
+    /**
+     * 获取今年是哪一年
+     * @return
+     */
     public Integer getNowYear() {
         Date date = new Date();
         GregorianCalendar gc = (GregorianCalendar) Calendar.getInstance();
@@ -517,7 +545,10 @@ public class DateUtil {
         return Integer.valueOf(gc.get(1));
     }
 
-    // 获取本月是哪一月
+    /**
+     * 获取本月是哪一月
+     * @return
+     */
     public int getNowMonth() {
         Date date = new Date();
         GregorianCalendar gc = (GregorianCalendar) Calendar.getInstance();
@@ -525,9 +556,13 @@ public class DateUtil {
         return gc.get(2) + 1;
     }
 
-    // 两个日期相减得到的天数
+    /**
+     * 两个日期相减得到的天数
+     * @param beginDate
+     * @param endDate
+     * @return
+     */
     public int getDiffDays(Date beginDate, Date endDate) {
-
         if (beginDate == null || endDate == null) {
             throw new IllegalArgumentException("getDiffDays param is null!");
         }
@@ -540,14 +575,24 @@ public class DateUtil {
         return days;
     }
 
-    // 两个日期相减得到的毫秒数
+    /**
+     * 两个日期相减得到的毫秒数
+     * @param beginDate
+     * @param endDate
+     * @return
+     */
     public long dateDiff(Date beginDate, Date endDate) {
         long date1ms = beginDate.getTime();
         long date2ms = endDate.getTime();
         return date2ms - date1ms;
     }
 
-    // 获取两个日期中的最大日期
+    /**
+     * 获取两个日期中的最大日期
+     * @param beginDate
+     * @param endDate
+     * @return
+     */
     public Date max(Date beginDate, Date endDate) {
         if (beginDate == null) {
             return endDate;
@@ -561,7 +606,12 @@ public class DateUtil {
         return endDate;
     }
 
-    // 获取两个日期中的最小日期
+    /**
+     * 获取两个日期中的最小日期
+     * @param beginDate
+     * @param endDate
+     * @return
+     */
     public Date min(Date beginDate, Date endDate) {
         if (beginDate == null) {
             return endDate;
@@ -575,7 +625,11 @@ public class DateUtil {
         return beginDate;
     }
 
-    // 返回某月该季度的第一个月
+    /**
+     * 返回某月该季度的第一个月
+     * @param date
+     * @return
+     */
     public Date getFirstSeasonDate(Date date) {
         final int[] SEASON = {1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4};
         Calendar cal = Calendar.getInstance();
@@ -585,7 +639,12 @@ public class DateUtil {
         return cal.getTime();
     }
 
-    // 返回某个日期下几天的日期
+    /**
+     * 返回某个日期下几天的日期
+     * @param date
+     * @param i
+     * @return
+     */
     public Date getNextDay(Date date, int i) {
         Calendar cal = new GregorianCalendar();
         cal.setTime(date);
@@ -593,7 +652,12 @@ public class DateUtil {
         return cal.getTime();
     }
 
-    // 返回某个日期前几天的日期
+    /**
+     * 返回某个日期前几天的日期
+     * @param date
+     * @param i
+     * @return
+     */
     public Date getFrontDay(Date date, int i) {
         Calendar cal = new GregorianCalendar();
         cal.setTime(date);
@@ -601,7 +665,15 @@ public class DateUtil {
         return cal.getTime();
     }
 
-    // 获取某年某月到某年某月按天的切片日期集合（间隔天数的集合）
+    /**
+     * 获取某年某月到某年某月按天的切片日期集合（间隔天数的集合）
+     * @param beginYear
+     * @param beginMonth
+     * @param endYear
+     * @param endMonth
+     * @param k
+     * @return
+     */
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	public List getTimeList(int beginYear, int beginMonth, int endYear,
                             int endMonth, int k) {
@@ -630,7 +702,13 @@ public class DateUtil {
         return list;
     }
 
-    // 获取某年某月按天切片日期集合（某个月间隔多少天的日期集合）
+    /**
+     * 获取某年某月按天切片日期集合（某个月间隔多少天的日期集合）
+     * @param beginYear
+     * @param beginMonth
+     * @param k
+     * @return
+     */
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	public List getTimeList(int beginYear, int beginMonth, int k) {
         List list = new ArrayList();

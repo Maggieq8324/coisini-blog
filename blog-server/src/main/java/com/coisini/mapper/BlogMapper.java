@@ -4,70 +4,61 @@ import com.coisini.entity.Blog;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Map;
 
 /**
- *  博文接口
-* @author Coisini
-* @date Mar 21, 2020
-*/
-
+ * @Description 博客Mapper
+ * @author coisini
+ * @date Jan 19, 2022
+ * @version 2.0
+ */
 @Repository
 @Mapper
 public interface BlogMapper {
 
     /**
      * 保存博客
-     *
      * @param blog
      */
     void saveBlog(Blog blog);
 
     /**
-     * 保存博文标签
-     *
+     * 保存博客标签
      * @param blogId
      * @param tagId
      */
     void saveBlogTag(@Param("blogId") Integer blogId, @Param("tagId") Integer tagId);
 
     /**
-     * 根据id查询博文
-     *
+     * 根据id查询博客
      * @param blogId
      * @return
      */
     Blog findBlogById(Integer blogId);
 
     /**
-     * 根据用户id查询博文
-     *
+     * 根据用户id查询博客
      * @param id
      * @return
      */
     List<Blog> findBlogByUserId(@Param("id") Integer id, @Param("start") Integer start, @Param("showCount") Integer showCount);
 
-
     /**
      * 查询该用户的博客数量
      * 正常状态
-     *
      * @return
      */
     Long getBlogCountByUserId(Integer id);
 
     /**
      * 查询主页博客数量
-     *
      * @return
      */
     Long getHomeBlogCount();
 
     /**
      * 查询主页博客
-     *
      * @param start
      * @param showCount
      * @return
@@ -75,16 +66,14 @@ public interface BlogMapper {
     List<Blog> findHomeBlog(@Param("start") Integer start, @Param("showCount") Integer showCount);
 
     /**
-     * 查询热门博文
-     *
+     * 查询热门博客
      * @param count 显示数量
      * @return
      */
     List<Blog> findHotBlog(Integer count);
 
     /**
-     * 搜索博文标题，内容
-     *
+     * 搜索博客标题，内容
      * @param searchText
      * @param start
      * @param showCount
@@ -95,36 +84,31 @@ public interface BlogMapper {
                           @Param("showCount") Integer showCount);
 
     /**
-     * 查询所有博文
-     *
+     * 查询所有博客
      * @param start
      * @param showCount
      * @return
      */
-    List<Blog> findAllblog(@Param("start") Integer start, @Param("showCount") Integer showCount);
-
+    List<Blog> findAllBlog(@Param("start") Integer start, @Param("showCount") Integer showCount);
 
     /**
-     * 符合关键词的博文数量
-     *
+     * 符合关键词的博客数量
      * @param searchText
      * @return
      */
     Long getSearchBlogCount(String searchText);
 
     /**
-     * 符合关键字的博文数量
+     * 符合关键字的博客数量
      * 所有状态
-     *
      * @param searchText
      * @return
      */
     Long getSearchAllBlogCount(String searchText);
 
     /**
-     * 搜索博文
+     * 搜索博客
      * 所有状态
-     *
      * @param searchText
      * @param start
      * @param showCount
@@ -134,7 +118,6 @@ public interface BlogMapper {
 
     /**
      * 按月份归档博客
-     *
      * @param count 最近几个月
      * @return month 月
      * year 年
@@ -142,10 +125,8 @@ public interface BlogMapper {
      */
     List<Map<String,Object>> statisticalBlogByMonth(Integer count);
 
-
     /**
      * 查询此标签下是否有博客
-     *
      * @param tagId
      * @return
      */
@@ -154,11 +135,9 @@ public interface BlogMapper {
     /**
      * 查询博客记录数
      * 所有状态
-     *
      * @return
      */
     Long getAllBlogCount();
-
 
     /**
      * 根据博客id更新博客
@@ -166,4 +145,5 @@ public interface BlogMapper {
      * @param blog
      */
     void updateBlog(Blog blog);
+
 }

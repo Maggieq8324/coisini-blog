@@ -4,6 +4,7 @@ import com.coisini.config.MailConfig;
 import com.coisini.config.RabbitMqConfig;
 import com.coisini.model.MailMessage;
 import com.coisini.utils.LoggerUtil;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -13,19 +14,21 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
- * 发送邮件的队列消费者
+ * @Description 发送邮件的队列消费者
+ * @author coisini
+ * @date Jan 19, 2022
+ * @version 2.0
  */
 @Component
 @RabbitListener(queues = RabbitMqConfig.MAIL_QUEUE)
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MailListener {
 
     private Logger logger = LoggerUtil.loggerFactory(this.getClass());
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
-    @Autowired
-    private MailMessage mailMessage;
+    private final MailMessage mailMessage;
 
     @RabbitHandler
     public void executeSms(Map<String, String> map) {
@@ -41,7 +44,7 @@ public class MailListener {
     }
 
     private void sendMail(String mail, String code) {
-        //发送邮件
+        // TODO 发送邮件
         mailSender.send(mailMessage
                 .create(mail, "邮箱验证码", "邮箱验证码：" + code + "，" + MailConfig.EXPIRED_TIME + "分钟内有效"));
     }
