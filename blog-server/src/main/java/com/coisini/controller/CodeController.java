@@ -34,7 +34,7 @@ public class CodeController {
      */
     @ApiOperation(value = "生成激活码", notes = "生成激活码")
     @PostMapping
-    public UnifyResponse generateCode() {
+    public UnifyResponse<?> generateCode() {
     	return UnifyResponse.success(UnifyCode.SUCCESS, codeService.generateCode());
     }
 
@@ -46,7 +46,7 @@ public class CodeController {
      */
     @ApiOperation(value = "分页查询激活码", notes = "页码+显示条数")
     @GetMapping("/{page}/{showCount}")
-    public UnifyResponse findCode(@PathVariable Integer page, @PathVariable Integer showCount) {
+    public UnifyResponse<?> findCode(@PathVariable Integer page, @PathVariable Integer showCount) {
 
         if (!formatUtil.checkPositive(page, showCount)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);

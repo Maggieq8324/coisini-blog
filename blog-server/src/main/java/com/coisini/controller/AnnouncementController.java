@@ -36,7 +36,7 @@ public class AnnouncementController {
     @ApiOperation(value = "发布公告", notes = "公告标题+公告内容")
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public UnifyResponse newAnnouncement(String title, String body) {
+    public UnifyResponse<?> newAnnouncement(String title, String body) {
 
         if (!formatUtil.checkStringNull(title, body)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -58,19 +58,14 @@ public class AnnouncementController {
     @ApiOperation(value = "删除公告", notes = "公告id")
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{announcementId}")
-    public ResponseModel deleteAnnouncement(@PathVariable Integer announcementId) {
-    	ResponseModel responseModel = new ResponseModel();
-    	
+    public UnifyResponse<?> deleteAnnouncement(@PathVariable Integer announcementId) {
+
         if (!formatUtil.checkPositive(announcementId)) {
-            responseModel.setSta(SysErrorCode.CODE_99999);
-        	responseModel.setMessage("参数错误");
-        	return responseModel;
+            return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
         }
 
         announcementService.deleteAnnouncementById(announcementId);
-        responseModel.setSta(SysErrorCode.CODE_00);
-    	responseModel.setMessage("删除成功");
-    	return responseModel;
+        return UnifyResponse.success(UnifyCode.DELETE_SUCCESS);
     }
 
     /**
@@ -82,25 +77,18 @@ public class AnnouncementController {
     @ApiOperation(value = "置顶/取消置顶公告", notes = "公告id+置顶状态 0置顶 1正常")
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/top/{announcementId}/{top}")
-    public ResponseModel top(@PathVariable Integer announcementId, @PathVariable Integer top) {
-    	ResponseModel responseModel = new ResponseModel();
-    	
+    public UnifyResponse<?> top(@PathVariable Integer announcementId, @PathVariable Integer top) {
+
         if (!formatUtil.checkPositive(announcementId)) {
-        	responseModel.setSta(SysErrorCode.CODE_99999);
-        	responseModel.setMessage("参数错误");
-        	return responseModel;
+            return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
         }
         
         if (!formatUtil.checkObjectNull(top)) {
-        	responseModel.setSta(SysErrorCode.CODE_99999);
-        	responseModel.setMessage("参数错误");
-        	return responseModel;
+            return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
         }
 
         announcementService.updateAnnouncementTop(announcementId, top);
-        responseModel.setSta(SysErrorCode.CODE_00);
-    	responseModel.setMessage("操作成功");
-    	return responseModel;
+    	return UnifyResponse.success(UnifyCode.SUCCESS);
     }
 
     /**
@@ -111,22 +99,16 @@ public class AnnouncementController {
      */
     @ApiOperation(value = "分页查询公告", notes = "页码+显示条数")
     @GetMapping("/{page}/{showCount}")
-    public ResponseModel getAnnouncement(@PathVariable Integer page, @PathVariable Integer showCount) {
-    	ResponseModel responseModel = new ResponseModel();
-    	
+    public UnifyResponse<?> getAnnouncement(@PathVariable Integer page, @PathVariable Integer showCount) {
+
         if (!formatUtil.checkPositive(page, showCount)) {
-        	responseModel.setSta(SysErrorCode.CODE_99999);
-        	responseModel.setMessage("参数错误");
-        	return responseModel;
+            return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
         }
 
         PageResult<Announcement> pageResult =
                 new PageResult<>(announcementService.getAnnouncementCount(), announcementService.findAnnouncement(page, showCount));
         
-        responseModel.setSta(SysErrorCode.CODE_00);
-    	responseModel.setMessage("查询成功");
-    	responseModel.setData(pageResult);
-    	return responseModel;
+    	return UnifyResponse.success(UnifyCode.QUERY_SUCCESS, pageResult);
     }
 
 }

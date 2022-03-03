@@ -83,7 +83,7 @@ export default {
               if (action === 'confirm') {
                 scrollTo(0, 0);
                 // history.back();
-                window.location.href = '/blog';
+                window.location.href = '/';
               }
             }
           });

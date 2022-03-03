@@ -2,6 +2,8 @@ package com.coisini.controller;
 
 import com.coisini.model.Result;
 import com.coisini.model.StatusCode;
+import com.coisini.model.UnifyCode;
+import com.coisini.model.UnifyResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +30,10 @@ public class ErrorController {
      * @return
      */
     @RequestMapping("/notfound")
-    public Result notfound() {
+    public UnifyResponse<?> notfound() {
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        return Result.create(StatusCode.NOTFOUND, "文件不存在");
+//        return Result.create(StatusCode.NOTFOUND, "文件不存在");
+        return UnifyResponse.fail(UnifyCode.SERVER_404, "文件不存在", null);
     }
 
     /**
@@ -38,8 +41,9 @@ public class ErrorController {
      * @return
      */
     @RequestMapping(FREQUENT_OPERATION)
-    public Result frequentOperation() {
-        return Result.create(StatusCode.REPERROR, "操作过于频繁");
+    public UnifyResponse<?> frequentOperation() {
+//        return Result.create(StatusCode.REPERROR, "操作过于频繁");
+        return UnifyResponse.fail(UnifyCode.SERVER_205, "操作过于频繁", null);
     }
 
 }

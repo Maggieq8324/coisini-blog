@@ -56,7 +56,7 @@ public class UserController {
      */
     @ApiOperation(value = "用户登录", notes = "用户名+密码 name+password 返回token")
     @PostMapping("/login")
-    public UnifyResponse login(User user) {
+    public UnifyResponse<?> login(User user) {
 
         if (!formatUtil.checkStringNull(user.getName(), user.getPassword())) {
             return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -83,7 +83,7 @@ public class UserController {
      */
     @ApiOperation(value = "用户退出登录")
     @GetMapping("/logout")
-    public UnifyResponse logout() {
+    public UnifyResponse<?> logout() {
     	userService.logout();
         return UnifyResponse.success(UnifyCode.LOGOUT_SUCCESS);
     }
@@ -96,7 +96,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('USER')")
     @ApiOperation(value = "创建管理员", notes = "用户名+密码+邮箱 name+password+mail")
     @PostMapping("/createAdmin")
-    public UnifyResponse createAdmin(User user) {
+    public UnifyResponse<?> createAdmin(User user) {
 
         if (!formatUtil.checkStringNull(user.getName(), user.getPassword(), user.getMail())) {
             return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -127,7 +127,7 @@ public class UserController {
      */
     @ApiOperation(value = "用户注册", notes = "用户名+密码+邮箱+邮箱验证码+邀请码 name+password+mail+mailCode")
     @PostMapping("/register")
-    public UnifyResponse register(User user, String mailCode) {
+    public UnifyResponse<?> register(User user, String mailCode) {
         if (!formatUtil.checkStringNull(
                 user.getName(),
                 mailCode,
@@ -155,7 +155,7 @@ public class UserController {
     @ApiOperation(value = "用户封禁或解禁", notes = "用户id+状态 id+state")
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/ban/{id}/{state}")
-    public UnifyResponse banUser(@PathVariable Integer id, @PathVariable Integer state) {
+    public UnifyResponse<?> banUser(@PathVariable Integer id, @PathVariable Integer state) {
 
         if (!formatUtil.checkObjectNull(id, state)) {
             return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -179,7 +179,7 @@ public class UserController {
      */
     @ApiOperation(value = "发送验证邮件", notes = "mail 冷却五分钟")
     @PostMapping("/sendMail")
-    public UnifyResponse sendMail(String mail) {
+    public UnifyResponse<?> sendMail(String mail) {
 
         // TODO 邮箱格式校验
         if (!(formatUtil.checkStringNull(mail)) || (!formatUtil.checkMail(mail))) {
@@ -204,7 +204,7 @@ public class UserController {
     @ApiOperation(value = "更新用户打赏码", notes = "更新用户打赏码")
     @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/updateReward")
-    public UnifyResponse updateReward(String imgPath) {
+    public UnifyResponse<?> updateReward(String imgPath) {
 
         if (!formatUtil.checkStringNull(imgPath)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -221,7 +221,7 @@ public class UserController {
     @ApiOperation(value = "获取用户绑定的邮箱", notes = "获取用户绑定的邮箱")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/mail")
-    public UnifyResponse getUserMail() {
+    public UnifyResponse<?> getUserMail() {
     	return UnifyResponse.success(UnifyCode.QUERY_SUCCESS, userService.findUserMail());
     }
 
@@ -252,7 +252,7 @@ public class UserController {
     @ApiOperation(value = "用户修改密码", notes = "旧密码+新密码+验证码")
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/updatePassword")
-    public UnifyResponse updatePassword(String oldPassword, String newPassword, String code) {
+    public UnifyResponse<?> updatePassword(String oldPassword, String newPassword, String code) {
 
         if (!formatUtil.checkStringNull(oldPassword, newPassword, code)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -277,7 +277,7 @@ public class UserController {
     @ApiOperation(value = "改绑邮箱", notes = "新邮箱+旧邮箱验证码+新邮箱验证码")
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/updateMail")
-    public UnifyResponse updateMail(String newMail, String oldMailCode, String newMailCode) {
+    public UnifyResponse<?> updateMail(String newMail, String oldMailCode, String newMailCode) {
 
         if (!formatUtil.checkStringNull(newMail, oldMailCode, newMailCode)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -306,7 +306,7 @@ public class UserController {
     @ApiOperation(value = "重置密码", notes = "用户名+验证码+新密码")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PostMapping("/forgetPassword")
-    public UnifyResponse forgetPassword(String userName, String mailCode, String newPassword) {
+    public UnifyResponse<?> forgetPassword(String userName, String mailCode, String newPassword) {
 
         if (!formatUtil.checkStringNull(userName, mailCode, newPassword)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -330,7 +330,7 @@ public class UserController {
      */
     @PreAuthorize("hasAuthority('REFRESH')")
     @GetMapping("/refresh")
-    public UnifyResponse refresh(HttpServletRequest request) {
+    public UnifyResponse<?> refresh(HttpServletRequest request) {
         String username = jwtTokenUtil.getUsernameFromRequest(request);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         String token = jwtTokenUtil.generateToken(userDetails);
@@ -346,7 +346,7 @@ public class UserController {
     @ApiOperation(value = "分页查询用户", notes = "页码+显示数量")
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{page}/{showCount}")
-    public UnifyResponse findUser(@PathVariable Integer page, @PathVariable Integer showCount) {
+    public UnifyResponse<?> findUser(@PathVariable Integer page, @PathVariable Integer showCount) {
 
         if (!formatUtil.checkPositive(page, showCount)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -368,7 +368,7 @@ public class UserController {
     @ApiOperation(value = "根据用户名分页搜索用户", notes = "页码+显示数量+搜索内容")
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/search/{page}/{showCount}")
-    public UnifyResponse searchUser(String userName, @PathVariable Integer page, @PathVariable Integer showCount) {
+    public UnifyResponse<?> searchUser(String userName, @PathVariable Integer page, @PathVariable Integer showCount) {
 
         if (!formatUtil.checkStringNull(userName) || !formatUtil.checkPositive(page, showCount)) {
             return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -386,7 +386,7 @@ public class UserController {
      */
     @ApiOperation(value = "游客权限测试", notes = "测试")
     @GetMapping
-    public UnifyResponse test() {
+    public UnifyResponse<?> test() {
         return UnifyResponse.success(UnifyCode.SUCCESS, "游客");
     }
 
@@ -396,7 +396,7 @@ public class UserController {
      */
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @GetMapping("/adminOrUser")
-    public UnifyResponse adminOrUser() {
+    public UnifyResponse<?> adminOrUser() {
         return UnifyResponse.success(UnifyCode.SUCCESS, "管理员或用户");
     }
 
@@ -406,7 +406,7 @@ public class UserController {
      */
     @PreAuthorize("hasAuthority('ADMIN') AND hasAnyAuthority('USER')")
     @GetMapping("/adminAndUser")
-    public UnifyResponse adminAndUser() {
+    public UnifyResponse<?> adminAndUser() {
         return UnifyResponse.success(UnifyCode.SUCCESS, "管理员且用户");
     }
 
@@ -417,7 +417,7 @@ public class UserController {
     @ApiOperation(value = "管理员权限测试", notes = "测试")
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin")
-    public UnifyResponse admin() {
+    public UnifyResponse<?> admin() {
         return UnifyResponse.success(UnifyCode.SUCCESS, "管理员");
     }
 
@@ -427,9 +427,8 @@ public class UserController {
      */
     @PreAuthorize("hasAnyAuthority('USER')")
     @GetMapping("/user")
-    public UnifyResponse user() {
+    public UnifyResponse<?> user() {
         return UnifyResponse.success(UnifyCode.SUCCESS, "用户");
     }
-
 
 }

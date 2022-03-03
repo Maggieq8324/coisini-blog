@@ -1,20 +1,20 @@
 <template>
   <div class="main-content" id="scollStyle">
     <div id="app">
-<!--      <bar/>-->
+      <bar/>
       <router-view/>
-<!--      <bottom/>-->
+      <bottom/>
     </div>
   </div>
 
 </template>
 
 <script>
-// import bar from '@/components/bar';
-// import bottom from '@/components/bottom';
+import bar from '@/components/bar';
+import bottom from '@/components/bottom';
 
 export default {
-  // components: {bar, bottom},
+  components: {bar, bottom},
   name: 'App'
 };
 </script>

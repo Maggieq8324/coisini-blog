@@ -37,7 +37,7 @@ public class TagController {
     @ApiOperation(value = "新增标签", notes = "标签名")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PostMapping
-    public UnifyResponse newTag(String tagName) {
+    public UnifyResponse<?> newTag(String tagName) {
 
         if (!formatUtil.checkStringNull(tagName)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -60,7 +60,7 @@ public class TagController {
     @ApiOperation(value = "删除标签", notes = "标签id")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @DeleteMapping("/{tagId}")
-    public UnifyResponse deleteTag(@PathVariable Integer tagId) {
+    public UnifyResponse<?> deleteTag(@PathVariable Integer tagId) {
 
         if (!formatUtil.checkObjectNull(tagId)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -84,7 +84,7 @@ public class TagController {
     @ApiOperation(value = "修改标签", notes = "标签id+新标签名")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PutMapping
-    public UnifyResponse updateTag(Integer tagId, String tagName) {
+    public UnifyResponse<?> updateTag(Integer tagId, String tagName) {
 
         if (!formatUtil.checkObjectNull(tagId)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -110,7 +110,7 @@ public class TagController {
     @ApiOperation(value = "获取用户标签", notes = "用户id")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping
-    public UnifyResponse findTagByUserId() {
+    public UnifyResponse<?> findTagByUserId() {
     	return UnifyResponse.success(UnifyCode.QUERY_SUCCESS, tagService.findTagByUserId());
     }
 

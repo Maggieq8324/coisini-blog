@@ -48,7 +48,7 @@ public class BlogController {
     @ApiOperation(value = "上传图片", notes = "图片")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PostMapping("/uploadImg")
-    public UnifyResponse uploadImg(MultipartFile file) {
+    public UnifyResponse<?> uploadImg(MultipartFile file) {
         if (!formatUtil.checkObjectNull(file)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
         }
@@ -81,7 +81,7 @@ public class BlogController {
     @ApiOperation(value = "发布博客", notes = "博客标题+博客内容+博客标签")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PostMapping
-    public UnifyResponse newBlog(String blogTitle, String blogBody, Integer[] tagId) {
+    public UnifyResponse<?> newBlog(String blogTitle, String blogBody, Integer[] tagId) {
         if (!formatUtil.checkStringNull(blogTitle, blogBody) || !formatUtil.checkPositive(tagId)) {
             return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
         }
@@ -103,7 +103,7 @@ public class BlogController {
      */
     @ApiOperation(value = "根据id查询博客", notes = "博客id")
     @GetMapping("/{blogId}/{isHistory}")
-    public UnifyResponse findBlogById(@PathVariable Integer blogId, @PathVariable boolean isHistory) throws BusinessException {
+    public UnifyResponse<?> findBlogById(@PathVariable Integer blogId, @PathVariable boolean isHistory) throws BusinessException {
         if (!formatUtil.checkObjectNull(blogId, isHistory)) {
             return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
         }
@@ -125,7 +125,7 @@ public class BlogController {
     @ApiOperation(value = "根据用户分页查询博客", notes = "页数+显示数量")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/myblog/{page}/{showCount}")
-    public UnifyResponse findBlogByUser(@PathVariable Integer page, @PathVariable Integer showCount) {
+    public UnifyResponse<?> findBlogByUser(@PathVariable Integer page, @PathVariable Integer showCount) {
 
         if (!formatUtil.checkPositive(page, showCount)) {
             return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -146,8 +146,7 @@ public class BlogController {
      */
     @ApiOperation(value = "首页分页查询博客", notes = "页数+显示数量")
     @GetMapping("/home/{page}/{showCount}")
-    public UnifyResponse homeBlog(@PathVariable Integer page, @PathVariable Integer showCount) {
-    	ResponseModel responseModel = new ResponseModel();
+    public UnifyResponse<?> homeBlog(@PathVariable Integer page, @PathVariable Integer showCount) {
 
         if (!formatUtil.checkPositive(page, showCount)) {
             return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -168,7 +167,7 @@ public class BlogController {
      */
     @ApiOperation(value = "首页热门博客", notes = "首页热门博客")
     @GetMapping("/hotBlog")
-    public UnifyResponse hotBlog() {
+    public UnifyResponse<?> hotBlog() {
         try {
             List<Blog> hotBlog = blogService.findHotBlog();
             return UnifyResponse.success(UnifyCode.QUERY_SUCCESS, hotBlog);
@@ -187,7 +186,7 @@ public class BlogController {
      */
     @ApiOperation(value = "分页搜索博客", notes = "搜索内容+页码+显示条数")
     @GetMapping("/searchBlog/{page}/{showCount}")
-    public UnifyResponse searchBlog(String search,
+    public UnifyResponse<?> searchBlog(String search,
                              @PathVariable Integer page,
                              @PathVariable Integer showCount) {
         if (!formatUtil.checkPositive(page, showCount) || showCount > RedisConfig.REDIS_NEW_BLOG_COUNT) {
@@ -213,7 +212,7 @@ public class BlogController {
     @ApiOperation(value = "管理员查询博客", notes = "管理员查询博客")
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/AllBlog/{page}/{showCount}")
-    public UnifyResponse findAllBlog(@PathVariable Integer page, @PathVariable Integer showCount) {
+    public UnifyResponse<?> findAllBlog(@PathVariable Integer page, @PathVariable Integer showCount) {
 
         if (!formatUtil.checkPositive(page, showCount)) {
             return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -235,7 +234,7 @@ public class BlogController {
     @ApiOperation(value = "修改博客", notes = "博客id+博客标题+博客内容+博客标签")
     @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/{blogId}")
-    public UnifyResponse updateBlog(@PathVariable Integer blogId, String blogTitle, String blogBody, Integer[] tagId) {
+    public UnifyResponse<?> updateBlog(@PathVariable Integer blogId, String blogTitle, String blogBody, Integer[] tagId) {
 
         if (!formatUtil.checkStringNull(blogTitle, blogBody)) {
             return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -262,7 +261,7 @@ public class BlogController {
     @ApiOperation(value = "用户删除博客", notes = "博客id")
     @PreAuthorize("hasAuthority('USER')")
     @DeleteMapping("/{blogId}")
-    public UnifyResponse deleteBlog(@PathVariable Integer blogId) {
+    public UnifyResponse<?> deleteBlog(@PathVariable Integer blogId) {
 
         if (!formatUtil.checkPositive(blogId)) {
             return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -286,7 +285,7 @@ public class BlogController {
     @ApiOperation(value = "管理员删除博客", notes = "博客id")
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/admin/{blogId}")
-    public UnifyResponse adminDeleteBlog(@PathVariable Integer blogId) throws JsonProcessingException {
+    public UnifyResponse<?> adminDeleteBlog(@PathVariable Integer blogId) throws JsonProcessingException {
 
         if (!formatUtil.checkPositive(blogId)) {
             return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -306,7 +305,7 @@ public class BlogController {
     @ApiOperation(value = "管理员分页搜索博客", notes = "搜索内容+页码+显示条数")
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/searchAllBlog/{page}/{showCount}")
-    public UnifyResponse searchAllBlog(String search,
+    public UnifyResponse<?> searchAllBlog(String search,
                                 @PathVariable Integer page,
                                 @PathVariable Integer showCount) {
         if (!formatUtil.checkPositive(page, showCount)) {
@@ -329,7 +328,7 @@ public class BlogController {
      */
     @ApiOperation(value = "按月份归档博客", notes = "按月份归档博客")
     @GetMapping("/statisticalBlogByMonth")
-    public UnifyResponse statisticalBlogByMonth() {
+    public UnifyResponse<?> statisticalBlogByMonth() {
         try {
             return UnifyResponse.success(UnifyCode.QUERY_SUCCESS, blogService.statisticalBlogByMonth());
         } catch (Exception e) {

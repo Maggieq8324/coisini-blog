@@ -66,7 +66,8 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     // 打包修改
-    assetsPublicPath: './',
+    // 20220303 修改 assetsPublicPath: '/' 解决blog.coisini.club下动态路由刷新404问题
+    assetsPublicPath: '/',
     // assetsPublicPath: '/blog/',
 
     /**

@@ -39,7 +39,7 @@ public class ReplyController {
     @ApiOperation(value = "发布回复", notes = "回复内容+评论id (父回复节点)?")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PostMapping("/{discussId}")
-    public UnifyResponse reply(@PathVariable Integer discussId, String replyBody, Integer rootId) {
+    public UnifyResponse<?> reply(@PathVariable Integer discussId, String replyBody, Integer rootId) {
 
         if (!formatUtil.checkStringNull(replyBody)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -66,7 +66,7 @@ public class ReplyController {
     @ApiOperation(value = "删除回复", notes = "回复id")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @DeleteMapping("/{replyId}")
-    public UnifyResponse deleteReply(@PathVariable Integer replyId) {
+    public UnifyResponse<?> deleteReply(@PathVariable Integer replyId) {
 
         if (!formatUtil.checkPositive(replyId)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR);
@@ -89,7 +89,7 @@ public class ReplyController {
     @ApiOperation(value = "管理员删除回复", notes = "回复id")
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/admin/{replyId}")
-    public UnifyResponse adminDeleteDiscuss(@PathVariable Integer replyId) {
+    public UnifyResponse<?> adminDeleteDiscuss(@PathVariable Integer replyId) {
 
         if (!formatUtil.checkPositive(replyId)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR);

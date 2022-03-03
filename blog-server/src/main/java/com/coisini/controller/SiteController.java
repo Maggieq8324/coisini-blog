@@ -31,7 +31,7 @@ public class SiteController {
      */
     @ApiOperation(value = "站点介绍", notes = "站点介绍")
     @GetMapping
-    public UnifyResponse getIntroduction() {
+    public UnifyResponse<?> getIntroduction() {
     	return UnifyResponse.success(UnifyCode.QUERY_SUCCESS, siteIntroductionConfig.getIntroduction());
     }
 

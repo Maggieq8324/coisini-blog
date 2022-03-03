@@ -28,6 +28,7 @@ public enum UnifyCode {
     /* web */
     SERVER_201("201","请求方式错误"),
     SERVER_203("203","token过期"),
+    SERVER_205("205","重复操作"),
     SERVER_400("400","Bad Request"),
     SERVER_403("403","拒绝访问"),
     SERVER_404("404","资源未找到"),

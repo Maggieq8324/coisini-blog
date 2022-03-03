@@ -34,7 +34,7 @@ export default {
     router(id) {
       scrollTo(0, 0);
       this.$router.push({ // 路由跳转
-        path: '/blog/article/' + id
+        path: '/article/' + id
       });
     }
   }

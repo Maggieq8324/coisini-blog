@@ -36,7 +36,7 @@ public class MessageController {
      */
     @ApiOperation(value = "留言", notes = "留言内容")
     @PostMapping
-    public UnifyResponse message(String messageBody) {
+    public UnifyResponse<?> message(String messageBody) {
 
         if (!formatUtil.checkStringNull(messageBody)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -59,7 +59,7 @@ public class MessageController {
     @ApiOperation(value = "管理员删除留言", notes = "留言id")
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{messageId}")
-    public UnifyResponse deleteMessage(@PathVariable Integer messageId) {
+    public UnifyResponse<?> deleteMessage(@PathVariable Integer messageId) {
 
         if (!formatUtil.checkPositive(messageId)) {
             return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);
@@ -77,7 +77,7 @@ public class MessageController {
      */
     @ApiOperation(value = "分页查询留言", notes = "页码+显示数量")
     @GetMapping("/{page}/{showCount}")
-    public UnifyResponse getMessage(@PathVariable Integer page, @PathVariable Integer showCount) {
+    public UnifyResponse<?> getMessage(@PathVariable Integer page, @PathVariable Integer showCount) {
 
         if (!formatUtil.checkPositive(page, showCount)) {
         	return UnifyResponse.fail(UnifyCode.SERVER_ERROR_PARAM);

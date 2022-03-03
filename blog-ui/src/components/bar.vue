@@ -5,9 +5,9 @@
         <el-menu :default-active="activeIndex" class="el-menu-demo" :router="true" mode="horizontal"
                  @select="handleSelect">
 
-          <el-menu-item index="1" route="/blog">首页</el-menu-item>
-          <el-menu-item index="2" style="margin-left: 2%" route="/blog/message">留言板</el-menu-item>
-          <el-menu-item index="3" style="margin-left: 2%" route="/blog/announcement">本站公告</el-menu-item>
+          <el-menu-item index="1" route="/">首页</el-menu-item>
+          <el-menu-item index="2" style="margin-left: 2%" route="/message">留言板</el-menu-item>
+          <el-menu-item index="3" style="margin-left: 2%" route="/announcement">本站公告</el-menu-item>
 
           <el-menu-item id="space" index="" class="hidden-xs-only"/>
           <el-menu-item/>
@@ -37,7 +37,7 @@
                           @keyup.enter.native="userLogin" prefixIcon="el-icon-lock"/>
               </el-form-item>
               <el-button @click="userLogin">登录&nbsp;&nbsp;<i class="el-icon-check"></i></el-button>
-              <router-link to="/blog/forgetPwd">
+              <router-link to="/forgetPwd">
                 <el-button @click="loginFormVisible = false">忘记密码&nbsp;&nbsp;<i class="el-icon-right"></i></el-button>
               </router-link>
             </el-form>
@@ -80,20 +80,20 @@
           <el-submenu class="hidden-xs-only" index="4" v-if="this.$store.state.token!==''" :router="true">
             <template slot="title">[&nbsp;&nbsp;{{this.$store.state.name}}&nbsp;&nbsp;]</template>
 
-            <el-menu-item route="/blog/newBlog" index="4-1">&nbsp;&nbsp;&nbsp;
+            <el-menu-item route="/newBlog" index="4-1">&nbsp;&nbsp;&nbsp;
               <i class="el-icon-edit"></i>
               写博客
             </el-menu-item>
-            <el-menu-item route="/blog/myBlog" index="4-3">&nbsp;&nbsp;&nbsp;
+            <el-menu-item route="/myBlog" index="4-3">&nbsp;&nbsp;&nbsp;
               <i class="el-icon-s-home"></i>
               我的博客
             </el-menu-item>
-            <el-menu-item route="/blog/account" index="4-2">&nbsp;&nbsp;&nbsp;
+            <el-menu-item route="/account" index="4-2">&nbsp;&nbsp;&nbsp;
               <i class="el-icon-s-tools"></i>
               账号设置
             </el-menu-item>
 
-            <el-menu-item route="/blog/admins" index="4-4" v-if="this.$store.state.roles.indexOf('ADMIN') > -1">
+            <el-menu-item route="/admins" index="4-4" v-if="this.$store.state.roles.indexOf('ADMIN') > -1">
               &nbsp;&nbsp;&nbsp;
               <i class="el-icon-loading"></i>管理后台
             </el-menu-item>
@@ -145,9 +145,9 @@ export default {
       handler(to, from) {
         if (to === '/') {
           this.activeIndex = '1';
-        } else if (to === '/blog/message') {
+        } else if (to === '/message') {
           this.activeIndex = '2';
-        } else if (to === '/blog/announcement') {
+        } else if (to === '/announcement') {
           this.activeIndex = '3';
         } else {
           this.activeIndex = '4';
@@ -191,7 +191,7 @@ export default {
         this.$store.commit('logout');// 清除token等信息
         this.$message.success(resp.message);
         this.$router.push({ // 路由跳转
-          path: '/blog'
+          path: '/'
         });
       });
     },
@@ -249,13 +249,13 @@ export default {
     searchSubmit() {
       if (this.searchTxt.length <= 0) { return; }
       this.$router.push({ // 路由跳转
-        path: '/blog/searchBlog/' + this.searchTxt
+        path: '/searchBlog/' + this.searchTxt
       });
       // this.searchTxt = '';// 清空搜索框
     },
     searchClear() {
       this.$router.push({ // 路由跳转
-        path: '/blog'
+        path: '/'
       });
     }
   }

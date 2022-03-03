@@ -9,17 +9,17 @@
               <span slot="title">用户管理</span>
             </el-menu-item>
 
-            <el-menu-item class="menuItem" index="2" route="/blog/admins/codeManage">
+            <el-menu-item class="menuItem" index="2" route="/admins/codeManage">
               <i class="el-icon-menu"></i>
               <span slot="title">邀请码管理</span>
             </el-menu-item>
 
-            <el-menu-item class="menuItem" index="3" route="/blog/admins/announcementManage">
+            <el-menu-item class="menuItem" index="3" route="/admins/announcementManage">
               <i class="el-icon-data-board"></i>
               <span slot="title">公告管理</span>
             </el-menu-item>
 
-            <el-menu-item class="menuItem" index="4" route="/blog/admins/blogManage">
+            <el-menu-item class="menuItem" index="4" route="/admins/blogManage">
               <i class="el-icon-document"></i>
               <span slot="title">博客管理</span>
             </el-menu-item>

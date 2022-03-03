@@ -2,7 +2,7 @@ import axios from 'axios';
 import {Message, MessageBox} from 'element-ui';
 import store from '@/store/store';
 import router from '@/router/router';
-import {global} from "../config/global";
+import {global} from '../config/global';
 
 // 创建axios实例
 var prod;
@@ -73,12 +73,12 @@ service.interceptors.response.use(
         }).then(() => {
           // window.location.href = '#/'
           router.push({ // 路由跳转
-            path: '/blog'
+            path: '/'
           });
           location.reload();
         }).catch(() => {
           router.push({ // 路由跳转
-            path: '/blog'
+            path: '/'
           });
           location.reload();
         });
