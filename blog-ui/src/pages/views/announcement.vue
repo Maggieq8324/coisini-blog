@@ -12,7 +12,7 @@
         &nbsp;{{announcement.title}}
       </p>
       <div style="color: #303133" :id="announcement.id" v-html="announcement.body"/>
-      <p style="color: #C0C4CC;font-size:14px">
+      <p style="color: #C0C4CC;font-size:15px">
         {{getTime(announcement.time)}}
       </p>
       <el-divider/>

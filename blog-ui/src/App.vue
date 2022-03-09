@@ -33,7 +33,7 @@ export default {
     right: 0;
     bottom: 0;
     padding: 0;
-    font-size: 14px;
+    font-size: 15px;
     font-family: 'KaiTi' !important;
     /*background: rgba(209, 212, 212, 0.5);*/
   }

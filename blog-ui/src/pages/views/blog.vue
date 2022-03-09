@@ -345,7 +345,7 @@ export default {
   }
 
   #editor {
-    font-size: 14px;
+    font-size: 15px;
     font-family: "楷体";
     margin: 2% 2%;
     height: 100%;
