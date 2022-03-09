@@ -22,7 +22,8 @@ public class RandomUtil {
      * @return
      */
     public synchronized int nextInt(int start, int end) {
-        return random.nextInt(end - start) + start + 1;  // +1:包括右界值
+        // TODO +1:包括右界值
+        return random.nextInt(end - start) + start + 1;
     }
 
 }

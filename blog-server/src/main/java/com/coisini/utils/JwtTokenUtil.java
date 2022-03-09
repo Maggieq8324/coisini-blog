@@ -40,7 +40,7 @@ public class JwtTokenUtil implements Serializable {
         String token = request.getHeader(jwtConfig.getHeader());
         token = token.substring(jwtConfig.getPrefix().length());
 
-        return token == null ? null : getUsernameFromToken(token);
+        return getUsernameFromToken(token);
     }
 
     /**
@@ -112,7 +112,6 @@ public class JwtTokenUtil implements Serializable {
 
     /**
      * 生成过期时间 单位[ms]
-     *
      * @return
      */
     private Date generateExpirationDate() {
@@ -122,7 +121,6 @@ public class JwtTokenUtil implements Serializable {
     /**
      * token是否过期
      * true 过期 false 未过期
-     *
      * @param token
      * @return
      */
@@ -132,35 +130,34 @@ public class JwtTokenUtil implements Serializable {
         return isExpired;
     }
 
-    @SuppressWarnings("unused")
 	private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
         return (lastPasswordReset != null && created.before(lastPasswordReset));
     }
 
-
     /**
      * 生成token
-     *
      * @param userDetails
      * @return
      */
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>(3);
-        claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername()); //放入用户名
-        claims.put(CLAIM_KEY_CREATED, new Date());//放入token生成时间
+        // TODO 放入用户名
+        claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
+        // TODO 放入token生成时间
+        claims.put(CLAIM_KEY_CREATED, new Date());
         List<String> roles = new ArrayList<>();
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         for (GrantedAuthority authority : authorities) {
             roles.add(authority.getAuthority());
         }
-        claims.put(CLAIM_KEY_ROLES, roles);//放入用户权限
+        // TODO 放入用户权限
+        claims.put(CLAIM_KEY_ROLES, roles);
 
         return generateToken(claims);
     }
 
     /**
      * 生成token
-     *
      * @param claims
      * @return
      */
@@ -190,26 +187,25 @@ public class JwtTokenUtil implements Serializable {
 
     /**
      * 校验token
-     *
      * @param token
      * @param userDetails
      * @return
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);  //从token中取出用户名
+        // TODO 从token中取出用户名
+        final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername())
                 &&
-                !isTokenExpired(token) //校验是否过期
+                // TODO 校验是否过期
+                !isTokenExpired(token)
         );
     }
 
     /**
      * 从token中获取用户角色
-     *
      * @param authToken
      * @return
      */
-    @SuppressWarnings("unchecked")
 	public List<String> getRolesFromToken(String authToken) {
         List<String> roles;
         try {

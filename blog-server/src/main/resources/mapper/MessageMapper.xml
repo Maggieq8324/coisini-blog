@@ -40,4 +40,5 @@
         ORDER BY message_id DESC
         LIMIT #{start},#{showCount}
     </select>
+
 </mapper>

@@ -9,7 +9,6 @@
         <result property="name" column="role_name"/>
     </resultMap>
 
-
     <select id="findUserRoles" parameterType="Integer" resultMap="Role">
         SELECT r.role_id,role_name from user_role ur LEFT JOIN role r on ur.role_id = r.role_id where user_id = #{value}
     </select>
@@ -31,4 +30,5 @@
         SELECT role_id,role_name
         FROM role 
     </select>
+
 </mapper>

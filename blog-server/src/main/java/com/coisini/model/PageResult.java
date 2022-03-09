@@ -1,21 +1,28 @@
 package com.coisini.model;
 
-
 import lombok.Data;
 import lombok.ToString;
-
 import java.util.List;
 
 /**
- * 分页结果类
- *
- * @param<T>
+ * @Description 分页结果封装
+ * @author coisini
+ * @date Mar 9, 2022
+ * @version 2.0
  */
 @Data
 @ToString
 public class PageResult<T> {
-    private Long total; //数据条数
-    private List<T> rows; //数据
+
+	/**
+	 * 数据条数
+	 */
+    private Long total;
+
+	/**
+	 * 数据
+	 */
+    private List<T> rows;
 
     public PageResult(Long total, List<T> rows) {
         super();

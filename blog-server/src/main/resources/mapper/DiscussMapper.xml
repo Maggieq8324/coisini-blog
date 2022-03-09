@@ -15,7 +15,6 @@
         <result property="blog.title" column="blog_title"/>
     </resultMap>
 
-
     <insert id="saveDiscuss" parameterType="Discuss">
         INSERT INTO discuss
         VALUES (null,#{body},#{time},#{user.id},#{blog.id})

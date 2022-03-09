@@ -37,9 +37,12 @@ public class DateUtil {
      * 输入年-月-日  转化为date类型
      **/
     public Date calendarToData(int year, int month, int day) {
-        Calendar calendar = Calendar.getInstance();//日历类的实例化
-        calendar.set(year, month - 1, day);//设置日历时间，月份必须减一
-        Date date = calendar.getTime(); // 从一个 Calendar 对象中获取 Date 对象
+        // TODO 日历类的实例化
+        Calendar calendar = Calendar.getInstance();
+        // TODO 设置日历时间，月份减一
+        calendar.set(year, month - 1, day);
+        // TODO 从一个 Calendar 对象中获取 Date 对象
+        Date date = calendar.getTime();
         return date;
     }
 
@@ -71,9 +74,8 @@ public class DateUtil {
      * @return
      */
     public Calendar getBeforeDay(Calendar cl) {
-        //使用roll方法进行向前回滚
-        //cl.roll(Calendar.DATE, -1);
-        //使用set方法直接进行设置
+        // TODO 使用roll方法进行向前回滚 cl.roll(Calendar.DATE, -1);
+        // TODO 使用set方法直接进行设置
         int day = cl.get(Calendar.DATE);
         cl.set(Calendar.DATE, day - 1);
         return cl;
@@ -85,9 +87,8 @@ public class DateUtil {
      * @return
      */
     public Calendar getAfterDay(Calendar cl) {
-        //使用roll方法进行回滚到后一天的时间
-        //cl.roll(Calendar.DATE, 1);
-        //使用set方法直接设置时间值
+        // TODO 使用roll方法进行回滚到后一天的时间 cl.roll(Calendar.DATE, 1);
+        // TODO 使用set方法直接设置时间值
         int day = cl.get(Calendar.DATE);
         cl.set(Calendar.DATE, day + 1);
         return cl;
@@ -342,14 +343,12 @@ public class DateUtil {
         return todayEnd.getTime().getTime();
     }
 
-
     /**
      * 把毫秒转化成日期
      * @param dateFormat (日期格式，例如：MM/ dd/yyyy HH:mm:ss)
      * @param millSec    (毫秒数)
      * @return
      */
-    @SuppressWarnings("unused")
 	private String transferLongToDate(String dateFormat, Long millSec) {
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         Date date = new Date(millSec);
@@ -426,7 +425,6 @@ public class DateUtil {
      * 获取本周的开始时间
      * @return
      */
-    @SuppressWarnings("unused")
 	public Date getBeginDayOfWeek() {
         Date date = new Date();
         if (date == null) {
@@ -674,7 +672,6 @@ public class DateUtil {
      * @param k
      * @return
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
 	public List getTimeList(int beginYear, int beginMonth, int endYear,
                             int endMonth, int k) {
         List list = new ArrayList();
