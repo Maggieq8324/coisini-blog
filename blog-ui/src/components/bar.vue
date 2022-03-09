@@ -178,9 +178,9 @@ export default {
           this.form.loginName = '';
           this.form.loginPwd = '';
           this.$store.commit('login', resp.data);// 存储token
-          this.$message.success(resp.message);
+          this.$message.success(resp.msg);
         } else {
-          this.$message.error(resp.message);
+          this.$message.error(resp.msg);
         }
 
         this.loginFormVisible = false;
@@ -189,7 +189,7 @@ export default {
     logout() {  // 退出登录
       user.logout().then(resp => {
         this.$store.commit('logout');// 清除token等信息
-        this.$message.success(resp.message);
+        this.$message.success(resp.msg);
         this.$router.push({ // 路由跳转
           path: '/'
         });
@@ -206,7 +206,7 @@ export default {
         if (resp.sta === '00') {
           this.$message.success('发送成功');
         } else {
-          this.$message.success(resp.message || '发送失败');
+          this.$message.success(resp.msg || '发送失败');
         }
 
         this.sendMailFlag = false;
@@ -241,7 +241,7 @@ export default {
           this.$message.success('注册成功');
           this.registerFormVisible = false;
         } else {
-          this.$message.error(resp.message || '注册失败');
+          this.$message.error(resp.msg || '注册失败');
         }
 
       });

@@ -69,7 +69,7 @@ export default {
           this.total = resp.data.total;
           this.blogList = resp.data.rows;
         } else {
-          this.$message.error(resp.message);
+          this.$message.error(resp.msg);
         }
 
         this.loading = false;

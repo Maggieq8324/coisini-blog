@@ -150,7 +150,7 @@ export default {
             this.$message.success('删除成功');
             this.load();
           } else {
-            this.$message.error(resp.message || '删除失败');
+            this.$message.error(resp.msg || '删除失败');
           }
         });
       }).catch(() => {

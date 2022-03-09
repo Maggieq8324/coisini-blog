@@ -43,14 +43,14 @@ service.interceptors.response.use(
       if (typeof (res.code) !== 'undefined' && res.code !== 403) {
         // 开发环境
         // Message({
-        //   message: res.code + ' : ' + res.message,
+        //   message: res.code + ' : ' + res.msg,
         //   type: 'error',
         //   duration: 5 * 1000
         // })
 
         // 生产环境
         Message({
-          message: res.message,
+          message: res.msg,
           type: 'error',
           duration: 5 * 1000
         });

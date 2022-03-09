@@ -49,7 +49,7 @@ export default {
             this.load();
             this.$message.success('删除成功');
           } else {
-            this.$message.error(resp.message || '删除失败');
+            this.$message.error(resp.msg || '删除失败');
           }
         });
       }).catch(() => {});
@@ -68,7 +68,7 @@ export default {
             this.load();
             this.$message.success('修改成功');
           } else {
-            this.$message.error(resp.message || '修改失败');
+            this.$message.error(resp.msg || '修改失败');
           }
         });
       }).catch(() => {
@@ -88,7 +88,7 @@ export default {
             this.load();
             this.$message.success('新增成功');
           } else {
-            this.$message.error(resp.message || '新增失败');
+            this.$message.error(resp.msg || '新增失败');
           }
         });
       }).catch(() => {

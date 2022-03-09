@@ -100,7 +100,7 @@ export default {
             }
           });
         } else {
-          this.$message.error(resp.message || '修改失败');
+          this.$message.error(resp.msg || '修改失败');
         }
       });
     },

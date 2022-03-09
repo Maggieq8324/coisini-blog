@@ -85,7 +85,7 @@ export default {
           this.$message.success('生成成功');
           this.load();
         } else {
-          this.$message.error(resp.message || '生成失败');
+          this.$message.error(resp.msg || '生成失败');
         }
       });
     }

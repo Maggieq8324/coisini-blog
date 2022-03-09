@@ -91,7 +91,7 @@ export default {
           this.messageBody = '';
           this.loadMessage();
         } else {
-          this.$message.warning(res.message);
+          this.$message.warning(res.msg);
         }
       });
     },

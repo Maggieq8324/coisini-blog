@@ -143,10 +143,10 @@ export default {
 
       user.updateReward(this.userReward.replace(global.apiBaseUrl, '')).then(resp => {
         if (resp.sta === '00') {
-          this.$message.success(resp.message);
+          this.$message.success(resp.msg);
           this.load();
         } else {
-          this.$message.error(resp.message || '更新失败');
+          this.$message.error(resp.msg || '更新失败');
         }
       });
     },
@@ -194,7 +194,7 @@ export default {
           this.updateMailToNewSendFlag = false;
         } else {
           this.updatePwdSendFlag = false;
-          this.$message.error(resp.message || '发送失败');
+          this.$message.error(resp.msg || '发送失败');
         }
       }).catch(() => {
         this.updatePwdSendFlag = false;
@@ -231,7 +231,7 @@ export default {
             path: '/'
           });
         } else {
-          this.$message.error(resp.message || '修改失败');
+          this.$message.error(resp.msg || '修改失败');
         }
       });
     },
@@ -260,7 +260,7 @@ export default {
           this.newMailCode = '';
           this.load();
         } else {
-          this.$message.error(resp.message || '改绑失败');
+          this.$message.error(resp.msg || '改绑失败');
         }
       });
     }

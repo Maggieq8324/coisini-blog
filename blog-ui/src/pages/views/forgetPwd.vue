@@ -62,7 +62,7 @@ export default {
         if (resp.sta === '00') {
           this.$message.success('发送成功');
         } else {
-          this.$message.error(resp.message || '发送失败');
+          this.$message.error(resp.msg || '发送失败');
         }
         this.sendMailFlag = false;
       }).catch(() => {
@@ -95,7 +95,7 @@ export default {
         if (resp.sta === '00') {
           this.$message.success('更改成功');
         } else {
-          this.$message.success(resp.message || '更改失败');
+          this.$message.success(resp.msg || '更改失败');
         }
 
         scrollTo(0, 0);

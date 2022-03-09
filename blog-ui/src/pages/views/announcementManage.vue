@@ -126,7 +126,7 @@ export default {
           this.load();
           this.sendFlag = false;
         } else {
-          this.$message.error(resp.message || '发布失败');
+          this.$message.error(resp.msg || '发布失败');
         }
       });
     },
@@ -140,7 +140,7 @@ export default {
           }
           this.load();
         } else {
-          this.$message.error(resp.message || '操作失败');
+          this.$message.error(resp.msg || '操作失败');
         }
       });
     },
@@ -155,7 +155,7 @@ export default {
             this.$message.success('删除成功');
             this.load();
           } else {
-            this.$message.error(resp.message || '删除失败');
+            this.$message.error(resp.msg || '删除失败');
           }
         });
       }).catch(() => {

@@ -77,7 +77,7 @@ export default {
 
       blog.sendBlog(this.title, this.body, tagStr).then(resp => {
         if (resp.sta === '00') {
-          this.$alert(resp.message, '提示', {
+          this.$alert(resp.msg, '提示', {
             confirmButtonText: '确定',
             callback: action => {
               if (action === 'confirm') {
@@ -88,7 +88,7 @@ export default {
             }
           });
         } else {
-          this.$message.error(resp.message || '发布失败');
+          this.$message.error(resp.msg || '发布失败');
         }
 
       });

@@ -220,7 +220,7 @@ export default {
             this.discussList = responese.data.rows;
           });
         } else {
-          this.$message.error(resp.message || '查询失败');
+          this.$message.error(resp.msg || '查询失败');
         }
       });
     },
@@ -250,7 +250,7 @@ export default {
             this.$message.success('回复成功');
             this.loadBlog();
           } else {
-            this.$message.error(resp.message || '回复失败');
+            this.$message.error(resp.msg || '回复失败');
           }
         });
       }).catch(() => {
@@ -268,7 +268,7 @@ export default {
           this.discussBody = '';
           this.loadBlog();
         } else {
-          this.$message.error(res.message || '评论失败');
+          this.$message.error(res.msg || '评论失败');
         }
       });
     },
@@ -285,7 +285,7 @@ export default {
               this.$message.success('删除成功');
               this.loadBlog();
             } else {
-              this.$message.error(res.message || '删除失败');
+              this.$message.error(res.msg || '删除失败');
             }
           });
         } else {
@@ -295,7 +295,7 @@ export default {
               this.$message.success('删除成功');
               this.loadBlog();
             } else {
-              this.$message.error(res.message || '删除失败');
+              this.$message.error(res.msg || '删除失败');
             }
           });
         }
@@ -314,7 +314,7 @@ export default {
             if (res.sta === '00') {
               this.$message.success('删除成功');
             } else {
-              this.$message.error(res.message || '删除失败');
+              this.$message.error(res.msg || '删除失败');
             }
           });
         } else {
@@ -323,7 +323,7 @@ export default {
             if (res.sta === '00') {
               this.$message.success('删除成功');
             } else {
-              this.$message.error(res.message || '删除失败');
+              this.$message.error(res.msg || '删除失败');
             }
           });
         }
