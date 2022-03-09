@@ -160,14 +160,6 @@ export default {
       //        console.log(key, keyPath);
       if (key != null && key !== '') { this.activeIndex = key; }
     },
-    // egg() {
-    //   this.$notify({
-    //     title: '彩蛋',
-    //     message: '耐心等待 十分钟后获得一枚邀请码',
-    //     type: 'success',
-    //     duration: 120
-    //   });
-    // },
     userLogin() { // 登录方法
       if (this.form.loginName.length <= 0 || this.form.loginPwd.length <= 0) {
         this.$message.info('请输入登录名和账号');
@@ -269,5 +261,9 @@ export default {
 
   #space {
     margin: 0 21% 0 20%;
+  }
+
+  .el-menu-item {
+    font-size: 15px !important;
   }
 </style>

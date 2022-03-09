@@ -7,7 +7,7 @@
       <p style="color: #303133">
         {{message.body}}
       </p>
-      <p style="color: #C0C4CC;font-size:14px">
+      <p style="color: #C0C4CC;font-size:15px">
         {{getTime(message.time)}}
       </p>
 

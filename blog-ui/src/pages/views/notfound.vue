@@ -51,7 +51,7 @@ export default {
 
   .notfoud-container .notfound-reason {
     color: #9ca4ac;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 13px;
     text-align: left;
     width: 210px;
