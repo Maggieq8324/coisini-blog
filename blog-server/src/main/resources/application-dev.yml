@@ -22,7 +22,7 @@ spring:
     host: smtp.qq.com
     port: 25
     username: maggieq8324@foxmail.com
-    password: gblwaiageaoscgje
+    password: xxx
     default-encoding: UTF-8
     properties:
       mail:
