@@ -22,7 +22,7 @@ spring:
     host: smtp.qq.com
     port: 25
     username: maggieq8324@foxmail.com
-    password: gblwaiageaoscgje
+    password: xxx
     default-encoding: UTF-8
     properties:
       mail:
@@ -31,7 +31,6 @@ spring:
           starttls:
             enable: true
             required: true
-          socketFactory:
             port: 465
             class: javax.net.ssl.SSLSocketFactory
             fallback: false
@@ -40,7 +39,7 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
-    password: sunday
+    password: xxx
     timeout: 1000
     jedis:
       pool:
