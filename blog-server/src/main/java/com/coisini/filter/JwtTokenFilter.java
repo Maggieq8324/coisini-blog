@@ -36,7 +36,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     /**
      * 范围时间内限制最大请求次数
      */
-    private static final int LIMIT_REQUEST_FREQUENCY_COUNT = 8;
+    private static final int LIMIT_REQUEST_FREQUENCY_COUNT = 100;
 
     @Autowired
     private UserService userService;
@@ -56,18 +56,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String ipAddress = requestUtil.getIpAddress(request);
         String redisKey = RedisConfig.REDIS_IP_PREFIX + ipAddress;
 
-        // 缓存时间 2s
-        // 127.0.0.1_/blog/hotBlog
         if (redisTemplate.hasKey(redisKey)) {
             String value = redisTemplate.opsForValue().get(redisKey);
-            Integer count = Integer.parseInt(value);
+            int count = Integer.parseInt(value);
             if (count > JwtTokenFilter.LIMIT_REQUEST_FREQUENCY_COUNT) {
                 // TODO 频繁请求
                 request.getRequestDispatcher(ErrorController.FREQUENT_OPERATION).forward(request, response);
                 return;
             } else {
                 count++;
-                redisTemplate.opsForValue().set(redisKey, count.toString(), RedisConfig.REDIS_LIMIT_REQUEST_FREQUENCY_TIME, TimeUnit.MILLISECONDS);
+                redisTemplate.opsForValue().set(redisKey, Integer.toString(count), RedisConfig.REDIS_LIMIT_REQUEST_FREQUENCY_TIME, TimeUnit.MILLISECONDS);
             }
         } else {
             redisTemplate.opsForValue().set(redisKey, "1", RedisConfig.REDIS_LIMIT_REQUEST_FREQUENCY_TIME, TimeUnit.MILLISECONDS);

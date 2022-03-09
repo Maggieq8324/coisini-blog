@@ -1,7 +1,5 @@
 package com.coisini.controller;
 
-import com.coisini.model.Result;
-import com.coisini.model.StatusCode;
 import com.coisini.model.UnifyCode;
 import com.coisini.model.UnifyResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +30,6 @@ public class ErrorController {
     @RequestMapping("/notfound")
     public UnifyResponse<?> notfound() {
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-//        return Result.create(StatusCode.NOTFOUND, "文件不存在");
         return UnifyResponse.fail(UnifyCode.SERVER_404, "文件不存在", null);
     }
 
@@ -42,8 +39,7 @@ public class ErrorController {
      */
     @RequestMapping(FREQUENT_OPERATION)
     public UnifyResponse<?> frequentOperation() {
-//        return Result.create(StatusCode.REPERROR, "操作过于频繁");
-        return UnifyResponse.fail(UnifyCode.SERVER_205, "操作过于频繁", null);
+        return UnifyResponse.fail(UnifyCode.SERVER_205, "资源有限，请勿频繁操作", null);
     }
 
 }

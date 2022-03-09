@@ -41,10 +41,10 @@ public class BlogTask {
 
     /**
      * 1000ms 1s
-     * 30 min 执行一次
+     * 60 min 执行一次
      * 博客任务
      */
-    @Scheduled(fixedRate = 1000 * 60 * 30)
+    @Scheduled(fixedRate = 1000 * 60 * 60)
     private void blogTask() {
         try {
             updateRedisHotBlogList();
@@ -61,13 +61,13 @@ public class BlogTask {
      * @throws JsonProcessingException
      */
     public void updateRedisHotBlogList() throws JsonProcessingException {
-        // TODO 若缓存没有newbog 或 hotblog 就不进行删除过期博客的操作
-        if (Boolean.TRUE.equals(redisTemplate.hasKey(RedisConfig.REDIS_NEW_BLOG)) && Boolean.TRUE.equals(redisTemplate.hasKey(RedisConfig.REDIS_HOT_BLOG))) {
+        // TODO 若缓存没有newBlog 或 hotBlog 就不进行删除过期博客的操作
+        if (hasNewBlogOrHotBlog()) {
             List<String> hotBlogIds = redisTemplate.opsForList().range(RedisConfig.REDIS_HOT_BLOG, 0, RedisConfig.REDIS_HOT_BLOG_COUNT - 1);
             List<String> newBlogIds = redisTemplate.opsForList().range(RedisConfig.REDIS_NEW_BLOG, 0, RedisConfig.REDIS_NEW_BLOG_COUNT - 1);
 
-            // TODO 判断热门博客的id是否存在于newblog中，如果不在newblog中 就删除此key
-            // TODO 避免删除同时在newblog 和 hotblog的id
+            // TODO 判断热门博客的id是否存在于newBlog中，如果不在newBlog中 就删除此key
+            // TODO 避免删除同时在newBlog 和 hotBlog的id
             for (String blogId : hotBlogIds) {
                 if (!newBlogIds.contains(blogId)) {
                     redisTemplate.delete(RedisConfig.REDIS_BLOG_PREFIX + blogId);
@@ -80,16 +80,8 @@ public class BlogTask {
         // TODO 查询数据库
         List<Blog> hotBlog = blogDao.findHotBlog(6);
 
-        for (Blog blog : hotBlog) {
-            blog.setTags(tagDao.findTagByBlogId(blog.getId()));
-            // TODO 向 hot 集合中存 id
-            String blogId = Integer.toString(blog.getId());
-
-            redisTemplate.opsForList().rightPush(RedisConfig.REDIS_HOT_BLOG, blogId);
-
-            // TODO 存具体的blog对象
-            redisTemplate.opsForValue().set(RedisConfig.REDIS_BLOG_PREFIX + blogId, objectMapper.writeValueAsString(blog));
-        }
+        // TODO 更新redis
+        updateBlogToRedis(hotBlog, RedisConfig.REDIS_HOT_BLOG);
     }
 
     /**
@@ -97,8 +89,8 @@ public class BlogTask {
      * @throws JsonProcessingException
      */
     public void updateRedisNewBlogList() throws JsonProcessingException {
-        // TODO 若缓存没有newbog 或 hotblog 就不进行删除过期博客的操作
-        if (Boolean.TRUE.equals(redisTemplate.hasKey(RedisConfig.REDIS_NEW_BLOG)) && Boolean.TRUE.equals(redisTemplate.hasKey(RedisConfig.REDIS_HOT_BLOG))) {
+        // TODO 若缓存没有newBlog 或 hotBlog 就不进行删除过期博客的操作
+        if (hasNewBlogOrHotBlog()) {
             List<String> hotBlogIds = redisTemplate.opsForList().range(RedisConfig.REDIS_HOT_BLOG, 0, RedisConfig.REDIS_HOT_BLOG_COUNT - 1);
             List<String> newBlogIds = redisTemplate.opsForList().range(RedisConfig.REDIS_NEW_BLOG, 0, RedisConfig.REDIS_NEW_BLOG_COUNT - 1);
 
@@ -114,15 +106,35 @@ public class BlogTask {
         // TODO 查询数据库
         List<Blog> newBlog = blogDao.findHomeBlog(0, 10);
 
-        for (Blog blog : newBlog) {
+        // TODO 更新redis
+        updateBlogToRedis(newBlog, RedisConfig.REDIS_NEW_BLOG);
+    }
+
+    /**
+     * 是否缓存有 newBlog 或 hotBlog
+     * @return
+     */
+    private boolean hasNewBlogOrHotBlog() {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(RedisConfig.REDIS_NEW_BLOG)) && Boolean.TRUE.equals(redisTemplate.hasKey(RedisConfig.REDIS_HOT_BLOG));
+    }
+
+    /**
+     * 更新Redis中的blog
+     * @param blogs
+     * @param blogTitle
+     * @throws JsonProcessingException
+     */
+    private void updateBlogToRedis(List<Blog> blogs, String blogTitle) throws JsonProcessingException {
+        for (Blog blog : blogs) {
             blog.setTags(tagDao.findTagByBlogId(blog.getId()));
             // TODO 向 hot 集合中存 id
             String blogId = Integer.toString(blog.getId());
 
-            redisTemplate.opsForList().rightPush(RedisConfig.REDIS_NEW_BLOG, blogId);
+            redisTemplate.opsForList().rightPush(blogTitle, blogId);
             // TODO 存具体的blog对象
             redisTemplate.opsForValue().set(RedisConfig.REDIS_BLOG_PREFIX + blogId, objectMapper.writeValueAsString(blog));
         }
     }
+
 
 }

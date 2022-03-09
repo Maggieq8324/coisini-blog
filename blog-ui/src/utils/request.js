@@ -36,9 +36,9 @@ service.interceptors.response.use(
 
     if ((typeof (res.code) !== 'undefined' && res.code !== 200) || (typeof (res.status) !== 'undefined' && res.status !== true)) {
       // 操作过于频繁不提示
-      if (typeof (res.code) !== 'undefined' && res.code === 205) {
-        return response.data;
-      }
+      // if (typeof (res.code) !== 'undefined' && res.code === 205) {
+      //   return response.data;
+      // }
 
       if (typeof (res.code) !== 'undefined' && res.code !== 403) {
         // 开发环境
